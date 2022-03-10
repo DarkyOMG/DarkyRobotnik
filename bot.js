@@ -132,7 +132,7 @@ async function asyncCall() {
 }
 
 
-
+console.log(commandmap)
 
 
 
