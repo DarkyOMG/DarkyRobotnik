@@ -131,9 +131,6 @@ async function asyncCall() {
   // expected output: "resolved"
 }
 
-LoadCommands()
-console.log(commandmap)
-
 
 
 
