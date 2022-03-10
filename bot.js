@@ -76,6 +76,7 @@ function onMessageHandler (target, context, msg, self) {
   if (self) { return; } // Ignore messages from the bot
   // Remove whitespace from chat message
   const commandName = msg.trim();
+  console.log(commandmap)
   if(commandName[0] == "!" && commandName.toLowerCase() in commandmap){
     if(typeof commandmap[commandName.toLowerCase()] === 'function'){
       commandmap[commandName.toLowerCase()](target,context,msg,self)
