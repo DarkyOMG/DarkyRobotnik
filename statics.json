@@ -1,1 +1,6 @@
-{"commands":{"!game":"Current game Info","!music":"Alle Hintergrundmusik wurde von Martin Platte (Pladde_Musicjam) erstellt"}}
+{"commands":{
+    "!game":"Current game Info",
+    "!music":"Alle Hintergrundmusik wurde von Martin Platte (Pladde_Musicjam) erstellt",
+    "!diesdas":"testitest"
+    }
+}
