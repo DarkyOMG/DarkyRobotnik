@@ -1,4 +1,4 @@
-//const tmi = require('tmi.js');
+const tmi = require('tmi.js');
 const fs = require('fs');
 
 // Define configuration options
@@ -92,6 +92,7 @@ function LoadCommands() {
     "!ReloadCommands":
     (target,context,msg,self) => {
       LoadCommands()
+      client.say(target, `Reload successfull!`);
     }
   }
 
