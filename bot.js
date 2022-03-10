@@ -50,7 +50,7 @@ fs.readFile('opts.json', 'utf-8', (err, data) => {
 
 
 commandmap = {
-  "!ReloadCommands":
+  "!reloadcommands":
   (target,context,msg,self) => {
     LoadCommands()
   }
@@ -90,7 +90,7 @@ function onMessageHandler (target, context, msg, self) {
 
 function LoadCommands() {
   commandmap = {
-    "!ReloadCommands":
+    "!reloadcommands":
     (target,context,msg,self) => {
       LoadCommands()
       client.say(target, `Reload successfull!`);
