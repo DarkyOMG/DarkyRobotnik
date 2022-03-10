@@ -58,18 +58,17 @@ commandmap = {
 
 
 
-if(true){
-  // Create a client with our options
-  const client = new tmi.client(opts);
 
-  // Register our event handlers (defined below)
-  client.on('message', onMessageHandler);
-  client.on('connected', onConnectedHandler);
+// Create a client with our options
+const client = new tmi.client(opts);
 
-  // Connect to Twitch:
-  client.connect();
+// Register our event handlers (defined below)
+client.on('message', onMessageHandler);
+client.on('connected', onConnectedHandler);
 
-}
+// Connect to Twitch:
+client.connect();
+
 
 // Called every time a message comes in
 function onMessageHandler (target, context, msg, self) {
