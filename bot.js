@@ -1,4 +1,4 @@
-const tmi = require('tmi.js');
+//const tmi = require('tmi.js');
 const fs = require('fs');
 
 // Define configuration options
@@ -11,22 +11,8 @@ const opts = {
   ]
 };
 
-// Change
-// read opts from file
-fs.readFile('opts.json', 'utf-8', (err, data) => {
-  if (err) {
-      throw err;
-  }
-
-  const optstemp = JSON.parse(data.toString());
-  opts.identity.username = optstemp.identity.username;
-  opts.identity.password = optstemp.identity.password;
-  opts.channels = optstemp.channels;
-});
-
-
 let firstwinner = ""
-commandmap = {
+riddlemap = {
   "!riddle" : 
     "104 116 116 112 115 058 047 047 119 119 119 046 121 111 117 116 117 098 101 046 099 111 109 047 119 097 116 099 104 063 118 061 100 086 098 053 080 102 112 109 119 073 069",
   "!0765" : 
@@ -47,16 +33,43 @@ commandmap = {
   "!firstwinner":
   firstwinner == ""? "Bisher noch kein Gewinner :(" : firstwinner
 };
+// Change
+// read opts from file
+fs.readFile('opts.json', 'utf-8', (err, data) => {
+  if (err) {
+      throw err;
+  }
 
-// Create a client with our options
-const client = new tmi.client(opts);
+  const optstemp = JSON.parse(data.toString());
+  opts.identity.username = optstemp.identity.username;
+  opts.identity.password = optstemp.identity.password;
+  opts.channels = optstemp.channels;
+});
 
-// Register our event handlers (defined below)
-client.on('message', onMessageHandler);
-client.on('connected', onConnectedHandler);
 
-// Connect to Twitch:
-client.connect();
+
+
+commandmap = {
+  "!ReloadCommands":
+  (target,context,msg,self) => {
+    LoadCommands()
+  }
+}
+
+
+
+if(true){
+  // Create a client with our options
+  const client = new tmi.client(opts);
+
+  // Register our event handlers (defined below)
+  client.on('message', onMessageHandler);
+  client.on('connected', onConnectedHandler);
+
+  // Connect to Twitch:
+  client.connect();
+
+}
 
 // Called every time a message comes in
 function onMessageHandler (target, context, msg, self) {
@@ -74,6 +87,26 @@ function onMessageHandler (target, context, msg, self) {
   }
 }
 
+function LoadCommands() {
+  commandmap = {
+    "!ReloadCommands":
+    (target,context,msg,self) => {
+      LoadCommands()
+    }
+  }
+
+  commandmap = Object.assign(commandmap, riddlemap)
+  fs.readFile('statics.json', 'utf-8', (err, data) => {
+    if (err) {
+      throw err;
+    }
+    const temp = JSON.parse(data.toString());
+    for (const [key, value] of Object.entries(temp.commands)) {
+      commandmap[key] = value
+    }
+
+  });
+}
 // Called every time the bot connects to Twitch chat
 function onConnectedHandler (addr, port) {
   console.log(`* Connected to ${addr}:${port}`);
@@ -96,4 +129,15 @@ async function asyncCall() {
   client.say(opts.channels[0], "This is a test after 10 seconds");
   // expected output: "resolved"
 }
+
+LoadCommands()
+console.log(commandmap)
+
+
+
+
+
+
+
+
 
