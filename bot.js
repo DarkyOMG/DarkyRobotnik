@@ -107,7 +107,7 @@ function LoadCommands() {
     for (const [key, value] of Object.entries(temp.commands)) {
       commandmap[key] = value
     }
-
+    console.log(commandmap)
   });
 }
 // Called every time the bot connects to Twitch chat
