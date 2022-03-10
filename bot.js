@@ -52,7 +52,10 @@ fs.readFile('opts.json', 'utf-8', (err, data) => {
 commandmap = {
   "!reloadcommands":
   (target,context,msg,self) => {
-    LoadCommands()
+    if(context['display-name'] == 'WTFDarky'){
+      LoadCommands()
+      client.say(target, `Reload successfull!`);
+    }
   }
 }
 
@@ -75,7 +78,6 @@ function onMessageHandler (target, context, msg, self) {
   if (self) { return; } // Ignore messages from the bot
   // Remove whitespace from chat message
   const commandName = msg.trim();
-  console.log(commandmap)
   if(commandName[0] == "!" && commandName.toLowerCase() in commandmap){
     if(typeof commandmap[commandName.toLowerCase()] === 'function'){
       commandmap[commandName.toLowerCase()](target,context,msg,self)
