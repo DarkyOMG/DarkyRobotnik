@@ -1,4 +1,4 @@
-const tmi = require('tmi.js');
+//const tmi = require('tmi.js');
 const fs = require('fs');
 
 // Define configuration options
@@ -45,10 +45,6 @@ fs.readFile('opts.json', 'utf-8', (err, data) => {
   opts.identity.password = optstemp.identity.password;
   opts.channels = optstemp.channels;
 });
-
-
-
-
 commandmap = {
   "!reloadcommands":
   (target,context,msg,self) => {
@@ -59,11 +55,8 @@ commandmap = {
   }
 }
 
-
-
-
 // Create a client with our options
-const client = new tmi.client(opts);
+//const client = new tmi.client(opts);
 
 // Register our event handlers (defined below)
 client.on('message', onMessageHandler);
@@ -73,10 +66,23 @@ client.on('connected', onConnectedHandler);
 client.connect();
 
 
+
+//console.log(re.match(string));
 // Called every time a message comes in
 function onMessageHandler (target, context, msg, self) {
   if (self) { return; } // Ignore messages from the bot
   // Remove whitespace from chat message
+
+
+  var re = /(?<raider>\S+) raidet mit einer Gruppe von \d+ Personen./;
+  let result = msg.match(re)
+  if(result != null){
+    if(context['display-name'] == ""){
+      client.say(target, `@${result[1]} hat die Vorlesung mit einer Schar wilder Studenten gestört! Schaut doch (aus Rache) mal dort vorbei!`);
+    }
+    console.log(result[1])
+  }
+  console.log(msg);
   const commandName = msg.trim();
   if(commandName[0] == "!" && commandName.toLowerCase() in commandmap){
     if(typeof commandmap[commandName.toLowerCase()] === 'function'){
