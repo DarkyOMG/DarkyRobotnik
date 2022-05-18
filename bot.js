@@ -56,7 +56,7 @@ commandmap = {
 }
 
 // Create a client with our options
-//const client = new tmi.client(opts);
+const client = new tmi.client(opts);
 
 // Register our event handlers (defined below)
 client.on('message', onMessageHandler);
