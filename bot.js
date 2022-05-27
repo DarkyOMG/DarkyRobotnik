@@ -93,6 +93,7 @@ function onMessageHandler(target, context, msg, self) {
   // Remove whitespace from chat message
 
   const commandName = msg.trim();
+  console.log(commandName)
   if (commandName[0] == "!" && commandName.toLowerCase() in commandmap) {
     if (typeof commandmap[commandName.toLowerCase()] === 'function') {
       console.log(`Executing ${commandmap[commandName.toLowerCase()]}`)
