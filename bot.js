@@ -103,6 +103,7 @@ function LoadCommands() {
   }
 
   commandmap = Object.assign(commandmap, riddlemap)
+  commandmap = Object.assign(commandmap, standardmap)
   fs.readFile('/sftp_uploads/user1/darkyrobotnikexchange/statics.json', 'utf-8', (err, data) => {
     if (err) {
       throw err;
