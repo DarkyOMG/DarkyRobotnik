@@ -13,42 +13,42 @@ const opts = {
 
 let firstwinner = ""
 riddlemap = {
-  "!riddle" : 
+  "!riddle":
     "104 116 116 112 115 058 047 047 119 119 119 046 121 111 117 116 117 098 101 046 099 111 109 047 119 097 116 099 104 063 118 061 100 086 098 053 080 102 112 109 119 073 069",
-  "!0765" : 
+  "!0765":
     "Zhofkhq Lqwhusuhwhq pxvv vlfk RWEW riw yrq Doha jhidoohq odvvhq?",
-  "!eminem" :
+  "!eminem":
     "CompSys - The Game ist ein echt cooles Spiel... Aber was ist der Titel?",
-  "!konzeption und implementierung von videospielen zur lernunterstützung in unity3d" : 
+  "!konzeption und implementierung von videospielen zur lernunterstützung in unity3d":
     "Welche Sprache spricht eigentlich Gilly?",
-  "!ruby" :
+  "!ruby":
     "Wiki ist ein Wikinger.. Oder so.. Oder was anderes? Hauptsache heiß!.. Aber wie heiß nun eigentlich?",
-  "!superhot" :
+  "!superhot":
     "No spaces. All lowercase. No '+'.\n Max Lieblingsspiel + OTBT-Chef-Vorname + BA-Betreuer-vorname + Gillys Lieblingsspiel + Wiki-Artikel-last-editor",
-  "!maplestoryjenstimhangmandobiko" : 
-  (target,context,msg,self) => {
-    firstwinner = context['display-name'];
-    client.say(target, `@${context['display-name']}, Du hast gewonnen!`);
-  },
+  "!maplestoryjenstimhangmandobiko":
+    (target, context, msg, self) => {
+      firstwinner = context['display-name'];
+      client.say(target, `@${context['display-name']}, Du hast gewonnen!`);
+    },
   "!firstwinner":
-  firstwinner == ""? "Bisher noch kein Gewinner :(" : firstwinner
+    firstwinner == "" ? "Bisher noch kein Gewinner :(" : firstwinner
 };
 standardmap = {
-  "!so" : 
-  (target,context,msg,self) => {
-    var re = /@\S*/;
-    let result = msg.match(re)
-    if(['WTFDarky','Toobi','pladdemusicjam'].includes(context['display-name'])){
-      client.say(target, `${result[0]} hat unsere Vorlesung gestört. Was für eine Ehre. Schaut doch auch mal ${result[0]}s letzte Veröffentlichungen an!`);
+  "!so":
+    (target, context, msg, self) => {
+      var re = /@\S*/;
+      let result = msg.match(re)
+      if (['WTFDarky', 'Toobi', 'pladdemusicjam'].includes(context['display-name'])) {
+        client.say(target, `${result[0]} hat unsere Vorlesung gestört. Was für eine Ehre. Schaut doch auch mal ${result[0]}s letzte Veröffentlichungen an!`);
+      }
     }
-  }    
 }
 
 // Change
 // read opts from file
 fs.readFile('opts.json', 'utf-8', (err, data) => {
   if (err) {
-      throw err;
+    throw err;
   }
 
   const optstemp = JSON.parse(data.toString());
@@ -58,12 +58,12 @@ fs.readFile('opts.json', 'utf-8', (err, data) => {
 });
 commandmap = {
   "!reloadcommands":
-  (target,context,msg,self) => {
-    if(context['display-name'] == 'WTFDarky'){
-      LoadCommands()
-      client.say(target, `Reload successfull!`);
+    (target, context, msg, self) => {
+      if (context['display-name'] == 'WTFDarky') {
+        LoadCommands()
+        client.say(target, `Reload successfull!`);
+      }
     }
-  }
 }
 
 // Create a client with our options
@@ -79,26 +79,27 @@ client.connect();
 
 
 // Called every time a message comes in
-function onMessageHandler (target, context, msg, self) {
+function onMessageHandler(target, context, msg, self) {
   if (self) { return; } // Ignore messages from the bot
   // Remove whitespace from chat message
 
   const commandName = msg.trim();
-  if(commandName[0] == "!" && commandName.toLowerCase() in commandmap){
-    if(typeof commandmap[commandName.toLowerCase()] === 'function'){
-      commandmap[commandName.toLowerCase()](target,context,msg,self)
-    } else if(typeof commandmap[commandName.toLowerCase()] === 'string'){
-      client.say(target, `@${context['display-name']} `+ commandmap[commandName.toLowerCase()]);
+  if (commandName[0] == "!" && commandName.toLowerCase() in commandmap) {
+    if (typeof commandmap[commandName.toLowerCase()] === 'function') {
+      commandmap[commandName.toLowerCase()](target, context, msg, self)
+    } else if (typeof commandmap[commandName.toLowerCase()] === 'string') {
+      client.say(target, `@${context['display-name']} ` + commandmap[commandName.toLowerCase()]);
     }
+  }
 }
 
 function LoadCommands() {
   commandmap = {
     "!reloadcommands":
-    (target,context,msg,self) => {
-      LoadCommands()
-      client.say(target, `Reload successfull!`);
-    }
+      (target, context, msg, self) => {
+        LoadCommands()
+        client.say(target, `Reload successfull!`);
+      }
   }
 
   commandmap = Object.assign(commandmap, riddlemap)
@@ -116,7 +117,7 @@ function LoadCommands() {
 
 
 // Called every time the bot connects to Twitch chat
-function onConnectedHandler (addr, port) {
+function onConnectedHandler(addr, port) {
   console.log(`* Connected to ${addr}:${port}`);
 }
 
