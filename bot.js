@@ -36,18 +36,11 @@ riddlemap = {
 standardmap = {
   "!so":
     (target, context, msg, self) => {
-      console.log("Something")
       var re = /@\S*/;
       let result = msg.match(re)        
-      console.log(['WTFDarky', 'Toobi', 'pladdemusicjam'].includes(context['display-name']))
-      console.log(result)
-      console.log(context['display-name'])
       if(result != null){
-        console.log(['WTFDarky', 'Toobi', 'pladdemusicjam'].includes(context['display-name']))
-        console.log(result[0])
-        console.log(context['display-name'])
         if (['WTFDarky', 'Toobi', 'pladdemusicjam'].includes(context['display-name'])) {
-          client.say(target, `${result[0]} hat unsere Vorlesung gestört. Was für eine Ehre. Schaut doch auch mal ${result[0]}s letzte Veröffentlichungen an!`);
+          client.say(target, `${result[0]} hat unsere Vorlesung gestört. Was für eine Ehre. Schaut doch auch mal die letzten Publikationen von ${result[0]} an!`);
         }
       }
     }
@@ -97,7 +90,6 @@ function onMessageHandler(target, context, msg, self) {
     return
   }
   const commandName = result[0].trim();
-  console.log(commandName)
   if (commandName[0] == "!" && commandName.toLowerCase() in commandmap) {
     if (typeof commandmap[commandName.toLowerCase()] === 'function') {
       console.log(`Executing ${commandmap[commandName.toLowerCase()]}`)
@@ -127,7 +119,6 @@ function LoadCommands() {
     for (const [key, value] of Object.entries(temp.commands)) {
       commandmap[key] = value
     }
-    console.log(commandmap)
   });
 }
 
