@@ -33,6 +33,17 @@ riddlemap = {
   "!firstwinner":
   firstwinner == ""? "Bisher noch kein Gewinner :(" : firstwinner
 };
+standardmap = {
+  "!so" : 
+  (target,context,msg,self) => {
+    var re = /@\S*/;
+    let result = msg.match(re)
+    if(['WTFDarky','Toobi','pladdemusicjam'].includes(context['display-name'])){
+      client.say(target, `${result[0]} hat unsere Vorlesung gestört. Was für eine Ehre. Schaut doch auch mal ${result[0]}s letzte Veröffentlichungen an!`);
+    }
+  }    
+}
+
 // Change
 // read opts from file
 fs.readFile('opts.json', 'utf-8', (err, data) => {
@@ -67,22 +78,11 @@ client.connect();
 
 
 
-//console.log(re.match(string));
 // Called every time a message comes in
 function onMessageHandler (target, context, msg, self) {
   if (self) { return; } // Ignore messages from the bot
   // Remove whitespace from chat message
 
-
-  var re = /(?<raider>\S+) raidet mit einer Gruppe von \d+ Personen./;
-  let result = msg.match(re)
-  if(result != null){
-    if(context['display-name'] == ""){
-      client.say(target, `@${result[1]} hat die Vorlesung mit einer Schar wilder Studenten gestört! Schaut doch (aus Rache) mal dort vorbei!`);
-    }
-    console.log(result[1])
-  }
-  console.log(msg);
   const commandName = msg.trim();
   if(commandName[0] == "!" && commandName.toLowerCase() in commandmap){
     if(typeof commandmap[commandName.toLowerCase()] === 'function'){
@@ -90,9 +90,6 @@ function onMessageHandler (target, context, msg, self) {
     } else if(typeof commandmap[commandName.toLowerCase()] === 'string'){
       client.say(target, `@${context['display-name']} `+ commandmap[commandName.toLowerCase()]);
     }
-  } else {
-    console.log(`* Unknown command ${commandName}`);
-  }
 }
 
 function LoadCommands() {
@@ -116,6 +113,8 @@ function LoadCommands() {
     console.log(commandmap)
   });
 }
+
+
 // Called every time the bot connects to Twitch chat
 function onConnectedHandler (addr, port) {
   console.log(`* Connected to ${addr}:${port}`);
@@ -139,8 +138,6 @@ async function asyncCall() {
   // expected output: "resolved"
 }
 
-
-console.log(commandmap)
 
 
 
