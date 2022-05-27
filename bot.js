@@ -101,7 +101,7 @@ function onMessageHandler(target, context, msg, self) {
   }
   else {
     randomchat =  Math.floor(Math.random() * 100)
-    if(randomchat < 5){
+    if(randomchat < 50){
       client.say(target, `@${context['display-name']} ` + answers[Math.floor(Math.random()*answers.length)]);
     }
   }
