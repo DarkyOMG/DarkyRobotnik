@@ -36,6 +36,7 @@ riddlemap = {
 standardmap = {
   "!so":
     (target, context, msg, self) => {
+      console.log("Something")
       var re = /@\S*/;
       let result = msg.match(re)        
       console.log(['WTFDarky', 'Toobi', 'pladdemusicjam'].includes(context['display-name']))
