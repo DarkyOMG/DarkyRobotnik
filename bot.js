@@ -11,6 +11,7 @@ const opts = {
   ]
 };
 
+let answers = [` haha, ja genau wtfdar2Unangenehm2`,` lol, du sagst es wtfdar2Heheh`,` ich genieße jedes einzelne dieser Worte!`, ` Da wird man ja wtfdar2Mad`]
 let firstwinner = "@pinkfluffyfluffycorn hat das Rätsel als erstes gelöst und hat sich damit einen 10€-Steam-Gutschein verdient :)"
 riddlemap = {
   "!riddle":
@@ -96,6 +97,12 @@ function onMessageHandler(target, context, msg, self) {
       commandmap[commandName.toLowerCase()](target, context, msg, self)
     } else if (typeof commandmap[commandName.toLowerCase()] === 'string') {
       client.say(target, `@${context['display-name']} ` + commandmap[commandName.toLowerCase()]);
+    }
+  }
+  else {
+    randomchat =  Math.floor(Math.random() * 100)
+    if(randomchat < 5){
+      client.say(target, `@${context['display-name']} ` + answers[Math.floor(Math.random()*answers.length)]);
     }
   }
 }
