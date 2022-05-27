@@ -37,7 +37,10 @@ standardmap = {
   "!so":
     (target, context, msg, self) => {
       var re = /@\S*/;
-      let result = msg.match(re)
+      let result = msg.match(re)        
+      console.log(['WTFDarky', 'Toobi', 'pladdemusicjam'].includes(context['display-name']))
+      console.log(result)
+      console.log(context['display-name'])
       if(result != null){
         console.log(['WTFDarky', 'Toobi', 'pladdemusicjam'].includes(context['display-name']))
         console.log(result[0])
