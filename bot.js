@@ -88,7 +88,11 @@ function onMessageHandler(target, context, msg, self) {
   var re = /!\S*/;
   let result = msg.match(re) 
   if(result == null){
-    return
+    randomchat =  Math.floor(Math.random() * 100)
+    console.log(randomchat)
+    if(randomchat < 50){
+      client.say(target, `@${context['display-name']} ` + answers[Math.floor(Math.random()*answers.length)]);
+    }
   }
   const commandName = result[0].trim();
   if (commandName[0] == "!" && commandName.toLowerCase() in commandmap) {
@@ -97,13 +101,6 @@ function onMessageHandler(target, context, msg, self) {
       commandmap[commandName.toLowerCase()](target, context, msg, self)
     } else if (typeof commandmap[commandName.toLowerCase()] === 'string') {
       client.say(target, `@${context['display-name']} ` + commandmap[commandName.toLowerCase()]);
-    }
-  }
-  else {
-    randomchat =  Math.floor(Math.random() * 100)
-    console.log(randomchat)
-    if(randomchat < 50){
-      client.say(target, `@${context['display-name']} ` + answers[Math.floor(Math.random()*answers.length)]);
     }
   }
 }
