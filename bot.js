@@ -11,7 +11,7 @@ const opts = {
   ]
 };
 
-let answers = [` haha, ja genau wtfdar2Unangenehm2`,` lol, du sagst es wtfdar2Heheh`,` ich genieße jedes einzelne dieser Worte!`, ` Da wird man ja wtfdar2Mad`]
+let answers = [` haha, ja genau!`,` lol, du sagst es :D`,` ich genieße jedes einzelne dieser Worte!`, ` Da wird man ja fuchsig!`,` das hast du doch von jemandem abgeschrieben!`, ` für die Nachricht gibt's 5 ECTS!`, ` du wirkst müde. Bestell dir doch mal einen !kaffee mit !milch!`]
 let firstwinner = "@pinkfluffyfluffycorn hat das Rätsel als erstes gelöst und hat sich damit einen 10€-Steam-Gutschein verdient :)"
 riddlemap = {
   "!riddle":
@@ -90,7 +90,7 @@ function onMessageHandler(target, context, msg, self) {
   if(result == null){
     randomchat =  Math.floor(Math.random() * 100)
     console.log(randomchat)
-    if(randomchat < 50){
+    if(randomchat < 5){
       client.say(target, `@${context['display-name']} ` + answers[Math.floor(Math.random()*answers.length)]);
     }
     return
