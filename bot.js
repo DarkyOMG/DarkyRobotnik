@@ -36,11 +36,11 @@ riddlemap = {
 standardmap = {
   "!so":
     (target, context, msg, self) => {
-      var re = /@\S*/;
+      var re = /@(?<name>\S*)/;
       let result = msg.match(re)        
       if(result != null){
         if (['WTFDarky', 'Toobi', 'pladdemusicjam'].includes(context['display-name'])) {
-          client.say(target, `${result[0]} hat unsere Vorlesung gestört. Was für eine Ehre. Schaut doch auch mal die letzten Publikationen von ${result[0]} an!`);
+          client.say(target, `${result[0]} hat unsere Vorlesung gestört. Was für eine Ehre. Schaut doch auch mal die letzten Publikationen von ${result[0]} an! https://www.twitch.tv/${result['groups']['name']}`);
         }
       }
     }
