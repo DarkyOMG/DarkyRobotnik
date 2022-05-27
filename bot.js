@@ -89,7 +89,6 @@ function onMessageHandler(target, context, msg, self) {
   let result = msg.match(re) 
   if(result == null){
     randomchat =  Math.floor(Math.random() * 100)
-    console.log(randomchat)
     if(randomchat < 5){
       client.say(target, `@${context['display-name']} ` + answers[Math.floor(Math.random()*answers.length)]);
     }
