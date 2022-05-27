@@ -95,6 +95,7 @@ function onMessageHandler(target, context, msg, self) {
   const commandName = msg.trim();
   if (commandName[0] == "!" && commandName.toLowerCase() in commandmap) {
     if (typeof commandmap[commandName.toLowerCase()] === 'function') {
+      console.log(`Executing ${commandmap[commandName.toLowerCase()]}`)
       commandmap[commandName.toLowerCase()](target, context, msg, self)
     } else if (typeof commandmap[commandName.toLowerCase()] === 'string') {
       client.say(target, `@${context['display-name']} ` + commandmap[commandName.toLowerCase()]);
