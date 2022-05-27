@@ -38,8 +38,13 @@ standardmap = {
     (target, context, msg, self) => {
       var re = /@\S*/;
       let result = msg.match(re)
-      if (['WTFDarky', 'Toobi', 'pladdemusicjam'].includes(context['display-name'])) {
-        client.say(target, `${result[0]} hat unsere Vorlesung gestört. Was für eine Ehre. Schaut doch auch mal ${result[0]}s letzte Veröffentlichungen an!`);
+      if(result != null){
+        console.log(['WTFDarky', 'Toobi', 'pladdemusicjam'].includes(context['display-name']))
+        console.log(result[0])
+        console.log(context['display-name'])
+        if (['WTFDarky', 'Toobi', 'pladdemusicjam'].includes(context['display-name'])) {
+          client.say(target, `${result[0]} hat unsere Vorlesung gestört. Was für eine Ehre. Schaut doch auch mal ${result[0]}s letzte Veröffentlichungen an!`);
+        }
       }
     }
 }
