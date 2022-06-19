@@ -1,5 +1,6 @@
 const tmi = require('tmi.js');
 const fs = require('fs');
+const exec = require('child_process').exec;
 
 // Define configuration options
 const opts = {
@@ -43,6 +44,13 @@ standardmap = {
         if (['WTFDarky', 'Toobi', 'pladdemusicjam'].includes(context['display-name'])) {
           client.say(target, `${result[0]} hat unsere Vorlesung gestört. Was für eine Ehre. Schaut doch auch mal die letzten Publikationen von ${result[0]} an! https://www.twitch.tv/${result['groups']['name']}`);
         }
+      }
+    },
+    "!pullandrestart":
+    (targes,context,msg,self) => {
+      if (context['display-name'] == 'WTFDarky') {
+        client.say(target, `Restarting...`);
+        PullAndRestart()
       }
     }
 }
@@ -125,7 +133,16 @@ function LoadCommands() {
     }
   });
 }
-
+function PullAndRestart() {
+  exec('./restart.sh', (e,stdout,stderr)=> {
+    if(e instanceof Error) {
+      console.error(e);
+      throw e;
+    }
+    console.log('stdout ', stdout);
+    console.log('stderr ', stderr);
+  });
+}
 
 // Called every time the bot connects to Twitch chat
 function onConnectedHandler(addr, port) {
