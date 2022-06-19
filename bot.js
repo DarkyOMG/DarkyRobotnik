@@ -47,7 +47,7 @@ standardmap = {
       }
     },
     "!pullandrestart":
-    (targes,context,msg,self) => {
+    (target,context,msg,self) => {
       if (context['display-name'] == 'WTFDarky') {
         client.say(target, `Restarting...`);
         PullAndRestart()
