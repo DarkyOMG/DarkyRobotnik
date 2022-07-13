@@ -1,7 +1,7 @@
 const crypto = require('crypto')
 const express = require('express');
 const app = express();
-const port = 8080;
+const port = 8081;
     
 // Notification request headers
 const TWITCH_MESSAGE_ID = 'Twitch-Eventsub-Message-Id'.toLowerCase();
