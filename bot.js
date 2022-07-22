@@ -11,8 +11,13 @@ const opts = {
   channels: [
   ]
 };
+// List your admins and Mods
+let mods = ['WTFDarky', 'Toobi', 'pladdemusicjam']
 
+// Anwers for Bot to automatically react to random messages
 let answers = [` haha, ja genau!`,` lol, du sagst es :D`,` ich genieße jedes einzelne dieser Worte!`, ` Da wird man ja fuchsig!`,` das hast du doch von jemandem abgeschrieben!`, ` für die Nachricht gibt's 5 ECTS!`, ` du wirkst müde. Bestell dir doch mal einen !kaffee mit !milch!`]
+
+// Variables and Commandmap for riddle
 let firstwinner = "@pinkfluffyfluffycorn hat das Rätsel als erstes gelöst und hat sich damit einen 10€-Steam-Gutschein verdient :)"
 riddlemap = {
   "!riddle":
@@ -35,13 +40,15 @@ riddlemap = {
   "!firstwinner":
     firstwinner == "" ? "Bisher noch kein Gewinner :(" : firstwinner
 };
+
+// Standardcommands. Including Shoutout (usage: !so @streamername) and pullandrestart, which pulls the repo and restarts the bot.
 standardmap = {
   "!so":
     (target, context, msg, self) => {
       var re = /@(?<name>\S*)/;
       let result = msg.match(re)        
       if(result != null){
-        if (['WTFDarky', 'Toobi', 'pladdemusicjam'].includes(context['display-name'])) {
+        if (mods.includes(context['display-name'])) {
           client.say(target, `${result[0]} hat unsere Vorlesung gestört. Was für eine Ehre. Schaut doch auch mal die letzten Publikationen von ${result[0]} an! https://www.twitch.tv/${result['groups']['name']}`);
         }
       }
@@ -55,7 +62,6 @@ standardmap = {
     }
 }
 
-// Change
 // read opts from file
 fs.readFile('opts.json', 'utf-8', (err, data) => {
   if (err) {
@@ -67,6 +73,8 @@ fs.readFile('opts.json', 'utf-8', (err, data) => {
   opts.identity.password = optstemp.identity.password;
   opts.channels = optstemp.channels;
 });
+
+
 commandmap = {
   "!reloadcommands":
     (target, context, msg, self) => {
@@ -133,6 +141,8 @@ function LoadCommands() {
     }
   });
 }
+
+
 function PullAndRestart() {
   exec('./restart.sh', (e,stdout,stderr)=> {
     if(e instanceof Error) {
