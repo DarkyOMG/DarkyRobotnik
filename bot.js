@@ -1,22 +1,28 @@
 const tmi = require('tmi.js');
 const fs = require('fs');
 const exec = require('child_process').exec;
-
+//////////////////////////////////////////////////////// Variables (Change this) //////////////////////////////////////////////////
 // Define configuration options
 const opts = {
   identity: {
-    username: "",
-    password: ""
+    username: "", // Example: "DarkyRobotnik"
+    password: ""  // Example: "password123"
   },
-  channels: [
+  channels: [     // Example: ["WTFDarky"]
   ]
 };
 // List your admins and Mods
 let mods = ['WTFDarky', 'Toobi', 'pladdemusicjam']
+// Path for statics.json, which should hold all your commands. Use './statics.json' if you want to use the given example-file.
+let staticsPath = '/sftp_uploads/user1/darkyrobotnikexchange/statics.json'
+
+
+
+//////////////////////////////////////////////////////// Code //////////////////////////////////////////////////
+
 
 // Anwers for Bot to automatically react to random messages
 let answers = [` haha, ja genau!`,` lol, du sagst es :D`,` ich genieße jedes einzelne dieser Worte!`, ` Da wird man ja fuchsig!`,` das hast du doch von jemandem abgeschrieben!`, ` für die Nachricht gibt's 5 ECTS!`, ` du wirkst müde. Bestell dir doch mal einen !kaffee mit !milch!`]
-
 // Variables and Commandmap for riddle
 let firstwinner = "@pinkfluffyfluffycorn hat das Rätsel als erstes gelöst und hat sich damit einen 10€-Steam-Gutschein verdient :)"
 riddlemap = {
@@ -55,7 +61,7 @@ standardmap = {
     },
     "!pullandrestart":
     (target,context,msg,self) => {
-      if (context['display-name'] == 'WTFDarky') {
+      if (mods.includes(context['display-name'])) {
         client.say(target, `Restarting...`);
         PullAndRestart()
       }
@@ -65,7 +71,7 @@ standardmap = {
 // read opts from file
 fs.readFile('opts.json', 'utf-8', (err, data) => {
   if (err) {
-    throw err;
+    console.log("Can't find opts.json. Using given opts.");
   }
 
   const optstemp = JSON.parse(data.toString());
@@ -78,7 +84,7 @@ fs.readFile('opts.json', 'utf-8', (err, data) => {
 commandmap = {
   "!reloadcommands":
     (target, context, msg, self) => {
-      if (context['display-name'] == 'WTFDarky') {
+      if (mods.includes(context['display-name'])) {
         LoadCommands()
         client.say(target, `Reload successfull!`);
       }
@@ -131,7 +137,7 @@ function LoadCommands() {
 
   commandmap = Object.assign(commandmap, riddlemap)
   commandmap = Object.assign(commandmap, standardmap)
-  fs.readFile('/sftp_uploads/user1/darkyrobotnikexchange/statics.json', 'utf-8', (err, data) => {
+  fs.readFile(staticsPath, 'utf-8', (err, data) => {
     if (err) {
       throw err;
     }
@@ -162,6 +168,9 @@ function onConnectedHandler(addr, port) {
 
 
 
+
+
+// Option for times events
 function resolveAfterNSeconds(n) {
   return new Promise(resolve => {
     setTimeout(() => {
@@ -170,6 +179,7 @@ function resolveAfterNSeconds(n) {
   });
 }
 
+// Starting-function for timed events. 
 async function asyncCall() {
   console.log('calling');
   const result = await resolveAfterNSeconds(10000);
