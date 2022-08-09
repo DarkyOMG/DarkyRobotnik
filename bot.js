@@ -12,7 +12,7 @@ const opts = {
   ]
 };
 // List your admins and Mods
-let mods = ['WTFDarky', 'Toobi', 'pladdemusicjam']
+let mods = ['WTFDarky', 'Toobi', 'pladdemusicjam', 'Herbstliches']
 // Path for statics.json, which should hold all your commands. Use './statics.json' if you want to use the given example-file.
 let staticsPath = '/sftp_uploads/user1/darkyrobotnikexchange/statics.json'
 
