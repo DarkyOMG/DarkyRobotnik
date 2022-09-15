@@ -116,7 +116,7 @@ client.on('connected', onConnectedHandler);
 
 // Connect to Twitch:
 client.connect();
-
+client.say(opts[0],"Bot started successfully.");
 
 
 // Called every time a message comes in
