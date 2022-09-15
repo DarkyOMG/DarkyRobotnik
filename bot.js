@@ -27,6 +27,10 @@ let adverts = [`Du willst auch an den Präsenzveranstaltungen teilnehmen? Dann k
 let currentadvert = 0;
 let nextcall = new Date()
 
+// Special variables
+var statistics = {deterioration: 0}
+let deterioration = 0;
+
 // Variables and Commandmap for riddle
 let firstwinner = "@pinkfluffyfluffycorn hat das Rätsel als erstes gelöst und hat sich damit einen 10€-Steam-Gutschein verdient :)"
 riddlemap = {
@@ -107,6 +111,16 @@ commandmap = {
     }
 }
 
+if (!fs.existsSync("./stats.json")) {
+  fs.writeFile('stats.json', JSON.stringify(statistics), (err) => console.log(err));
+} else {
+  fs.readFile('stats.json', 'utf-8', (err, data) => {
+    if (err) {
+      throw err;
+    }
+    statistics = JSON.parse(data.toString());
+  });
+}
 // Create a client with our options
 const client = new tmi.client(opts);
 
@@ -199,7 +213,7 @@ function PullAndRestart() {
 // Called every time the bot connects to Twitch chat
 function onConnectedHandler(addr, port) {
   console.log(`* Connected to ${addr}:${port}`);
-  client.say(opts.channels[0], "Bot connected successfully!");
+  client.say(opts.channels[0], `Bot connected successfully! ${statistics[deterioration]}`);
 }
 
 
