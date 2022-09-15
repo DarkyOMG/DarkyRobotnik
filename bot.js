@@ -159,6 +159,17 @@ function LoadCommands() {
       (target, context, msg, self) => {
         LoadCommands()
         client.say(target, `Reload successfull!`);
+      },
+    "!hug":
+      (target, context, msg, self) => {
+        var re = /@(?<name>\S*)/;
+        let result = msg.match(re)
+        if (result != null) {
+          client.say(target, `${result[0]} wird fest von ${context['display-name']} in den Arm genommen.`);
+        }
+        else {
+          client.say(target, `${context['display-name']} läuft wild herum und umarmt wahllos Leute. Achtung!`);
+        }
       }
   }
 
