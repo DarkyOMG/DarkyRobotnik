@@ -239,7 +239,7 @@ function PullAndRestart() {
 // Called every time the bot connects to Twitch chat
 function onConnectedHandler(addr, port) {
   console.log(`* Connected to ${addr}:${port}`);
-  client.say(opts.channels[0], `Bot connected successfully! ${statistics['deterioration']}`);
+  client.say(opts.channels[0], `Bot connected successfully!`);
 }
 
 
