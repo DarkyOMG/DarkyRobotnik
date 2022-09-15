@@ -28,8 +28,7 @@ let currentadvert = 0;
 let nextcall = new Date()
 
 // Special variables
-var statistics = {deterioration: 0}
-let deterioration = 0;
+var statistics = {"deterioration": 0}
 
 // Variables and Commandmap for riddle
 let firstwinner = "@pinkfluffyfluffycorn hat das Rätsel als erstes gelöst und hat sich damit einen 10€-Steam-Gutschein verdient :)"
