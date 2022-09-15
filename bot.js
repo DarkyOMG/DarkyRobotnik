@@ -28,7 +28,10 @@ let currentadvert = 0;
 let nextcall = new Date()
 
 // Special variables
-var statistics = {"deterioration": 0}
+var statistics = {
+  "deterioration":  1,
+  "messagecount":   0
+}
 
 // Variables and Commandmap for riddle
 let firstwinner = "@pinkfluffyfluffycorn hat das Rätsel als erstes gelöst und hat sich damit einen 10€-Steam-Gutschein verdient :)"
@@ -133,7 +136,12 @@ client.connect();
 // Called every time a message comes in
 function onMessageHandler(target, context, msg, self) {
   if (self) { return; } // Ignore messages from the bot
-  
+  statistics['messagecount'] = statistics['messagecount'] + 1;
+  if(statistics['messagecount'] > 1000)
+  {
+    statistics['deterioration'] = statistics['deterioration'] + 1
+    statistics['messagecount'] = 0;
+  }
   // Show adverts sometimes.
   if(new Date() > nextcall)
   {
@@ -142,15 +150,34 @@ function onMessageHandler(target, context, msg, self) {
     nextcall.setMinutes(nextcall.getMinutes() + 15)
     currentadvert = (currentadvert + 1) % adverts.length; 
   }
-  
-  
+
+
   // Remove whitespace from chat message
   var re = /!\S*/;
-  let result = msg.match(re) 
-  if(result == null){
-    randomchat =  Math.floor(Math.random() * 100)
-    if(randomchat < 5){
-      client.say(target, `@${context['display-name']} ` + answers[Math.floor(Math.random()*answers.length)]);
+  let result = msg.match(re)
+  if (result == null) {
+    randomchat = Math.floor(Math.random() * 100)
+    if (randomchat < 5) {
+      // Shuffle array
+      var answer = answers[Math.floor(Math.random() * answers.length)]
+      if (statistics['deterioration'] > 0) {
+        var arr = [];
+        while (arr.length < statistics['deterioration']) {
+          var r = Math.floor(Math.random() * answer.length) + 1;
+          if (arr.indexOf(r) === -1) arr.push(r);
+        }
+        for(let i = 0;i < arr.length;i++)
+        { 
+          var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+          var charactersLength = characters.length;
+          randomletter = characters.charAt(Math.floor(Math.random() *
+            charactersLength));
+
+          answer[arr[i]] =  randomletter;
+        }
+      }
+
+      client.say(target, `@${context['display-name']} ` + answer);
     }
     return
   }
