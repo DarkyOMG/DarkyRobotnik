@@ -12,7 +12,7 @@ const opts = {
   ]
 };
 // List your admins and Mods
-let mods = ['WTFDarky', 'Toobi', 'pladdemusicjam', 'Herbstliches']
+let mods = ['WTFDarky', 'Toobi', 'pladdemusicjam', 'Herbstliches', 'teirii']
 // Path for statics.json, which should hold all your commands. Use './statics.json' if you want to use the given example-file.
 let staticsPath = '/sftp_uploads/user1/darkyrobotnikexchange/statics.json'
 
@@ -23,6 +23,10 @@ let staticsPath = '/sftp_uploads/user1/darkyrobotnikexchange/statics.json'
 
 // Anwers for Bot to automatically react to random messages
 let answers = [` haha, ja genau!`,` lol, du sagst es :D`,` ich genieße jedes einzelne dieser Worte!`, ` Da wird man ja fuchsig!`,` das hast du doch von jemandem abgeschrieben!`, ` für die Nachricht gibt's 5 ECTS!`, ` du wirkst müde. Bestell dir doch mal einen !kaffee mit !milch!`]
+let adverts = [`Du willst auch an den Präsenzveranstaltungen teilnehmen? Dann klicke hier: https://discord.gg/VaJfZVKWhK` , `Alle Hintergrundmusik wurde von Martin Platte @pladdemusicjam (https://twitter.com/PLaddeXOXO) erstellt.`,`Alle 3D-Flow-Simulationen wurden von @Toobi (https://www.twitch.tv/Toobi) erstellt.`,`Alle gezeichneten Emotes wurden von @Teirii (https://www.twitch.tv/Teirii) erstellt.`]
+let currentadvert = 0;
+let nextcall = new Date()
+
 // Variables and Commandmap for riddle
 let firstwinner = "@pinkfluffyfluffycorn hat das Rätsel als erstes gelöst und hat sich damit einen 10€-Steam-Gutschein verdient :)"
 riddlemap = {
@@ -88,6 +92,18 @@ commandmap = {
         LoadCommands()
         client.say(target, `Reload successfull!`);
       }
+    },
+    "!hug":
+    (target, context, msg, self) => {
+      var re = /@(?<name>\S*)/;
+      let result = msg.match(re)        
+      if(result != null){
+        client.say(target, `${result[0]} wird fest von ${context['display-name']} in den Arm genommen.`);
+      } 
+      else 
+      {
+        client.say(target, `${context['display-name']} läuft wild herum und umarmt wahllos Leute. Achtung!`);
+      }
     }
 }
 
@@ -106,6 +122,17 @@ client.connect();
 // Called every time a message comes in
 function onMessageHandler(target, context, msg, self) {
   if (self) { return; } // Ignore messages from the bot
+  
+  // Show adverts sometimes.
+  if(new Date() > nextcall)
+  {
+    asyncCall(adverts[currentadvert],60000);
+    nextcall = new Date()
+    nextcall.setMinutes(nextcall.getMinutes() + 15)
+    currentadvert = (currentadvert + 1) % adverts.length; 
+  }
+  
+  
   // Remove whitespace from chat message
   var re = /!\S*/;
   let result = msg.match(re) 
@@ -180,11 +207,9 @@ function resolveAfterNSeconds(n) {
 }
 
 // Starting-function for timed events. 
-async function asyncCall() {
-  console.log('calling');
-  const result = await resolveAfterNSeconds(10000);
-  client.say(opts.channels[0], "This is a test after 10 seconds");
-  // expected output: "resolved"
+async function asyncCall(text,time) {
+  const result = await resolveAfterNSeconds(time);
+  client.say(opts.channels[0], text);
 }
 
 
