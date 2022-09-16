@@ -311,7 +311,10 @@ if (apienabled) {
     type: 'application/json'
   }))
 
-
+  app.get('/', (req, res) => {
+    res.send('Hello World!')
+  })
+  
   app.post('/eventsub', (req, res) => {
     let secret = getSecret();
     let message = getHmacMessage(req);
