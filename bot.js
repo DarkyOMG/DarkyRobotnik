@@ -329,11 +329,11 @@ if (apienabled) {
         console.log(`Event type: ${notification.subscription.type}`);
         console.log(JSON.stringify(notification.event, null, 4));
         if(notification.subscription.type == "channel.follow"){
-          client.say(target, `${notification.event['user_name']} hat unsere Vorlesung gestört. Was für eine Ehre. Schaut doch auch mal die letzten Publikationen von ${notification.event['user_name']} an! https://www.twitch.tv/${notification.event['user_name']}`);
+          client.say(opts.channels[0], `${notification.event['user_name']} hat unsere Vorlesung gestört. Was für eine Ehre. Schaut doch auch mal die letzten Publikationen von ${notification.event['user_name']} an! https://www.twitch.tv/${notification.event['user_name']}`);
         
         }
         if(notification.subscription.type == "channel.raid"){
-          client.say(target, `${notification.event['from_broadcaster_user_name']} hat unsere Vorlesung gestört. Was für eine Ehre. Schaut doch auch mal die letzten Publikationen von ${notification.event['from_broadcaster_user_name']} an! https://www.twitch.tv/${notification.event['from_broadcaster_user_name']}`);
+          client.say(opts.channels[0], `${notification.event['from_broadcaster_user_name']} hat unsere Vorlesung gestört. Was für eine Ehre. Schaut doch auch mal die letzten Publikationen von ${notification.event['from_broadcaster_user_name']} an! https://www.twitch.tv/${notification.event['from_broadcaster_user_name']}`);
         }
         res.sendStatus(204);
       }
