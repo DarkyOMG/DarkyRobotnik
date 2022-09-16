@@ -132,3 +132,6 @@ dist
 
 # Certificates
 .pem
+
+# Secrets
+api-secret.txt
