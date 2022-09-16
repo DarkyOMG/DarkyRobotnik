@@ -17,20 +17,19 @@ let mods = ['WTFDarky', 'Toobi', 'pladdemusicjam', 'Herbstliches', 'teirii']
 let staticsPath = '/sftp_uploads/user1/darkyrobotnikexchange/statics.json'
 
 
-
 //////////////////////////////////////////////////////// Code //////////////////////////////////////////////////
-
-
+// Enable this if you want to use the twitch-api for eventhandling
+const apienabled = false
 // Anwers for Bot to automatically react to random messages
-let answers = [` haha, ja genau!`,` lol, du sagst es :D`,` ich genieße jedes einzelne dieser Worte!`, ` Da wird man ja fuchsig!`,` das hast du doch von jemandem abgeschrieben!`, ` für die Nachricht gibt's 5 ECTS!`, ` du wirkst müde. Bestell dir doch mal einen !kaffee mit !milch!`]
-let adverts = [`Du willst auch an den Präsenzveranstaltungen teilnehmen? Dann klicke hier: https://discord.gg/VaJfZVKWhK` , `Alle Hintergrundmusik wurde von Martin Platte @pladdemusicjam (https://twitter.com/PLaddeXOXO) erstellt.`,`Alle 3D-Flow-Simulationen wurden von @Toobi (https://www.twitch.tv/Toobi) erstellt.`,`Alle gezeichneten Emotes wurden von @Teirii (https://www.twitch.tv/Teirii) erstellt.`]
+let answers = [` haha, ja genau!`, ` lol, du sagst es :D`, ` ich genieße jedes einzelne dieser Worte!`, ` Da wird man ja fuchsig!`, ` das hast du doch von jemandem abgeschrieben!`, ` für die Nachricht gibt's 5 ECTS!`, ` du wirkst müde. Bestell dir doch mal einen !kaffee mit !milch!`]
+let adverts = [`Du willst auch an den Präsenzveranstaltungen teilnehmen? Dann klicke hier: https://discord.gg/VaJfZVKWhK`, `Alle Hintergrundmusik wurde von Martin Platte @pladdemusicjam (https://twitter.com/PLaddeXOXO) erstellt.`, `Alle 3D-Flow-Simulationen wurden von @Toobi (https://www.twitch.tv/Toobi) erstellt.`, `Alle gezeichneten Emotes wurden von @Teirii (https://www.twitch.tv/Teirii) erstellt.`]
 let currentadvert = 0;
 let nextcall = new Date()
 
 // Special variables
 var statistics = {
-  "deterioration":  1,
-  "messagecount":   0
+  "deterioration": 1,
+  "messagecount": 0
 }
 
 // Variables and Commandmap for riddle
@@ -62,15 +61,15 @@ standardmap = {
   "!so":
     (target, context, msg, self) => {
       var re = /@(?<name>\S*)/;
-      let result = msg.match(re)        
-      if(result != null){
+      let result = msg.match(re)
+      if (result != null) {
         if (mods.includes(context['display-name'])) {
           client.say(target, `${result[0]} hat unsere Vorlesung gestört. Was für eine Ehre. Schaut doch auch mal die letzten Publikationen von ${result[0]} an! https://www.twitch.tv/${result['groups']['name']}`);
         }
       }
     },
-    "!pullandrestart":
-    (target,context,msg,self) => {
+  "!pullandrestart":
+    (target, context, msg, self) => {
       if (mods.includes(context['display-name'])) {
         client.say(target, `Restarting...`);
         PullAndRestart()
@@ -99,15 +98,14 @@ commandmap = {
         client.say(target, `Reload successfull!`);
       }
     },
-    "!hug":
+  "!hug":
     (target, context, msg, self) => {
       var re = /@(?<name>\S*)/;
-      let result = msg.match(re)        
-      if(result != null){
+      let result = msg.match(re)
+      if (result != null) {
         client.say(target, `${result[0]} wird fest von ${context['display-name']} in den Arm genommen.`);
-      } 
-      else 
-      {
+      }
+      else {
         client.say(target, `${context['display-name']} läuft wild herum und umarmt wahllos Leute. Achtung!`);
       }
     }
@@ -137,18 +135,16 @@ client.connect();
 function onMessageHandler(target, context, msg, self) {
   if (self) { return; } // Ignore messages from the bot
   statistics['messagecount'] = statistics['messagecount'] + 1;
-  if(statistics['messagecount'] > 1000)
-  {
+  if (statistics['messagecount'] > 1000) {
     statistics['deterioration'] = statistics['deterioration'] + 1
     statistics['messagecount'] = 0;
   }
   // Show adverts sometimes.
-  if(new Date() > nextcall)
-  {
-    asyncCall(adverts[currentadvert],60000);
+  if (new Date() > nextcall) {
+    asyncCall(adverts[currentadvert], 60000);
     nextcall = new Date()
     nextcall.setMinutes(nextcall.getMinutes() + 15)
-    currentadvert = (currentadvert + 1) % adverts.length; 
+    currentadvert = (currentadvert + 1) % adverts.length;
   }
 
 
@@ -166,14 +162,13 @@ function onMessageHandler(target, context, msg, self) {
           var r = Math.floor(Math.random() * answer.length) + 1;
           if (arr.indexOf(r) === -1) arr.push(r);
         }
-        for(let i = 0;i < arr.length;i++)
-        { 
+        for (let i = 0; i < arr.length; i++) {
           var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
           var charactersLength = characters.length;
           randomletter = characters.charAt(Math.floor(Math.random() *
             charactersLength));
 
-          answer[arr[i]] =  randomletter;
+          answer[arr[i]] = randomletter;
         }
       }
 
@@ -226,8 +221,8 @@ function LoadCommands() {
 
 
 function PullAndRestart() {
-  exec('./restart.sh', (e,stdout,stderr)=> {
-    if(e instanceof Error) {
+  exec('./restart.sh', (e, stdout, stderr) => {
+    if (e instanceof Error) {
       console.error(e);
       throw e;
     }
@@ -244,9 +239,6 @@ function onConnectedHandler(addr, port) {
 
 
 
-
-
-
 // Option for times events
 function resolveAfterNSeconds(n) {
   return new Promise(resolve => {
@@ -257,7 +249,7 @@ function resolveAfterNSeconds(n) {
 }
 
 // Starting-function for timed events. 
-async function asyncCall(text,time) {
+async function asyncCall(text, time) {
   const result = await resolveAfterNSeconds(time);
   client.say(opts.channels[0], text);
 }
@@ -265,6 +257,131 @@ async function asyncCall(text,time) {
 
 
 
+///////////////////////////////////////////////////// Twitch-API Eventhandler ////////////////////////////////////////////////////////
+if (apienabled) {
+
+  const crypto = require('crypto')
+  const express = require('express');
+  const https = require('https')
+  const app = express();
+  const port = 443;
+
+  const fs = require('fs');
+  var secret = ""
+  try {
+    // read contents of the file
+    const data = fs.readFileSync('api-secret.txt', 'UTF-8');
+
+    // split the contents by new line
+    const lines = data.split(/\r?\n/);
+
+    // print all lines
+    secret = lines[0]
+  } catch (err) {
+    console.error(err);
+  }
+
+  // Notification request headers
+  const TWITCH_MESSAGE_ID = 'Twitch-Eventsub-Message-Id'.toLowerCase();
+  const TWITCH_MESSAGE_TIMESTAMP = 'Twitch-Eventsub-Message-Timestamp'.toLowerCase();
+  const TWITCH_MESSAGE_SIGNATURE = 'Twitch-Eventsub-Message-Signature'.toLowerCase();
+  const MESSAGE_TYPE = 'Twitch-Eventsub-Message-Type'.toLowerCase();
+
+  // Notification message types
+  const MESSAGE_TYPE_VERIFICATION = 'webhook_callback_verification';
+  const MESSAGE_TYPE_NOTIFICATION = 'notification';
+  const MESSAGE_TYPE_REVOCATION = 'revocation';
+
+  // Prepend this string to the HMAC that's created from the message
+  const HMAC_PREFIX = 'sha256=';
+  https
+    .createServer(
+      // Provide the private and public key to the server by reading each
+      // file's content with the readFileSync() method.
+      {
+        key: fs.readFileSync("privkey.pem"),
+        cert: fs.readFileSync("fullchain.pem"),
+      },
+      app
+    )
+    .listen(port, () => {
+      console.log("server is running at port 443");
+    });
+  app.use(express.raw({          // Need raw message body for signature verification
+    type: 'application/json'
+  }))
+
+
+  app.post('/eventsub', (req, res) => {
+    let secret = getSecret();
+    let message = getHmacMessage(req);
+    let hmac = HMAC_PREFIX + getHmac(secret, message);  // Signature to compare
+
+    if (true === verifyMessage(hmac, req.headers[TWITCH_MESSAGE_SIGNATURE])) {
+      console.log("signatures match");
+
+      // Get JSON object from body, so you can process the message.
+      let notification = JSON.parse(req.body);
+
+      if (MESSAGE_TYPE_NOTIFICATION === req.headers[MESSAGE_TYPE]) {
+        // TODO: Do something with the event's data.
+
+        console.log(`Event type: ${notification.subscription.type}`);
+        console.log(JSON.stringify(notification.event, null, 4));
+
+        res.sendStatus(204);
+      }
+      else if (MESSAGE_TYPE_VERIFICATION === req.headers[MESSAGE_TYPE]) {
+        string = ""
+        string = notification.challenge
+        res.status(200).send(string);
+      }
+      else if (MESSAGE_TYPE_REVOCATION === req.headers[MESSAGE_TYPE]) {
+        res.sendStatus(204);
+
+        console.log(`${notification.subscription.type} notifications revoked!`);
+        console.log(`reason: ${notification.subscription.status}`);
+        console.log(`condition: ${JSON.stringify(notification.subscription.condition, null, 4)}`);
+      }
+      else {
+        res.sendStatus(204);
+        console.log(`Unknown message type: ${req.headers[MESSAGE_TYPE]}`);
+      }
+    }
+    else {
+      console.log('403');    // Signatures didn't match.
+      res.sendStatus(403);
+    }
+  })
 
 
 
+  function getSecret() {
+    // TODO: Get secret from secure storage. This is the secret you pass 
+    // when you subscribed to the event.
+    return secret;
+  }
+
+  // Build the message used to get the HMAC.
+  function getHmacMessage(request) {
+    return (request.headers[TWITCH_MESSAGE_ID] +
+      request.headers[TWITCH_MESSAGE_TIMESTAMP] +
+      request.body);
+  }
+
+  // Get the HMAC.
+  function getHmac(secret, message) {
+    return crypto.createHmac('sha256', secret)
+      .update(message)
+      .digest('hex');
+  }
+
+  // Verify whether our hash matches the hash that Twitch passed in the header.
+  function verifyMessage(hmac, verifySignature) {
+    return crypto.timingSafeEqual(Buffer.from(hmac), Buffer.from(verifySignature));
+  }
+
+
+
+
+}
