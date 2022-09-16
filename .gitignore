@@ -131,7 +131,7 @@ dist
 .pnp.*
 
 # Certificates
-.pem
+*.pem
 
 # Secrets
 api-secret.txt
