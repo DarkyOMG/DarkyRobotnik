@@ -1,6 +1,5 @@
+import { WebSocketServer } from 'ws';
 const tmi = require('tmi.js');
-
-import WebSocket, { WebSocketServer } from 'ws';
 const fs = require('fs');
 const exec = require('child_process').exec;
 //////////////////////////////////////////////////////// Variables (Change this) //////////////////////////////////////////////////
