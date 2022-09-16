@@ -1,6 +1,5 @@
 const tmi = require('tmi.js');
 const fs = require('fs');
-const { channel } = require('diagnostics_channel');
 const exec = require('child_process').exec;
 //////////////////////////////////////////////////////// Variables (Change this) //////////////////////////////////////////////////
 // Define configuration options
