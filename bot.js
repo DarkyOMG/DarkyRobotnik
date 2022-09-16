@@ -329,7 +329,6 @@ if (apienabled) {
 
         console.log(`Event type: ${notification.subscription.type}`);
         console.log(JSON.stringify(notification.event, null, 4));
-        console.log(typeof notification.subscription.type);
         if(notification.subscription.type == "channel.follow"){
           console.log("RAID!");
         }
