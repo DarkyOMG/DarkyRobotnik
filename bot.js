@@ -267,7 +267,7 @@ if (apienabled) {
   const app = express();
   const port = 443;
 
-  const wss = new WebSocketServer({port: 8080 });
+  const wss = new WebSocketServer();
 
   wss.on('connection', function connection(ws) {
     ws.on('message', function message(data) {
