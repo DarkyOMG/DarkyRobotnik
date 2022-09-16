@@ -325,7 +325,7 @@ if (apienabled) {
     ws.on('close', () => console.log('Client disconnected'));
   });
   app.get('/', (req, res) => {
-    res.send('Hello World!')
+    res.sendFile('views/test.html', {root: __dirname })
   })
 
   app.post('/eventsub', (req, res) => {

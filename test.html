@@ -16,11 +16,11 @@
             <code>audio</code> element.
         </audio>
     </figure>
-    <div id = "sse">
-        <a href = "javascript:WebSocketTest()">Run WebSocket</a>
-     </div>
+
 </body>
 <script type = "text/javascript">
+    const elem = document.querySelector("audio");
+    WebSocketTest()
     function WebSocketTest() {
        console.log("Testing");
        if ("WebSocket" in window) {
@@ -40,6 +40,9 @@
              var received_msg = evt.data;
              alert("Message is received...");
              console.log(received_msg);
+             if(received_msg == "something"){
+                elem.play()
+             }
           };
            
           ws.onclose = function() { 
@@ -54,9 +57,4 @@
        }
     }
  </script>
-<script>
-const elem = document.querySelector("audio");
-elem.play()
-</script>
-
 </html>
