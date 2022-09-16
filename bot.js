@@ -1,5 +1,6 @@
 const tmi = require('tmi.js');
 const fs = require('fs');
+const { channel } = require('diagnostics_channel');
 const exec = require('child_process').exec;
 //////////////////////////////////////////////////////// Variables (Change this) //////////////////////////////////////////////////
 // Define configuration options
@@ -328,6 +329,10 @@ if (apienabled) {
 
         console.log(`Event type: ${notification.subscription.type}`);
         console.log(JSON.stringify(notification.event, null, 4));
+        console.log(typeof notification.subscription.type);
+        // if(notification.subscription.type == "channel.raid"){
+        //   console.log("RAID!");
+        // }
 
         res.sendStatus(204);
       }
