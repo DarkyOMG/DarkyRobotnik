@@ -1,4 +1,6 @@
 const tmi = require('tmi.js');
+
+import WebSocket, { WebSocketServer } from 'ws';
 const fs = require('fs');
 const exec = require('child_process').exec;
 //////////////////////////////////////////////////////// Variables (Change this) //////////////////////////////////////////////////
@@ -265,10 +267,16 @@ if (apienabled) {
   const https = require('https')
   const app = express();
   const port = 443;
-  const { Server } = require('ws');
 
-  const wss = new Server({ server });
+  const wss = new WebSocketServer({ port: 8080 });
 
+  wss.on('connection', function connection(ws) {
+    ws.on('message', function message(data) {
+      console.log('received: %s', data);
+    });
+
+    ws.send('something');
+  });
   const fs = require('fs');
   var secret = ""
   try {
@@ -313,7 +321,7 @@ if (apienabled) {
   app.use(express.raw({          // Need raw message body for signature verification
     type: 'application/json'
   }))
-  wss.on('connection', (ws) => {
+  app.on('connection', (ws) => {
     console.log('Client connected');
     ws.on('close', () => console.log('Client disconnected'));
   });
