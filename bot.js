@@ -19,7 +19,7 @@ let staticsPath = '/sftp_uploads/user1/darkyrobotnikexchange/statics.json'
 
 //////////////////////////////////////////////////////// Code //////////////////////////////////////////////////
 // Enable this if you want to use the twitch-api for eventhandling
-const apienabled = false
+const apienabled = true
 // Anwers for Bot to automatically react to random messages
 let answers = [` haha, ja genau!`, ` lol, du sagst es :D`, ` ich genieße jedes einzelne dieser Worte!`, ` Da wird man ja fuchsig!`, ` das hast du doch von jemandem abgeschrieben!`, ` für die Nachricht gibt's 5 ECTS!`, ` du wirkst müde. Bestell dir doch mal einen !kaffee mit !milch!`]
 let adverts = [`Du willst auch an den Präsenzveranstaltungen teilnehmen? Dann klicke hier: https://discord.gg/VaJfZVKWhK`, `Alle Hintergrundmusik wurde von Martin Platte @pladdemusicjam (https://twitter.com/PLaddeXOXO) erstellt.`, `Alle 3D-Flow-Simulationen wurden von @Toobi (https://www.twitch.tv/Toobi) erstellt.`, `Alle gezeichneten Emotes wurden von @Teirii (https://www.twitch.tv/Teirii) erstellt.`]
@@ -265,6 +265,9 @@ if (apienabled) {
   const https = require('https')
   const app = express();
   const port = 443;
+  const { Server } = require('ws');
+
+  const wss = new Server({ server });
 
   const fs = require('fs');
   var secret = ""
@@ -310,11 +313,14 @@ if (apienabled) {
   app.use(express.raw({          // Need raw message body for signature verification
     type: 'application/json'
   }))
-
+  wss.on('connection', (ws) => {
+    console.log('Client connected');
+    ws.on('close', () => console.log('Client disconnected'));
+  });
   app.get('/', (req, res) => {
     res.send('Hello World!')
   })
-  
+
   app.post('/eventsub', (req, res) => {
     let secret = getSecret();
     let message = getHmacMessage(req);
