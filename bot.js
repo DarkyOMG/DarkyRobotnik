@@ -1,4 +1,4 @@
-const WebSocketServer = require('ws');
+const WebSocketServer = require('wss');
 const tmi = require('tmi.js');
 const fs = require('fs');
 const exec = require('child_process').exec;
