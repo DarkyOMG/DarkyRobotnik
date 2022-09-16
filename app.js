@@ -5,7 +5,7 @@ const app = express();
 const port = 443;
 
 const fs = require('fs');
-
+var secret  = ""
 try {
     // read contents of the file
     const data = fs.readFileSync('api-secret.txt', 'UTF-8');
@@ -14,7 +14,7 @@ try {
     const lines = data.split(/\r?\n/);
 
     // print all lines
-    const secret = lines[0]
+     secret = lines[0]
 } catch (err) {
     console.error(err);
 }
