@@ -9,6 +9,7 @@
    <figure>
       <audio></audio>
    </figure>
+   <img src="test.png" alt="test">
 </body>
 <script type="text/javascript">
    const audioelem = document.querySelector("audio");
@@ -29,6 +30,9 @@
             console.log(received_msg);
             if(received_msg == 'follow'){
                audioelem.play();
+            }
+            if(received_msg == 'raid'){
+               audioelem.play()
             }
          };
 
