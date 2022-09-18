@@ -264,6 +264,7 @@ if (apienabled) {
   const crypto = require('crypto')
   const express = require('express');
   const https = require('https')
+  var favicon = require('serve-favicon');
   const app = express();
   const port = 443;
 
