@@ -264,19 +264,9 @@ if (apienabled) {
   const crypto = require('crypto')
   const express = require('express');
   const https = require('https')
-  var favicon = require('serve-favicon');
   const app = express();
   const port = 443;
 
-  // const wss = new WebSocketServer({port: 8080});
-
-  // wss.on('connection', function connection(ws) {
-  //   ws.on('message', function message(data) {
-  //     console.log('received: %s', data);
-  //   });
-
-  //   ws.send('something');
-  // });
   const fs = require('fs');
   var secret = ""
   try {
