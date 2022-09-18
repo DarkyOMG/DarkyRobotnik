@@ -10,11 +10,10 @@
    <figure>
       <audio></audio>
    </figure>
-   <img src="test.png" alt="test">
 </body>
 <script type="text/javascript">
    const audioelem = document.querySelector("audio");
-   WebSocketTest()
+   WebSocketTest();
    function WebSocketTest() {
       if ("WebSocket" in window) {
 
@@ -31,9 +30,9 @@
             var received_msg = evt.data;
             console.log(received_msg);
             if(received_msg == "follow"){
-               audioelem.src = 'Follow.wav'
+               audioelem.src = 'Follow.wav';
+               audioelem.play();
             }
-            document.querySelector("img").classList.add("animthing")
          };
 
 
