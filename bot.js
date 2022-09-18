@@ -328,6 +328,9 @@ if (apienabled) {
   app.get('/', (req, res) => {
     res.sendFile('test.html', {root: __dirname })
   })
+  app.get('/Alles%20Mist.wav', (req,res) => {
+    res.sendFile('Alles Mist.wav',{root: __dirname })
+  })
 
   app.post('/eventsub', (req, res) => {
     let secret = getSecret();
