@@ -326,11 +326,14 @@ if (apienabled) {
     ws.send('something');
     ws.on('close', () => console.log('Client disconnected'));
   });
-  app.get('/', (req, res) => {
+  app.get('/:filename?', (req, res) => {
+    if(req.params.filename){
+      console.log("Given filename");
+    }
     res.sendFile('test.html', {root: __dirname })
   })
   app.get('/Alles%20Mist.wav', (req,res) => {
-    res.sendFile('Alles Mist.wav',{root: __dirname })
+    res.download('Alles Mist.wav',{root: __dirname })
   })
 
   app.post('/eventsub', (req, res) => {
