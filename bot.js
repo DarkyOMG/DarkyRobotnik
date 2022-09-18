@@ -335,7 +335,7 @@ if (apienabled) {
 
   app.get('/:filename?', (req, res) => {
     if(req.params.filename != null){
-      if(fs.existsSync(req.params.filename) && req.params.filename.slice(-3) == "wav"){
+      if(fs.existsSync(req.params.filename) && (req.params.filename.slice(-3) == "wav" || req.params.filename.slice(-3) == "png")){
         res.download(req.params.filename)
       }
     }
@@ -365,7 +365,7 @@ if (apienabled) {
         }
         if(notification.subscription.type == "channel.follow"){
           console.log("Expect sound on OBS");
-          webconnections.forEach(key => key.send('raid'))
+          webconnections.forEach(key => key.send('follow'))
         }
         res.sendStatus(204);
       }
