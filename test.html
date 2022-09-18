@@ -33,13 +33,19 @@
             console.log(received_msg);
             if(received_msg == 'follow'){
                imageelem.classList.remove("animthing");
+               setTimeout(() => {
+                  
+               }, 1);
+               imageelem.classList.add("animthing");
                imageelem.src = 'Follow.png';
                audioelem.src = 'Follow.wav';
-               imageelem.classList.add("animthing");
                audioelem.play();
             }
             if(received_msg == 'raid'){
                imageelem.classList.remove("animthing");
+               setTimeout(() => {
+                  
+               }, 1);
                imageelem.src = 'Raid.png';
                audioelem.src = 'Raid.wav';
                audioelem.play();
