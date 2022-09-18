@@ -365,9 +365,7 @@ if (apienabled) {
         }
         if(notification.subscription.type == "channel.follow"){
           console.log("Expect sound on OBS");
-          for(let i = 0; i<webconnections.length;i++){
-            webconnections[i].send('Alles Mist.wav');
-          }
+          webconnections.forEach(key => key.send('Alles Mist.wav'))
         }
         res.sendStatus(204);
       }
