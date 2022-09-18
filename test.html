@@ -10,11 +10,10 @@
    <figure>
       <audio></audio>
    </figure>
-   <!-- <img class="animthing" src="test.png" alt="test"> -->
+   <img src="test.png" alt="test">
 </body>
 <script type="text/javascript">
    const audioelem = document.querySelector("audio");
-   //const imageelem = document.querySelector("img");
    WebSocketTest()
    function WebSocketTest() {
       if ("WebSocket" in window) {
@@ -31,22 +30,10 @@
          ws.onmessage = function (evt) {
             var received_msg = evt.data;
             console.log(received_msg);
-            switch (received_msg) {
-               case "raid":
-                  audioelem.src = "Raid.wav";
-                  //imageelem.classList.remove("animthing");
-                  //imageelem.classList.add("animthing");
-                  audioelem.play();
-                  break;
-               case "follow":
-                  audioelem.src = "Follow.wav";
-                  //imageelem.classList.remove("animthing");
-                  //imageelem.classList.add("animthing");
-                  audioelem.play();
-                  break;
-               default:
-                  break;
+            if(received_msg == "follow"){
+               audioelem.src = 'Follow.wav'
             }
+            document.querySelector("img").classList.add("animthing")
          };
 
 
