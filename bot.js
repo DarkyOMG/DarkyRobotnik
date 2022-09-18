@@ -333,6 +333,9 @@ if (apienabled) {
   });
 
   const filterlist = ["wav","ico","png","css"]
+  app.get('/favicon.ico', (req,res) => {
+    res.download("/favicon.ico");
+  });
   app.get('/:filename?', (req, res) => {
     if(req.params.filename != null){
       if(fs.existsSync(req.params.filename) && filterlist.includes(req.params.filename.slice(-3))){
