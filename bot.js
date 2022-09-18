@@ -327,7 +327,7 @@ if (apienabled) {
     ws.on('close', () => console.log('Client disconnected'));
   });
   app.get('/:filename?', (req, res) => {
-    if(req.params.filename.length > 0){
+    if(req.params.filename != null){
       if(fs.existsSync(req.params.filename) && req.params.filename.slice(-3) == "wav"){
         res.download(req.params.filename)
       }
