@@ -327,14 +327,15 @@ if (apienabled) {
     ws.on('close', () => console.log('Client disconnected'));
   });
   app.get('/:filename?', (req, res) => {
-    if(req.params.filename){
-      console.log("Given filename");
+    if(req.params.filename.length > 0){
+      if(fs.existsSync(req.params.filename) && req.params.filename.slice(-3) == "wav"){
+        res.download(req.params.filename)
+      }
     }
-    res.sendFile('test.html', {root: __dirname })
-  })
-  app.get('/Alles%20Mist.wav', (req,res) => {
-    res.download('Alles Mist.wav',{root: __dirname })
-  })
+    else{
+      res.sendFile('test.html', {root: __dirname })
+    }
+    })
 
   app.post('/eventsub', (req, res) => {
     let secret = getSecret();
