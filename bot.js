@@ -365,7 +365,7 @@ if (apienabled) {
         }
         if(notification.subscription.type == "channel.follow"){
           console.log("Expect sound on OBS");
-          webconnections.forEach(key => key.send('Alles Mist.wav'))
+          webconnections.forEach(key => key.send('raid'))
         }
         res.sendStatus(204);
       }

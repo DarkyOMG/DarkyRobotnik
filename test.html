@@ -2,24 +2,19 @@
 <html>
 
 <head>
-   <title>Our Funky HTML Page</title>
-   <meta name="description" content="Our first page">
-   <meta name="keywords" content="html tutorial template">
-
+   <title>DarkyRobotnik Alerts</title>
+   <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
    <figure>
-      <figcaption>Listen to the T-Rex:</figcaption>
-      <audio controls src="Amerikaner die kämpfen wie Weiber.wav">
-         Your browser does not support the
-         <code>audio</code> element.
-      </audio>
+      <audio></audio>
    </figure>
-
+   <img class="animthing" src="test.png" alt="test">
 </body>
 <script type="text/javascript">
-   const elem = document.querySelector("audio");
+   const audioelem = document.querySelector("audio");
+   const imageelem = document.querySelector("img");
    WebSocketTest()
    function WebSocketTest() {
       if ("WebSocket" in window) {
@@ -36,8 +31,22 @@
          ws.onmessage = function (evt) {
             var received_msg = evt.data;
             console.log(received_msg);
-            elem.src = received_msg;
-            elem.play()
+            switch (received_msg) {
+               case "raid":
+                  audioelem.src = "Raid.wav";
+                  imageelem.classList.remove("animthing");
+                  imageelem.classList.add("animthing");
+                  audioelem.play();
+                  break;
+               case "follow":
+                  audioelem.src = "Follow.wav";
+                  imageelem.classList.remove("animthing");
+                  imageelem.classList.add("animthing");
+                  audioelem.play();
+                  break;
+               default:
+                  break;
+            }
          };
 
 

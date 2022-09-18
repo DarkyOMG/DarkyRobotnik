@@ -1,0 +1,22 @@
+  .animthing {
+    animation:  slidein 4s,
+                dissolve 2s 4s forwards;
+  }
+  @keyframes slidein {
+    from {
+      margin-left: 100%;
+    }
+  
+    to {
+      margin-left: 0%;
+    }
+  }
+  @keyframes dissolve {
+    from {
+        opacity: 100%;
+    }
+    to {
+        opacity: 0%;
+    }
+  }
+  
