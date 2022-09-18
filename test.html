@@ -40,8 +40,8 @@
              var received_msg = evt.data;
              alert("Message is received...");
              console.log(received_msg);
-             if(received_msg == "something"){
-                elem.play()
+             elem.src = received_msg;
+             elem.play()
              }
           };
            

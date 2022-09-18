@@ -323,7 +323,7 @@ if (apienabled) {
   const wss = new WebSocketServer({server});
   wss.on('connection', (ws) => {
     console.log('Client connected');
-    ws.send('something');
+    ws.send('Alles Mist.wav');
     ws.on('close', () => console.log('Client disconnected'));
   });
   app.get('/:filename?', (req, res) => {
