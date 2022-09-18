@@ -320,12 +320,16 @@ if (apienabled) {
   app.use(express.raw({          // Need raw message body for signature verification
     type: 'application/json'
   }))
+
+  let webconnections = []
   const wss = new WebSocketServer({server});
   wss.on('connection', (ws) => {
     console.log('Client connected');
-    ws.send('Alles Mist.wav');
+    webconnections.push(ws);
     ws.on('close', () => console.log('Client disconnected'));
   });
+
+
   app.get('/:filename?', (req, res) => {
     if(req.params.filename != null){
       if(fs.existsSync(req.params.filename) && req.params.filename.slice(-3) == "wav"){
@@ -355,6 +359,12 @@ if (apienabled) {
         console.log(JSON.stringify(notification.event, null, 4));
         if(notification.subscription.type == "channel.raid"){
           client.say(opts.channels[0], `${notification.event['from_broadcaster_user_name']} hat unsere Vorlesung gestört. Was für eine Ehre. Schaut doch auch mal die letzten Publikationen von ${notification.event['from_broadcaster_user_name']} an! https://www.twitch.tv/${notification.event['from_broadcaster_user_name']}`);
+        }
+        if(notification.subscription.type == "channel.follow"){
+          console.log("Expect sound on OBS");
+          for(let i = 0; i<webconnections.length;i++){
+            webconnections[i].send('Alles Mist.wav');
+          }
         }
         res.sendStatus(204);
       }
