@@ -335,7 +335,7 @@ if (apienabled) {
 
   app.get('/:filename?', (req, res) => {
     if(req.params.filename != null){
-      if(fs.existsSync(req.params.filename) && (req.params.filename.slice(-3) == "wav" || req.params.filename.slice(-3) == "png")){
+      if(fs.existsSync(req.params.filename) && (req.params.filename.slice(-3) == "wav" || req.params.filename.slice(-3) == "png"|| req.params.filename.slice(-3) == "ico")){
         res.download(req.params.filename)
       }
     }
