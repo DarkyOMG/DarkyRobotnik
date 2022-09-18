@@ -32,24 +32,22 @@
             var received_msg = evt.data;
             console.log(received_msg);
             if(received_msg == 'follow'){
-               imageelem.classList.remove("animthing");
-               setTimeout(() => {
-                  
-               }, 1);
-               imageelem.classList.add("animthing");
                imageelem.src = 'Follow.png';
                audioelem.src = 'Follow.wav';
                audioelem.play();
+               imageelem.classList.remove("animthing");
+               setTimeout(function() {
+                  title.classList.add("animthing");
+               }, 0);
             }
             if(received_msg == 'raid'){
-               imageelem.classList.remove("animthing");
-               setTimeout(() => {
-                  
-               }, 1);
                imageelem.src = 'Raid.png';
                audioelem.src = 'Raid.wav';
                audioelem.play();
-               imageelem.classList.add("animthing");
+               imageelem.classList.remove("animthing");
+               setTimeout(function() {
+                  title.classList.add("animthing");
+               }, 0);
             }
          };
 
