@@ -340,8 +340,7 @@ if (apienabled) {
       }
     }
     else{
-      res.send("HIIII")
-      //res.sendFile('test.html', {root: __dirname })
+      res.sendFile('test.html', {root: __dirname })
     }
     })
 

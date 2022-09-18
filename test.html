@@ -1,9 +1,8 @@
 <!doctype html>
 <html>
-
 <head>
    <title>DarkyRobotnik Alerts</title>
-   <link rel="stylesheet" href="styles.css">
+   <!--<link rel="stylesheet" href="styles.css">-->
 </head>
 
 <body>
@@ -21,7 +20,6 @@
          var ws = new WebSocket("wss://muskatnuss.duckdns.org");
 
          ws.onopen = function () {
-
             console.log("Connected to server!")
             alert("Connection is open!")
          };
@@ -29,10 +27,6 @@
          ws.onmessage = function (evt) {
             var received_msg = evt.data;
             console.log(received_msg);
-            if(received_msg == "follow"){
-               audioelem.src = 'Follow.wav';
-               audioelem.play();
-            }
          };
 
 
