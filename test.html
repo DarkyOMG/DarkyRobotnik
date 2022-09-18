@@ -29,9 +29,11 @@
             var received_msg = evt.data;
             console.log(received_msg);
             if(received_msg == 'follow'){
+               audioelem.src = 'Follow.wav';
                audioelem.play();
             }
             if(received_msg == 'raid'){
+               audioelem.src = 'Raid.wav';
                audioelem.play()
             }
          };
