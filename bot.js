@@ -332,10 +332,10 @@ if (apienabled) {
     });
   });
 
-
+  const filterlist = ["wav","ico","png","css"]
   app.get('/:filename?', (req, res) => {
     if(req.params.filename != null){
-      if(fs.existsSync(req.params.filename) && (req.params.filename.slice(-3) == "wav" || req.params.filename.slice(-3) == "png"|| req.params.filename.slice(-3) == "ico")){
+      if(fs.existsSync(req.params.filename) && filterlist.includes(req.params.filename.slice(-3))){
         res.download(req.params.filename)
       }
     }
