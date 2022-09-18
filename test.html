@@ -2,59 +2,60 @@
 <html>
 
 <head>
-    <title>Our Funky HTML Page</title>
-    <meta name="description" content="Our first page">
-    <meta name="keywords" content="html tutorial template">
-    
+   <title>Our Funky HTML Page</title>
+   <meta name="description" content="Our first page">
+   <meta name="keywords" content="html tutorial template">
+
 </head>
 
 <body>
-    <figure>
-        <figcaption>Listen to the T-Rex:</figcaption>
-        <audio controls src="Amerikaner die kämpfen wie Weiber.wav">
-            Your browser does not support the
-            <code>audio</code> element.
-        </audio>
-    </figure>
+   <figure>
+      <figcaption>Listen to the T-Rex:</figcaption>
+      <audio controls src="Amerikaner die kämpfen wie Weiber.wav">
+         Your browser does not support the
+         <code>audio</code> element.
+      </audio>
+   </figure>
 
 </body>
-<script type = "text/javascript">
-    const elem = document.querySelector("audio");
-    WebSocketTest()
-    function WebSocketTest() {
-       console.log("Testing");
-       if ("WebSocket" in window) {
-          alert("WebSocket is supported by your Browser!");
-          
-          // Let us open a web socket
-          var ws = new WebSocket("wss://muskatnuss.duckdns.org");
-           
-          ws.onopen = function() {
-             
-             // Web Socket is connected, send data using send()
-             ws.send("Message to send");
-             alert("Message is sent...");
-          };
-           
-          ws.onmessage = function (evt) { 
-             var received_msg = evt.data;
-             alert("Message is received...");
-             console.log(received_msg);
-             elem.src = received_msg;
-             elem.play()
-             }
-          };
-           
-          ws.onclose = function() { 
-             
-             // websocket is closed.
-             alert("Connection is closed..."); 
-          };
-       } else {
-         
-          // The browser doesn't support WebSocket
-          alert("WebSocket NOT supported by your Browser!");
-       }
-    }
- </script>
+<script type="text/javascript">
+   const elem = document.querySelector("audio");
+   WebSocketTest()
+   function WebSocketTest() {
+      console.log("Testing");
+      if ("WebSocket" in window) {
+         alert("WebSocket is supported by your Browser!");
+
+         // Let us open a web socket
+         var ws = new WebSocket("wss://muskatnuss.duckdns.org");
+
+         ws.onopen = function () {
+
+            // Web Socket is connected, send data using send()
+            ws.send("Message to send");
+            alert("Message is sent...");
+         };
+
+         ws.onmessage = function (evt) {
+            var received_msg = evt.data;
+            alert("Message is received...");
+            console.log(received_msg);
+            elem.src = received_msg;
+            elem.play()
+         };
+
+
+         ws.onclose = function () {
+
+            // websocket is closed.
+            alert("Connection is closed...");
+         };
+      } else {
+
+         // The browser doesn't support WebSocket
+         alert("WebSocket NOT supported by your Browser!");
+      }
+   }
+</script>
+
 </html>
