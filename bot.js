@@ -267,15 +267,15 @@ if (apienabled) {
   const app = express();
   const port = 443;
 
-  const wss = new WebSocketServer({port: 8080});
+  // const wss = new WebSocketServer({port: 8080});
 
-  wss.on('connection', function connection(ws) {
-    ws.on('message', function message(data) {
-      console.log('received: %s', data);
-    });
+  // wss.on('connection', function connection(ws) {
+  //   ws.on('message', function message(data) {
+  //     console.log('received: %s', data);
+  //   });
 
-    ws.send('something');
-  });
+  //   ws.send('something');
+  // });
   const fs = require('fs');
   var secret = ""
   try {
@@ -304,7 +304,7 @@ if (apienabled) {
 
   // Prepend this string to the HMAC that's created from the message
   const HMAC_PREFIX = 'sha256=';
-  https
+  const server = https
     .createServer(
       // Provide the private and public key to the server by reading each
       // file's content with the readFileSync() method.
@@ -320,7 +320,8 @@ if (apienabled) {
   app.use(express.raw({          // Need raw message body for signature verification
     type: 'application/json'
   }))
-  app.on('connection', (ws) => {
+  const ws = new WebSocketServer({server});
+  wss.on('connection', (ws) => {
     console.log('Client connected');
     ws.on('close', () => console.log('Client disconnected'));
   });
