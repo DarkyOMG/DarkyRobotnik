@@ -334,7 +334,7 @@ if (apienabled) {
 
   const filterlist = ["wav","ico","png","css"]
   app.get('/favicon.ico', (req,res) => {
-    res.download("/favicon.ico");
+    res.download("favicon.ico");
   });
   app.get('/:filename?', (req, res) => {
     if(req.params.filename != null){
