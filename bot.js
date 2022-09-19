@@ -373,7 +373,7 @@ if (apienabled) {
         }
         if(notification.subscription.type == "channel.channel_points_custom_reward_redemption.add"){
           if(notification.event['reward']['title'].slice(0,4) == "Clip"){
-            webconnections.forEach(key => key.send('clip'+notification.event['reward']['title']).slice(6));
+            webconnections.forEach(key => key.send('clip'+notification.event['reward']['title'].slice(6)));
           }
         }
         res.sendStatus(204);
