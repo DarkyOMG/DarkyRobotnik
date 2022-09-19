@@ -119,8 +119,8 @@ if (!fs.existsSync("./stats.json")) {
     if (err) {
       throw err;
     }
-    statistics['deterioration'] = JSON.parse(data.toString()['deteriotation']);
-    
+    statistics['deterioration'] = JSON.parse(data.toString())['deterioration'];
+
   });
 }
 // Create a client with our options
