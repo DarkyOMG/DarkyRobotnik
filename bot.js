@@ -323,20 +323,22 @@ if (apienabled) {
     });
   });
 
-  const filterlist = ["wav","ico","png","css"]
+  const filterlist = ["wav","ico","png","css","gif"]
   app.get('/favicon.ico', (req,res) => {
     res.download("favicon.ico");
   });
-  app.get('/:filename?', (req, res) => {
+  app.get('/:folder?/:filename', (req, res) => {
     if(req.params.filename != null){
-      if(fs.existsSync(req.params.filename) && filterlist.includes(req.params.filename.slice(-3))){
-        res.download(req.params.filename)
+      if(fs.existsSync(req.params.folder+"/"+req.params.filename) && filterlist.includes(req.params.filename.slice(-3))){
+        res.download(req.params.folder+"/"+req.params.filename);
       }
     }
     else{
-      res.sendFile('index.html', {root: __dirname })
+      res.sendFile('index.html', {root: __dirname });
     }
     })
+  
+
 
   app.post('/eventsub', (req, res) => {
     let secret = getSecret();
@@ -363,6 +365,7 @@ if (apienabled) {
         }
         if(notification.subscription.type = "channel.channel_points_custom_reward_redemption.add"){
           console.log(`Dingens.${notification.event['reward']['title']}`);
+          webconnections.forEach(key => key.send(notification.event['reward']['title']));
         }
         res.sendStatus(204);
       }

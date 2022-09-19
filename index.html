@@ -10,7 +10,7 @@
    <figure>
       <audio src="Follow.wav"></audio>
    </figure>
-   <img src="Follow.png" alt="test">
+   <img src="images/Follow.gif" alt="Couldn't find image">
 </body>
 <script type="text/javascript">
    const audioelem = document.querySelector("audio");
@@ -31,8 +31,8 @@
             var received_msg = evt.data;
             console.log(received_msg);
             if(received_msg == 'follow'){
-               imageelem.src = 'Follow.png';
-               audioelem.src = 'Follow.wav';
+               imageelem.src = 'images/Follow.gif';
+               audioelem.src = 'clips/Follow.wav';
                audioelem.play();
                imageelem.classList.remove("animthing");
                setTimeout(function() {
@@ -40,8 +40,8 @@
                }, 0);
             }
             if(received_msg == 'raid'){
-               imageelem.src = 'Raid.png';
-               audioelem.src = 'Raid.wav';
+               imageelem.src = 'images/Raid.png';
+               audioelem.src = 'clips/Raid.wav';
                audioelem.play();
                imageelem.classList.remove("animthing");
                setTimeout(function() {
