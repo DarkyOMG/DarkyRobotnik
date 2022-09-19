@@ -119,7 +119,8 @@ if (!fs.existsSync("./stats.json")) {
     if (err) {
       throw err;
     }
-    statistics = JSON.parse(data.toString());
+    statistics['deterioration'] = JSON.parse(data.toString()['deteriotation']);
+    
   });
 }
 // Create a client with our options
@@ -248,7 +249,10 @@ function resolveAfterNSeconds(n) {
     }, n);
   });
 }
-
+async function asnycFuncCall(func,time){
+  const restult = await resolveAfterNSeconds(600000)
+  fs.writeFile('stats.json', JSON.stringify(statistics), (err) => console.log(err));
+}
 // Starting-function for timed events. 
 async function asyncCall(text, time) {
   const result = await resolveAfterNSeconds(time);
@@ -337,8 +341,8 @@ if (apienabled) {
   })
   app.get('/:folder/:filename', (req, res) => {
     if (req.params.filename != null) {
-      if (fs.existsSync(req.params.folder + "/" + req.params.filename) && filterlist.includes(req.params.filename.slice(-3))) {
-        res.download(req.params.folder + "/" + req.params.filename);
+      if (fs.existsSync('/sftp_uploads/user1/'+req.params.folder + "/" + req.params.filename) && filterlist.includes(req.params.filename.slice(-3))) {
+        res.download('/sftp_uploads/user1/'+req.params.folder + "/" + req.params.filename);
       }
     }
     else {
