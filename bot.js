@@ -334,7 +334,7 @@ if (apienabled) {
       }
     }
     else{
-      res.sendFile('test.html', {root: __dirname })
+      res.sendFile('index.html', {root: __dirname })
     }
     })
 
@@ -359,7 +359,10 @@ if (apienabled) {
         }
         if(notification.subscription.type == "channel.follow"){
           console.log("Expect sound on OBS");
-          webconnections.forEach(key => key.send('follow'))
+          webconnections.forEach(key => key.send('follow'));
+        }
+        if(notification.subscription.type = "channel.channel_points_custom_reward_redemption.add"){
+          console.log(`Dingens.${notification.event['reward']['title']}`);
         }
         res.sendStatus(204);
       }
