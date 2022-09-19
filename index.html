@@ -15,6 +15,7 @@
 <script type="text/javascript">
    const audioelem = document.querySelector("audio");
    const imageelem = document.querySelector("img");
+   let audioelemlist = []
    WebSocketTest();
    function WebSocketTest() {
       if ("WebSocket" in window) {
@@ -49,6 +50,14 @@
                }, 0);
             }
             if(received_msg.slice(0,4) == 'clip'){
+               if(received_msg.slice(4) == "Clap"){
+                  var tempaudio = document.createElement("audio");
+                  tempaudio.src = 'clips/'+received_msg.slice(4)+'.wav';
+                  tempaudio.play();
+                  setTimeout(function() {
+                     tempaudio.parentNode.removeChild(tempaudio);
+                  },2000);
+               }
                audioelem.src = 'clips/'+received_msg.slice(4)+'.wav';
                audioelem.play();
             }

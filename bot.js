@@ -313,7 +313,7 @@ if (apienabled) {
   }))
 
   let webconnections = new Set()
-  const wss = new WebSocketServer({server});
+  const wss = new WebSocketServer({ server });
   wss.on('connection', (ws) => {
     console.log('Client connected');
     webconnections.add(ws)
@@ -323,29 +323,29 @@ if (apienabled) {
     });
   });
 
-  const filterlist = ["wav","ico","png","css","gif"]
-  
+  const filterlist = ["wav", "ico", "png", "css", "gif"]
+
   app.get('/:filename?', (req, res) => {
-    if(req.params.filename != null){
-      if(fs.existsSync(req.params.filename) && filterlist.includes(req.params.filename.slice(-3))){
+    if (req.params.filename != null) {
+      if (fs.existsSync(req.params.filename) && filterlist.includes(req.params.filename.slice(-3))) {
         res.download(req.params.filename);
       }
     }
-    else{
-      res.sendFile('index.html', {root: __dirname });
+    else {
+      res.sendFile('index.html', { root: __dirname });
     }
-    })
+  })
   app.get('/:folder/:filename', (req, res) => {
-    if(req.params.filename != null){
-      if(fs.existsSync(req.params.folder+"/"+req.params.filename) && filterlist.includes(req.params.filename.slice(-3))){
-        res.download(req.params.folder+"/"+req.params.filename);
+    if (req.params.filename != null) {
+      if (fs.existsSync(req.params.folder + "/" + req.params.filename) && filterlist.includes(req.params.filename.slice(-3))) {
+        res.download(req.params.folder + "/" + req.params.filename);
       }
     }
-    else{
-      res.sendFile('index.html', {root: __dirname });
+    else {
+      res.sendFile('index.html', { root: __dirname });
     }
-    })
-  
+  })
+
 
 
   app.post('/eventsub', (req, res) => {
@@ -364,16 +364,18 @@ if (apienabled) {
 
         console.log(`Event type: ${notification.subscription.type}`);
         console.log(JSON.stringify(notification.event, null, 4));
-        if(notification.subscription.type == "channel.raid"){
+        if (notification.subscription.type == "channel.raid") {
           client.say(opts.channels[0], `${notification.event['from_broadcaster_user_name']} hat unsere Vorlesung gestört. Was für eine Ehre. Schaut doch auch mal die letzten Publikationen von ${notification.event['from_broadcaster_user_name']} an! https://www.twitch.tv/${notification.event['from_broadcaster_user_name']}`);
         }
-        if(notification.subscription.type == "channel.follow"){
+        if (notification.subscription.type == "channel.follow") {
           console.log("Expect sound on OBS");
           webconnections.forEach(key => key.send('follow'));
         }
-        if(notification.subscription.type == "channel.channel_points_custom_reward_redemption.add"){
-          if(notification.event['reward']['title'].slice(0,4) == "Clip"){
-            webconnections.forEach(key => key.send('clip'+notification.event['reward']['title'].slice(6)));
+        if (notification.subscription.type == "channel.channel_points_custom_reward_redemption.add") {
+          if (notification.event['reward']['title'].slice(0, 4) == "Clip") {
+
+            webconnections.forEach(key => key.send('clip' + notification.event['reward']['title'].slice(6)));
+
           }
         }
         res.sendStatus(204);
