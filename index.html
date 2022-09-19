@@ -48,6 +48,10 @@
                   imageelem.classList.add("animthing");
                }, 0);
             }
+            if(received_msg.slice(0,3) == 'clip'){
+               audioelem.src = 'clips/'+received_msg.slice(4);
+               audioelem.play();
+            }
          };
 
 

@@ -371,9 +371,9 @@ if (apienabled) {
           console.log("Expect sound on OBS");
           webconnections.forEach(key => key.send('follow'));
         }
-        if(notification.subscription.type = "channel.channel_points_custom_reward_redemption.add"){
+        if(notification.subscription.type == "channel.channel_points_custom_reward_redemption.add"){
           console.log(`Dingens.${notification.event['reward']['title']}`);
-          webconnections.forEach(key => key.send(notification.event['reward']['title']));
+          webconnections.forEach(key => key.send('clip'+notification.event['reward']['title']));
         }
         res.sendStatus(204);
       }

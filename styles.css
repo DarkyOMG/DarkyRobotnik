@@ -1,6 +1,6 @@
   .animthing {
     animation: slidein 4s,
-      dissolve 2s 4s forwards;
+      dissolve 2s 6s forwards;
   }
 
   @keyframes slidein {
