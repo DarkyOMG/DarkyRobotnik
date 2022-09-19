@@ -372,8 +372,9 @@ if (apienabled) {
           webconnections.forEach(key => key.send('follow'));
         }
         if(notification.subscription.type == "channel.channel_points_custom_reward_redemption.add"){
-          console.log(`Dingens.${notification.event['reward']['title']}`);
-          webconnections.forEach(key => key.send('clip'+notification.event['reward']['title']));
+          if(notification.event['reward']['title'].slice(0,4) == "Clip"){
+            webconnections.forEach(key => key.send('clip'+notification.event['reward']['title']).slice(6));
+          }
         }
         res.sendStatus(204);
       }
