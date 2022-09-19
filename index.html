@@ -1,5 +1,6 @@
 <!doctype html>
 <html>
+
 <head>
    <title>DarkyRobotnik Alerts</title>
    <link rel="icon" href="/images/favicon.ico" sizes="any"><!-- 32×32 -->
@@ -31,35 +32,37 @@
          ws.onmessage = function (evt) {
             var received_msg = evt.data;
             console.log(received_msg);
-            if(received_msg == 'follow'){
+            if (received_msg == 'follow') {
                imageelem.src = 'images/Follow.gif';
                audioelem.src = 'clips/Follow.wav';
                audioelem.play();
                imageelem.classList.remove("animthing");
-               setTimeout(function() {
+               setTimeout(function () {
                   imageelem.classList.add("animthing");
                }, 0);
             }
-            if(received_msg == 'raid'){
+            if (received_msg == 'raid') {
                imageelem.src = 'images/Raid.png';
                audioelem.src = 'clips/Raid.wav';
                audioelem.play();
                imageelem.classList.remove("animthing");
-               setTimeout(function() {
+               setTimeout(function () {
                   imageelem.classList.add("animthing");
                }, 0);
             }
-            if(received_msg.slice(0,4) == 'clip'){
-               if(received_msg.slice(4) == "Clap"){
+            if (received_msg.slice(0, 4) == 'clip') {
+               if (received_msg.slice(4) == "Clap") {
                   var tempaudio = document.createElement("audio");
-                  tempaudio.src = 'clips/'+received_msg.slice(4)+'.wav';
+                  tempaudio.src = 'clips/' + received_msg.slice(4) + '.wav';
                   tempaudio.play();
-                  setTimeout(function() {
+                  setTimeout(function () {
                      tempaudio.parentNode.removeChild(tempaudio);
-                  },2000);
+                  }, 2000);
                }
-               audioelem.src = 'clips/'+received_msg.slice(4)+'.wav';
-               audioelem.play();
+               else {
+                  audioelem.src = 'clips/' + received_msg.slice(4) + '.wav';
+                  audioelem.play();
+               }
             }
          };
 
