@@ -1,3 +1,17 @@
+  div {
+    display: flex;
+    background-color: antiquewhite;
+  }
+  figure{
+    align-items: center;
+    justify-items: auto;
+    text-align: center;
+  }
+  p {
+    font-size: larger;
+    font-style: oblique;
+    color: gold;
+  }
   .animthing {
     animation: slidein 4s,
       dissolve 2s 6s forwards;

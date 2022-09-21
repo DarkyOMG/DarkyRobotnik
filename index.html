@@ -11,11 +11,16 @@
    <figure>
       <audio src="Follow.wav"></audio>
    </figure>
-   <img class="animthing" src="images/Follow.gif" alt="Couldn't find image">
+   <div class="animthing">
+      <figure>
+         <img src="images/Follow.gif" alt="Couldn't find image">
+         <p>FOLLOW!</p>
+      </figure>
+   </div>
 </body>
 <script type="text/javascript">
    const audioelem = document.querySelector("audio");
-   const imageelem = document.querySelector("img");
+   const imageelem = document.querySelector("div");
    let audioelemlist = []
    WebSocketTest();
    function WebSocketTest() {
