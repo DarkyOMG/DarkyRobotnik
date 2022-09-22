@@ -112,7 +112,7 @@ commandmap = {
     },
     "!stats":
     (target, context, msg, self) => {
-      client.say(target, `Stats: Secret:${deterioration}, Messages since last start: ${messagecount}`);
+      client.say(target, `Stats: Secret:${statistics['deterioration']}, Messages since last start: ${statistics['messagecount']}`);
     }
 }
 
@@ -212,7 +212,7 @@ function LoadCommands() {
       },
       "!stats":
       (target, context, msg, self) => {
-        client.say(target, `Stats: Secret:${deterioration}, Messages since last start: ${messagecount}`);
+        client.say(target, `Stats: Secret:${statistics['deterioration']}, Messages since last start: ${statistics['messagecount']}`);
       }
   }
 
