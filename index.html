@@ -54,8 +54,9 @@
                   imageelem.classList.add("animthing");
                }, 0);
             }
+            let tones = ["A","H","C","D","E","F","G"]
             if (received_msg.slice(0, 4) == 'clip') {
-               if (received_msg.slice(4) == "Clap") {
+               if (received_msg.slice(4) == "Clap" || tones.includes(received_msg.slice(4))) {
                   var tempaudio = document.createElement("audio");
                   tempaudio.src = 'clips/' + received_msg.slice(4) + '.wav';
                   tempaudio.play();
