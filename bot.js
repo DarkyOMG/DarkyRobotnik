@@ -109,6 +109,10 @@ commandmap = {
       else {
         client.say(target, `${context['display-name']} läuft wild herum und umarmt wahllos Leute. Achtung!`);
       }
+    },
+    "!stats":
+    (target, context, msg, self) => {
+      client.say(target, `Stats: Secret:${deterioration}, Messages since last start: ${messagecount}`);
     }
 }
 
