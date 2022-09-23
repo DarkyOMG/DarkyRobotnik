@@ -1,4 +1,5 @@
 <!doctype html>
+<!-- HTML Webpage for own alerts. Only needed if you want to fire your own alerts and clips.-->
 <html>
 
 <head>
@@ -19,14 +20,19 @@
    </div>
 </body>
 <script type="text/javascript">
+   // Get all relevant elements.
    const audioelem = document.querySelector("audio");
    const imageelem = document.querySelector("div");
    const textelem = document.querySelector("p");
+   // This list is used for overlaid audioelements.
    let audioelemlist = []
-   WebSocketTest();
-   function WebSocketTest() {
-      if ("WebSocket" in window) {
 
+   // Start the websocket to recieve events fired by bot.js
+   WebSocketTest();
+
+   function WebSocketTest() {
+      // Check if your browers allows websockets
+      if ("WebSocket" in window) {
          // Let us open a web socket
          var ws = new WebSocket("wss://muskatnuss.duckdns.org");
 
@@ -35,55 +41,68 @@
             alert("Connection is open!")
          };
 
+         // Handle any received message, such as raid or follow-alerts.
          ws.onmessage = function (evt) {
             var received_msg = evt.data;
-            if (received_msg.slice(0,6) == 'follow') {
+
+            // Handle follows
+            if (received_msg.slice(0, 6) == 'follow') {
                imageelem.src = 'images/Follow.gif';
                audioelem.src = 'clips/Follow.wav';
+               var username = received_msg.slice(6);
+               textelem.innerText = `${username} ist nun immatrikuliert!`;
                audioelem.play();
+               // restart the animation
                imageelem.classList.remove("animthing");
-               textelem.innerText = `${received_msg.slice(6)} ist nun immatrikuliert!`
                setTimeout(function () {
                   imageelem.classList.add("animthing");
                }, 0);
             }
-            if (received_msg.slice(0,4) == 'raid') {
+            // Handle raids
+            if (received_msg.slice(0, 4) == 'raid') {
                const regex = /raid(?<name>\S+):(?<viewers>\d+)/;
                let result = received_msg.match(regex);
-               textelem.innerText = `${result['groups']['name']} stürmt den Hörsaal mit ${result['groups']['viewers']} wilden Studierenden!`
+               var raidername = result['groups']['name'];
+               var viewercount = result['groups']['viewers'];
+               textelem.innerText = `${raidername} stürmt den Hörsaal mit ${viewercount} wilden Studierenden!`;
                imageelem.src = 'images/Raid.png';
                audioelem.src = 'clips/Raid.wav';
                audioelem.play();
+               // restart the animation
                imageelem.classList.remove("animthing");
                setTimeout(function () {
                   imageelem.classList.add("animthing");
                }, 0);
             }
+            // List for certain rewards. Only needed for filtering.
             let tones = ["A", "H", "C", "D", "E", "F", "G"]
+
+            // I myself use soundsclips so a possible event could be the call of clip. Handling clip-calls
             if (received_msg.slice(0, 4) == 'clip') {
+               // On certain clip-calls, we use overlaiable audioelements. In my example these are the clap and the tones-clips.
                if (received_msg.slice(4) == "Clap" || tones.includes(received_msg.slice(4))) {
+                  // For this, we create a new audio-element for each call and play the given soundclip. Notice that all files are called like the event.
                   var tempaudio = document.createElement("audio");
                   tempaudio.src = 'clips/' + received_msg.slice(4) + '.wav';
+                  // Play the sound and remove it's audioelement after 2 seconds (could be longer, doesn't really matter) to not fill up the ram.
                   tempaudio.play();
                   setTimeout(function () {
                      tempaudio.remove();
                   }, 2000);
                }
+               // If a normal clip is called, just play the clip and be done with it.
                else {
+                  //TODO: queue up these events.
                   audioelem.src = 'clips/' + received_msg.slice(4) + '.wav';
                   audioelem.play();
                }
             }
          };
-
-
          ws.onclose = function () {
-
             // websocket is closed.
             alert("Connection is closed!");
          };
       } else {
-
          // The browser doesn't support WebSocket
          alert("WebSocket NOT supported by your Browser!");
       }

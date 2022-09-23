@@ -23,11 +23,12 @@ let staticsPath = '/sftp_uploads/user1/darkyrobotnikexchange/statics.json'
 const apienabled = true
 // Anwers for Bot to automatically react to random messages
 let answers = [` haha, ja genau!`, ` lol, du sagst es :D`, ` ich genieße jedes einzelne dieser Worte!`, ` Da wird man ja fuchsig!`, ` das hast du doch von jemandem abgeschrieben!`, ` für die Nachricht gibt's 5 ECTS!`, ` du wirkst müde. Bestell dir doch mal einen !kaffee mit !milch!`]
+// Adverts the bot says periodically while there are still chatters.
 let adverts = [`Du willst auch an den Präsenzveranstaltungen teilnehmen? Dann klicke hier: https://discord.gg/VaJfZVKWhK`, `Alle Hintergrundmusik wurde von Martin Platte @pladdemusicjam (https://twitter.com/PLaddeXOXO) erstellt.`, `Alle 3D-Flow-Simulationen wurden von @Toobi (https://www.twitch.tv/Toobi) erstellt.`, `Alle gezeichneten Emotes wurden von @Teirii (https://www.twitch.tv/Teirii) erstellt.`]
 let currentadvert = 0;
 let nextcall = new Date()
 
-// Special variables
+// Special variables for secret feature
 var statistics = {
   "deterioration": 1,
   "messagecount": 0
@@ -75,6 +76,31 @@ standardmap = {
         client.say(target, `Restarting...`);
         PullAndRestart()
       }
+    },
+  "!hug":
+    (target, context, msg, self) => {
+      var re = /@(?<name>\S*)/;
+      let result = msg.match(re)
+      if (result != null) {
+        client.say(target, `${result[0]} wird fest von ${context['display-name']} in den Arm genommen.`);
+      }
+      else {
+        client.say(target, `${context['display-name']} läuft wild herum und umarmt wahllos Leute. Achtung!`);
+      }
+    },
+  "!stats":
+    (target, context, msg, self) => {
+      client.say(target, `Stats: Secret:${statistics['deterioration']}, Messages since last start: ${statistics['messagecount']}`);
+    }
+}
+
+commandmap = {
+  "!reloadcommands":
+    (target, context, msg, self) => {
+      if (mods.includes(context['display-name'])) {
+        LoadCommands()
+        client.say(target, `Reload successfull!`);
+      }
     }
 }
 
@@ -89,32 +115,6 @@ fs.readFile('opts.json', 'utf-8', (err, data) => {
   opts.identity.password = optstemp.identity.password;
   opts.channels = optstemp.channels;
 });
-
-
-commandmap = {
-  "!reloadcommands":
-    (target, context, msg, self) => {
-      if (mods.includes(context['display-name'])) {
-        LoadCommands()
-        client.say(target, `Reload successfull!`);
-      }
-    },
-  "!hug":
-    (target, context, msg, self) => {
-      var re = /@(?<name>\S*)/;
-      let result = msg.match(re)
-      if (result != null) {
-        client.say(target, `${result[0]} wird fest von ${context['display-name']} in den Arm genommen.`);
-      }
-      else {
-        client.say(target, `${context['display-name']} läuft wild herum und umarmt wahllos Leute. Achtung!`);
-      }
-    },
-    "!stats":
-    (target, context, msg, self) => {
-      client.say(target, `Stats: Secret:${statistics['deterioration']}, Messages since last start: ${statistics['messagecount']}`);
-    }
-}
 
 if (!fs.existsSync("./stats.json")) {
   fs.writeFile('stats.json', JSON.stringify(statistics), (err) => console.log(err));
@@ -140,6 +140,7 @@ client.connect();
 // Called every time a message comes in
 function onMessageHandler(target, context, msg, self) {
   if (self) { return; } // Ignore messages from the bot
+  // Message counting for secret feature.
   statistics['messagecount'] = statistics['messagecount'] + 1;
   if (statistics['messagecount'] > 1000) {
     statistics['deterioration'] = statistics['deterioration'] + 1
@@ -153,15 +154,19 @@ function onMessageHandler(target, context, msg, self) {
     currentadvert = (currentadvert + 1) % adverts.length;
   }
 
-
-  // Remove whitespace from chat message
+  // Check if a command has been called. Commands start with "!".
   var re = /!\S*/;
   let result = msg.match(re)
+
+  // If no command has been called, randomly answer chatters with predefined messages.
   if (result == null) {
+    // Answer if a random number between 1 and 100 is below 5.
     randomchat = Math.floor(Math.random() * 100)
     if (randomchat < 5) {
-      // Shuffle array
+      // Shuffle array to pick a random answer
       var answer = answers[Math.floor(Math.random() * answers.length)]
+
+      // Secret feature. You can delete this if-clause part.
       if (statistics['deterioration'] > 0) {
         var arr = [];
         while (arr.length < statistics['deterioration']) {
@@ -177,13 +182,15 @@ function onMessageHandler(target, context, msg, self) {
           answer[arr[i]] = randomletter;
         }
       }
-
       client.say(target, `@${context['display-name']} ` + answer);
     }
     return
   }
+  // If a command was found, this part is triggered.
   const commandName = result[0].trim();
+  // Check if the command is valid and belongs to this commandmap
   if (commandName[0] == "!" && commandName.toLowerCase() in commandmap) {
+    // The commandmap has either strings or functions. If it is a function, invoke it. Otherwise just post the string in the chat.
     if (typeof commandmap[commandName.toLowerCase()] === 'function') {
       commandmap[commandName.toLowerCase()](target, context, msg, self)
     } else if (typeof commandmap[commandName.toLowerCase()] === 'string') {
@@ -191,31 +198,15 @@ function onMessageHandler(target, context, msg, self) {
     }
   }
 }
-
+// Function to load all given commands by the standardmap and the statics.json file into the active commandmap.
 function LoadCommands() {
   commandmap = {
     "!reloadcommands":
       (target, context, msg, self) => {
         LoadCommands()
         client.say(target, `Reload successfull!`);
-      },
-    "!hug":
-      (target, context, msg, self) => {
-        var re = /@(?<name>\S*)/;
-        let result = msg.match(re)
-        if (result != null) {
-          client.say(target, `${result[0]} wird fest von ${context['display-name']} in den Arm genommen.`);
-        }
-        else {
-          client.say(target, `${context['display-name']} läuft wild herum und umarmt wahllos Leute. Achtung!`);
-        }
-      },
-      "!stats":
-      (target, context, msg, self) => {
-        client.say(target, `Stats: Secret:${statistics['deterioration']}, Messages since last start: ${statistics['messagecount']}`);
       }
   }
-
   commandmap = Object.assign(commandmap, riddlemap)
   commandmap = Object.assign(commandmap, standardmap)
   fs.readFile(staticsPath, 'utf-8', (err, data) => {
@@ -229,7 +220,7 @@ function LoadCommands() {
   });
 }
 
-
+// Function to call a script that pulls the current repository and restarts the bot.
 function PullAndRestart() {
   exec('./restart.sh', (e, stdout, stderr) => {
     if (e instanceof Error) {
@@ -257,18 +248,18 @@ function resolveAfterNSeconds(n) {
     }, n);
   });
 }
-async function asnycFuncCall(func,time){
+
+// Function to call a function asynchronously.
+async function asnycFuncCall(func, time) {
   const restult = await resolveAfterNSeconds(600000)
   fs.writeFile('stats.json', JSON.stringify(statistics), (err) => console.log(err));
 }
-// Starting-function for timed events. 
+
+// Starting-function for timed events posts (e.g. Adverts) 
 async function asyncCall(text, time) {
   const result = await resolveAfterNSeconds(time);
   client.say(opts.channels[0], text);
 }
-
-
-
 
 ///////////////////////////////////////////////////// Twitch-API Eventhandler ////////////////////////////////////////////////////////
 if (apienabled) {
@@ -277,10 +268,16 @@ if (apienabled) {
   const express = require('express');
   const https = require('https')
   const app = express();
+  // Standard port for https communication. Change this if needed.
   const port = 443;
 
   const fs = require('fs');
+
+  // Read in the secret of the server. This can be any random string, but must be kept secret. (e.g. "thisisasecret" or "s92bd8nsu9a892nf8")
+  // It is used to identify authorized events.
   var secret = ""
+  // I save my secret in a file called api-secret.txt. If you don't want to use the same schema, just delete this try-catch block and write the
+  // secret into the variable above.
   try {
     // read contents of the file
     const data = fs.readFileSync('api-secret.txt', 'UTF-8');
@@ -293,6 +290,8 @@ if (apienabled) {
   } catch (err) {
     console.error(err);
   }
+
+  // This part is given by Twitch and is needed for certain identifications of message-parts. Nothing to change here.
 
   // Notification request headers
   const TWITCH_MESSAGE_ID = 'Twitch-Eventsub-Message-Id'.toLowerCase();
@@ -307,6 +306,13 @@ if (apienabled) {
 
   // Prepend this string to the HMAC that's created from the message
   const HMAC_PREFIX = 'sha256=';
+
+
+
+  // Important: To use your own handler, you must enable https on your webserver. To do so, you need to give a CA-signed certificate.
+  // The files needed from this certification are privkey.pem and fullchain.pem. 
+  // To get these files, I used https://certbot.eff.org/ (https://certbot.eff.org/instructions for a detailed explanation).
+
   const server = https
     .createServer(
       // Provide the private and public key to the server by reading each
@@ -318,14 +324,21 @@ if (apienabled) {
       app
     )
     .listen(port, () => {
-      console.log("server is running at port 443");
+      console.log(`server is running at port ${port}`);
     });
   app.use(express.raw({          // Need raw message body for signature verification
     type: 'application/json'
   }))
 
+
+  // This server also serves as a websocketserver for different websockets. This can be used to send events to webclients or other websockets.
+  // This set will contain all open websocket-connections
   let webconnections = new Set()
+
+  // Starting the webserver onto the already started https server to be able to use secure websocketserving. 
+  // This is only needed if you want to fire your own alerts on-stream.
   const wss = new WebSocketServer({ server });
+  // Standard schema for usage of the webserver. wss.on('eventname')... will execute when a message reaches the websocketserver with message 'eventname'.
   wss.on('connection', (ws) => {
     console.log('Client connected');
     webconnections.add(ws)
@@ -335,8 +348,10 @@ if (apienabled) {
     });
   });
 
+  // For certain purposes, we need to be able to download files. These are all the file-types that are openly downloadable.
   const filterlist = ["wav", "ico", "png", "css", "gif"]
 
+  // Downloading files on root-level like the icon or just access the main page.
   app.get('/:filename?', (req, res) => {
     if (req.params.filename != null) {
       if (fs.existsSync(req.params.filename) && filterlist.includes(req.params.filename.slice(-3))) {
@@ -347,19 +362,23 @@ if (apienabled) {
       res.sendFile('index.html', { root: __dirname });
     }
   })
+
+  // Rootfolder for all downloadable content, such as images or clips
+  let folderroot = '/sftp_uploads/user1/'
+
+  // Download images or clips using the folderroot and given folders. This is used for browser-alerts and such.
   app.get('/:folder/:filename', (req, res) => {
     if (req.params.filename != null) {
-      if (fs.existsSync('/sftp_uploads/user1/'+req.params.folder + "/" + req.params.filename) && filterlist.includes(req.params.filename.slice(-3))) {
-        res.download('/sftp_uploads/user1/'+req.params.folder + "/" + req.params.filename);
+      if (fs.existsSync(folderroot + req.params.folder + "/" + req.params.filename) && filterlist.includes(req.params.filename.slice(-3))) {
+        res.download(folderroot + req.params.folder + "/" + req.params.filename);
       }
-    }
-    else {
-      res.sendFile('index.html', { root: __dirname });
     }
   })
 
 
-
+  // Main twitch-event subscription message. This will trigger whenever a twitch-event has been triggered.
+  // To subscribe to events you need to have an app-access token and a client-ID. 
+  // On how to subscribe to events check the documentation: https://dev.twitch.tv/docs/eventsub
   app.post('/eventsub', (req, res) => {
     let secret = getSecret();
     let message = getHmacMessage(req);
@@ -371,25 +390,33 @@ if (apienabled) {
       // Get JSON object from body, so you can process the message.
       let notification = JSON.parse(req.body);
 
+      // Main segment for event-handling
       if (MESSAGE_TYPE_NOTIFICATION === req.headers[MESSAGE_TYPE]) {
         console.log(`Event type: ${notification.subscription.type}`);
         console.log(JSON.stringify(notification.event, null, 4));
+        // Here different events are handled differently. The subscription type is used to identify which kind of event happened.
         if (notification.subscription.type == "channel.raid") {
+          // Give a shoutout to whoever raided the channel.
           client.say(opts.channels[0], `${notification.event['from_broadcaster_user_name']} hat unsere Vorlesung gestört. Was für eine Ehre. Schaut doch auch mal die letzten Publikationen von ${notification.event['from_broadcaster_user_name']} an! https://www.twitch.tv/${notification.event['from_broadcaster_user_name']}`);
-          webconnections.forEach(key => key.send('raid'+notification.event['from_broadcaster_user_name']+':'+notification.event['viewers']));
+          // Also send a notification with all important information to all connected websockets
+          webconnections.forEach(key => key.send('raid' + notification.event['from_broadcaster_user_name'] + ':' + notification.event['viewers']));
         }
+
         if (notification.subscription.type == "channel.follow") {
-          webconnections.forEach(key => key.send('follow'+notification.event['user_name']));
+          webconnections.forEach(key => key.send('follow' + notification.event['user_name']));
         }
+        // This event is triggered whenever a viewer redeems a custom reward. 
         if (notification.subscription.type == "channel.channel_points_custom_reward_redemption.add") {
+          // You can further filter the event by it's title
           if (notification.event['reward']['title'].slice(0, 4) == "Clip") {
-
             webconnections.forEach(key => key.send('clip' + notification.event['reward']['title'].slice(6)));
-
           }
         }
+        // This sends a "OK" signal to Twitch, indicating that the event has been received.
         res.sendStatus(204);
       }
+
+      // This needs to be implemented for twitch to verify and revoke your subscription, but doens't need to be changed.
       else if (MESSAGE_TYPE_VERIFICATION === req.headers[MESSAGE_TYPE]) {
         string = ""
         string = notification.challenge
@@ -412,8 +439,6 @@ if (apienabled) {
       res.sendStatus(403);
     }
   })
-
-
 
   function getSecret() {
     // TODO: Get secret from secure storage. This is the secret you pass 
@@ -439,8 +464,4 @@ if (apienabled) {
   function verifyMessage(hmac, verifySignature) {
     return crypto.timingSafeEqual(Buffer.from(hmac), Buffer.from(verifySignature));
   }
-
-
-
-
 }
