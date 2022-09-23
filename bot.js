@@ -372,16 +372,14 @@ if (apienabled) {
       let notification = JSON.parse(req.body);
 
       if (MESSAGE_TYPE_NOTIFICATION === req.headers[MESSAGE_TYPE]) {
-        // TODO: Do something with the event's data.
-
         console.log(`Event type: ${notification.subscription.type}`);
         console.log(JSON.stringify(notification.event, null, 4));
         if (notification.subscription.type == "channel.raid") {
           client.say(opts.channels[0], `${notification.event['from_broadcaster_user_name']} hat unsere Vorlesung gestört. Was für eine Ehre. Schaut doch auch mal die letzten Publikationen von ${notification.event['from_broadcaster_user_name']} an! https://www.twitch.tv/${notification.event['from_broadcaster_user_name']}`);
+          webconnections.forEach(key => key.send('raid'+notification.event['from_broadcaster_user_name']+':'+notification.event['viewers']));
         }
         if (notification.subscription.type == "channel.follow") {
-          console.log("Expect sound on OBS");
-          webconnections.forEach(key => key.send('follow'));
+          webconnections.forEach(key => key.send('follow'+notification.event['user_name']));
         }
         if (notification.subscription.type == "channel.channel_points_custom_reward_redemption.add") {
           if (notification.event['reward']['title'].slice(0, 4) == "Clip") {

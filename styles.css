@@ -1,6 +1,8 @@
   div {
     display: flex;
-    background-color: antiquewhite;
+    width: 20%;
+    background-color: black;
+    justify-content: center;
   }
   figure{
     align-items: center;
@@ -8,7 +10,7 @@
     text-align: center;
   }
   p {
-    font-size: larger;
+    font-size: x-large;
     font-style: oblique;
     color: gold;
   }

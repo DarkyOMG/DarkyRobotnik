@@ -14,13 +14,14 @@
    <div class="animthing">
       <figure>
          <img src="images/Follow.gif" alt="Couldn't find image">
-         <p>FOLLOW!</p>
+         <p>WTFDarky stürmt den Hörsaal mit 23 wilden Studierenden!</p>
       </figure>
    </div>
 </body>
 <script type="text/javascript">
    const audioelem = document.querySelector("audio");
    const imageelem = document.querySelector("div");
+   const textelem = document.querySelector("p");
    let audioelemlist = []
    WebSocketTest();
    function WebSocketTest() {
@@ -36,16 +37,20 @@
 
          ws.onmessage = function (evt) {
             var received_msg = evt.data;
-            if (received_msg == 'follow') {
+            if (received_msg.slice(0,6) == 'follow') {
                imageelem.src = 'images/Follow.gif';
                audioelem.src = 'clips/Follow.wav';
                audioelem.play();
                imageelem.classList.remove("animthing");
+               textelem.innerText = `${received_msg.slice(6)} ist nun immatrikuliert!`
                setTimeout(function () {
                   imageelem.classList.add("animthing");
                }, 0);
             }
-            if (received_msg == 'raid') {
+            if (received_msg.slice(0,4) == 'raid') {
+               const regex = /raid(?<name>\S+):(?<viewers>\d+)/;
+               let result = received_msg.match(regex);
+               textelem.innerText = `${result['groups']['name']} stürmt den Hörsaal mit ${result['groups']['viewers']} wilden Studierenden!`
                imageelem.src = 'images/Raid.png';
                audioelem.src = 'clips/Raid.wav';
                audioelem.play();
@@ -54,7 +59,7 @@
                   imageelem.classList.add("animthing");
                }, 0);
             }
-            let tones = ["A","H","C","D","E","F","G"]
+            let tones = ["A", "H", "C", "D", "E", "F", "G"]
             if (received_msg.slice(0, 4) == 'clip') {
                if (received_msg.slice(4) == "Clap" || tones.includes(received_msg.slice(4))) {
                   var tempaudio = document.createElement("audio");
