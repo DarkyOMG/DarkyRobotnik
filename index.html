@@ -80,7 +80,7 @@
          if(audioqueue.length >0){
             var current = audioqueue.shift()
             PlaySingleClip(current)
-            setTimeout(HandleClips,5000)
+            setTimeout(HandleClips,audioelem.duration*1000)
          } else {
             isFiringClip = false
          }
