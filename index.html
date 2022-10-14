@@ -81,6 +81,8 @@
             var current = audioqueue.shift()
             PlaySingleClip(current)
             setTimeout(HandleClips,audioelem.duration)
+         } else {
+            isFiringClip = false
          }
       }
    function WebSocketTest() {
@@ -140,7 +142,9 @@
                else {
                   audioqueue.push(received_msg.slice(4))
                }
-               HandleClips()
+               if(!isFiringClip){
+                  HandleClips()
+               }
             }
          };
          ws.onclose = function () {
