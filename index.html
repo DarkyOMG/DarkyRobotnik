@@ -142,10 +142,12 @@
                else {
                   audioqueue.push(received_msg.slice(4))
                }
-               if(!isFiringClip){
+            }
+            
+            if(!isFiringClip){
+                  console.log("Not Firing")
                   HandleClips()
                }
-            }
          };
          ws.onclose = function () {
             // websocket is closed.
