@@ -33,60 +33,75 @@
    // Start the websocket to recieve events fired by bot.js
    WebSocketTest();
 
-      function TriggerFollow(username) {
-         imageelem.src = 'images/Follow.gif';
-         audioelem.src = 'clips/Follow.wav';
-         textelem.innerText = `${username} ist nun immatrikuliert!`;
-         audioelem.play();
-         // restart the animation
-         imageelem.classList.remove("animthing");
-         setTimeout(function () {
-            imageelem.classList.add("animthing");
-         }, 0);
-      }
-      function TriggerRaid(raidername, viewercount) {
-         textelem.innerText = `${raidername} stürmt den Hörsaal mit ${viewercount} wilden Studierenden!`;
-         imageelem.src = 'images/Raid.png';
-         audioelem.src = 'clips/Raid.wav';
-         audioelem.play();
-         // restart the animation
-         imageelem.classList.remove("animthing");
-         setTimeout(function () {
-            imageelem.classList.add("animthing");
-         }, 0);
-      }
-      function HandleAlerts(){
-         isFiringAlert = true
-         if(alertqueue.length >0){
-            var current = alertqueue.shift()
-            if(current['type'] == "follow"){
-               TriggerFollow(current['username'])
-            }
-            if(current['type'] == "raid"){
-               TriggerRaid(current['raidername'],current['viewercount'])
-            }
-            setTimeout(HandleAlerts, 8000);
-         } else {
-            isFiringAlert = false
+   function TriggerFollow(username) {
+      imageelem.src = 'images/Follow.gif';
+      audioelem.src = 'clips/Follow.wav';
+      textelem.innerText = `${username} ist nun immatrikuliert!`;
+      audioelem.play();
+      // restart the animation
+      imageelem.classList.remove("animthing");
+      setTimeout(function () {
+         imageelem.classList.add("animthing");
+      }, 0);
+   }
+   function TriggerRaid(raidername, viewercount) {
+      textelem.innerText = `${raidername} stürmt den Hörsaal mit ${viewercount} wilden Studierenden!`;
+      imageelem.src = 'images/Raid.png';
+      audioelem.src = 'clips/Raid.wav';
+      audioelem.play();
+      // restart the animation
+      imageelem.classList.remove("animthing");
+      setTimeout(function () {
+         imageelem.classList.add("animthing");
+      }, 0);
+   }
+   function HandleAlerts() {
+      isFiringAlert = true
+      if (alertqueue.length > 0) {
+         var current = alertqueue.shift()
+         if (current['type'] == "follow") {
+            TriggerFollow(current['username'])
          }
-      }
-      function PlaySingleClip(clipname){
-         
-         audioelem.src = 'clips/' + clipname + '.wav';
-         audioelem.play();
-      }
-      function HandleClips(){
-         isFiringClip = true
-         if(audioqueue.length >0){
-            var current = audioqueue.shift()
-            PlaySingleClip(current)
-            alert(audioelem.src.duration)
-            alert(audioelem.src.duration*1000)
-            setTimeout(HandleClips,audioelem.src.duration*1000)
-         } else {
-            isFiringClip = false
+         if (current['type'] == "raid") {
+            TriggerRaid(current['raidername'], current['viewercount'])
          }
+         setTimeout(HandleAlerts, 8000);
+      } else {
+         isFiringAlert = false
       }
+   }
+   function PlaySingleClip(clipname) {
+
+      audioelem.src = 'clips/' + clipname + '.wav';
+      audioelem.play();
+   }
+   function HandleClips() {
+      isFiringClip = true
+      if (audioqueue.length > 0) {
+         var current = audioqueue.shift()
+         PlaySingleClip(current)
+         alert(Getaudiocliplength(current))
+         alert(Getaudiocliplength(current))
+         setTimeout(HandleClips, Getaudiocliplength(current) * 1000)
+      } else {
+         isFiringClip = false
+      }
+   }
+   function Getaudiocliplength(clipname) {
+      // Create a non-dom allocated Audio element
+      var au = document.createElement('audio');
+
+      // Define the URL of the MP3 audio file
+      au.src = 'clips/' + clipname + '.wav';
+
+      // Once the metadata has been loaded, display the duration in the console
+      au.addEventListener('loadedmetadata', function () {
+         // Obtain the duration in seconds of the audio file (with milliseconds as well, a float value)
+         var duration = au.duration;
+      }, false);
+      au.remove();
+      return duration;
+   }
    function WebSocketTest() {
       // Check if your browers allows websockets
       if ("WebSocket" in window) {
@@ -97,9 +112,9 @@
             console.log("Connected to server!")
             alert("Connection is open!")
          };
-      if (window.speechSynthesis){
-         alert("Seechy!");
-      }
+         if (window.speechSynthesis) {
+            alert("Seechy!");
+         }
 
          // Handle any received message, such as raid or follow-alerts.
          ws.onmessage = function (evt) {
@@ -108,7 +123,7 @@
             // Handle follows
             if (received_msg.slice(0, 6) == 'follow') {
                var username = received_msg.slice(6);
-               alertqueue.push({type: "follow",username: username})               
+               alertqueue.push({ type: "follow", username: username })
             }
 
             // Handle raids
@@ -117,10 +132,10 @@
                let result = received_msg.match(regex);
                var raidername = result['groups']['name'];
                var viewercount = result['groups']['viewers'];
-               alertqueue.push({type: "raid",raidername: raidername, viewercount: viewercount})
+               alertqueue.push({ type: "raid", raidername: raidername, viewercount: viewercount })
             }
 
-            if(!isFiringAlert){
+            if (!isFiringAlert) {
                HandleAlerts()
             }
 
@@ -145,11 +160,11 @@
                   audioqueue.push(received_msg.slice(4))
                }
             }
-            
-            if(!isFiringClip){
-                  console.log("Not Firing")
-                  HandleClips()
-               }
+
+            if (!isFiringClip) {
+               console.log("Not Firing")
+               HandleClips()
+            }
          };
          ws.onclose = function () {
             // websocket is closed.
