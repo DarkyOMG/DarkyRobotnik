@@ -1,4 +1,3 @@
-// Just write your commands in here. Change the Path in the bot.js accordingly. Don't forget the , after each command.
 {"commands":{
     "!game":"Current game Info",
     "!music":"Alle Hintergrundmusik wurde von Martin Platte (Pladde_Musicjam) erstellt",
