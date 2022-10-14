@@ -80,27 +80,10 @@
       if (audioqueue.length > 0) {
          var current = audioqueue.shift()
          PlaySingleClip(current)
-         alert(Getaudiocliplength(current))
-         alert(Getaudiocliplength(current))
-         setTimeout(HandleClips, Getaudiocliplength(current) * 1000)
+         setTimeout(HandleClips, 10000)
       } else {
          isFiringClip = false
       }
-   }
-   function Getaudiocliplength(clipname) {
-      // Create a non-dom allocated Audio element
-      var au = document.createElement('audio');
-
-      // Define the URL of the MP3 audio file
-      au.src = 'clips/' + clipname + '.wav';
-
-      // Once the metadata has been loaded, display the duration in the console
-      au.addEventListener('loadedmetadata', function () {
-         // Obtain the duration in seconds of the audio file (with milliseconds as well, a float value)
-         var duration = au.duration;
-      }, false);
-      au.remove();
-      return duration;
    }
    function WebSocketTest() {
       // Check if your browers allows websockets
