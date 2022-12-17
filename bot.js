@@ -412,6 +412,7 @@ if (apienabled) {
           // You can further filter the event by it's title
           if (notification.event['reward']['title'].slice(0, 4) == "Clip") {
             getAudioDurationInSeconds(folderroot+'clips/'+notification.event['reward']['title'].slice(6)+'.wav').then((duration) => {
+              duration = Math.ceil(duration);
               durationstring = duration <10? "0"+duration.toString() : duration.toString();
               webconnections.forEach(key => key.send('clip' + durationstring + notification.event['reward']['title'].slice(6)));
               console.log(duration)
