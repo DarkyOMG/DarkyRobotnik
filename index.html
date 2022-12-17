@@ -10,7 +10,7 @@
 
 <body>
    <div id="wrapper">
-      <img id ="animelem" src="">
+      <img src="5Gp9.gif">
   </div>
    <figure>
       <audio src="Follow.wav"></audio>
@@ -26,9 +26,7 @@
    // Get all relevant elements.
    const audioelem = document.querySelector("audio");
    const imageelem = document.querySelector("div");
-   const animelem = document.getElementById('animelem');
    const textelem = document.querySelector("p");
-   animelem.parentElement.style.display = "none";
    // This list is used for overlaid audioelements.
    let audioelemlist = []
    let audioqueue = []
@@ -81,14 +79,13 @@
       audioelem.play();
    }
    function HandleClips() {
-      animelem.parentElement.style.display = "none"
+      imageelem.src = ''
       isFiringClip = true
       if (audioqueue.length > 0) {
          var current = audioqueue.shift()
          PlaySingleClip(current[1])
          if(current[2]){
-            animelem.parentElement.style.display = "block";
-            animelem.src= 'images/'+current[1]+'.gif';
+            imageelem.src= 'images/'+current[1]+'.gif'
          }
          setTimeout(HandleClips, parseInt(current[0])*1000)
       } else {
