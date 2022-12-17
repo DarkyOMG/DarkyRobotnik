@@ -38,7 +38,7 @@
       opacity: 0%;
     }
   }
-  #wrapper, img{
+  #wrapper{
     width: 1280px;
     height: 720px;
     background-color: transparent;
