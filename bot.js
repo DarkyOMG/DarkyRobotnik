@@ -2,6 +2,7 @@ const WebSocketServer = require('wss');
 const tmi = require('tmi.js');
 const fs = require('fs');
 const exec = require('child_process').exec;
+const { getAudioDurationInSeconds } = require('get-audio-duration')
 //////////////////////////////////////////////////////// Variables (Change this) //////////////////////////////////////////////////
 // Define configuration options
 const opts = {
@@ -24,7 +25,7 @@ const apienabled = true
 // Anwers for Bot to automatically react to random messages
 let answers = [` haha, ja genau!`, ` lol, du sagst es :D`, ` ich genieße jedes einzelne dieser Worte!`, ` Da wird man ja fuchsig!`, ` das hast du doch von jemandem abgeschrieben!`, ` für die Nachricht gibt's 5 ECTS!`, ` du wirkst müde. Bestell dir doch mal einen !kaffee mit !milch!`]
 // Adverts the bot says periodically while there are still chatters.
-let adverts = [`Du willst auch an den Präsenzveranstaltungen teilnehmen? Dann klicke hier: https://discord.gg/VaJfZVKWhK`, `Alle Hintergrundmusik wurde von Martin Platte @pladdemusicjam (https://twitter.com/PLaddeXOXO) erstellt.`, `Alle 3D-Flow-Simulationen wurden von @Toobi (https://www.twitch.tv/Toobi) erstellt.`, `Alle gezeichneten Emotes wurden von @Teirii (https://www.twitch.tv/Teirii) erstellt.`]
+let adverts = [`Du willst auch an den Präsenzveranstaltungen teilnehmen? Dann klicke hier: https://discord.gg/VaJfZVKWhK`, `Alle Hintergrundmusik wurde von Martin Platte @pladdemusicjam (https://www.instagram.com/die_pladde/) erstellt.`, `Alle 3D-Flow-Simulationen wurden von @Toobi (https://www.twitch.tv/Toobi) erstellt.`, `Alle gezeichneten Emotes wurden von @Teirii (https://www.twitch.tv/Teirii) erstellt.`]
 let currentadvert = 0;
 let nextcall = new Date()
 
@@ -261,6 +262,7 @@ async function asyncCall(text, time) {
   client.say(opts.channels[0], text);
 }
 
+
 ///////////////////////////////////////////////////// Twitch-API Eventhandler ////////////////////////////////////////////////////////
 if (apienabled) {
 
@@ -409,7 +411,14 @@ if (apienabled) {
         if (notification.subscription.type == "channel.channel_points_custom_reward_redemption.add") {
           // You can further filter the event by it's title
           if (notification.event['reward']['title'].slice(0, 4) == "Clip") {
-            webconnections.forEach(key => key.send('clip' + notification.event['reward']['title'].slice(6)));
+            getAudioDurationInSeconds('audio.flac').then((duration) => {
+              durationstring = duration <10? "0"+duration.toString() : duration.toString();
+              webconnections.forEach(key => key.send('clip' + durationstring + notification.event['reward']['title'].slice(6)));
+              console.log(duration)
+            })
+            }
+          if(notification.event['reward']['title'].slice(0,9) == "Animation"){
+            webconnections.forEach(key => key.send('anim' + notification.event['reward']['title'].slice(11)));
           }
         }
         // This sends a "OK" signal to Twitch, indicating that the event has been received.
