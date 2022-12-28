@@ -415,11 +415,14 @@ if (apienabled) {
               duration = Math.ceil(duration);
               durationstring = duration <10? "0"+duration.toString() : duration.toString();
               webconnections.forEach(key => key.send('clip' + durationstring + notification.event['reward']['title'].slice(6)));
-              console.log(duration)
             })
             }
           if(notification.event['reward']['title'].slice(0,9) == "Animation"){
-            webconnections.forEach(key => key.send('anim' + notification.event['reward']['title'].slice(11)));
+            getAudioDurationInSeconds(folderroot+'clips/'+notification.event['reward']['title'].slice(11)+'.wav').then((duration) => {
+              duration = Math.ceil(duration);
+              durationstring = duration <10? "0"+duration.toString() : duration.toString();
+              webconnections.forEach(key => key.send('anim' + durationstring + notification.event['reward']['title'].slice(11)));
+            })
           }
         }
         // This sends a "OK" signal to Twitch, indicating that the event has been received.

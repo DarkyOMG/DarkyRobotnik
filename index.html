@@ -12,6 +12,9 @@
    <figure>
       <audio src="Follow.wav"></audio>
    </figure>
+   <div id="wrapper">
+      <img id="animim">
+  </div>
    <div class="animthing">
       <figure>
          <img src="images/Follow.gif" alt="Couldn't find image">
@@ -23,8 +26,12 @@
    // Get all relevant elements.
    const audioelem = document.querySelector("audio");
    const imageelem = document.querySelector("div");
+   const animimagewrapper = document.getElementById("wrapper");
+   const animim = document.getElementById("animim");
    const textelem = document.querySelector("p");
    // This list is used for overlaid audioelements.
+   animimagewrapper.style.display = "none";
+   animim.src = "";
    let audioelemlist = []
    let audioqueue = []
    let isFiringClip = false
@@ -32,7 +39,6 @@
    let isFiringAlert = false
    // Start the websocket to recieve events fired by bot.js
    WebSocketTest();
-
    function TriggerFollow(username) {
       imageelem.src = 'images/Follow.gif';
       audioelem.src = 'clips/Follow.wav';
@@ -57,6 +63,10 @@
    }
    function HandleAlerts() {
       isFiringAlert = true
+      if(isFiringClip){
+         setTimeout(HandleAlerts, 8500);
+         return;
+      }
       if (alertqueue.length > 0) {
          var current = alertqueue.shift()
          if (current['type'] == "follow") {
@@ -77,15 +87,21 @@
    }
    function HandleClips() {
       isFiringClip = true
+      animim.src = "";
+      animimagewrapper.style.display = "none";
+      if(isFiringAlert){
+         setTimeout(HandleClips, 8500);
+      }
       if (audioqueue.length > 0) {
          var current = audioqueue.shift()
          PlaySingleClip(current[1])
          if(current[2]){
-            //Add behaviour
+            animim.src = 'images/'+current[1]+'.gif';
+            animimagewrapper.style.display = "block";
          }
-         setTimeout(HandleClips, parseInt(current[0])*1000)
+         setTimeout(HandleClips, parseInt(current[0])*1000);
       } else {
-         isFiringClip = false
+         isFiringClip = false;
       }
    }
    function WebSocketTest() {
@@ -98,9 +114,6 @@
             console.log("Connected to server!")
             alert("Connection is open!")
          };
-         if (window.speechSynthesis) {
-            alert("Seechy!");
-         }
 
          // Handle any received message, such as raid or follow-alerts.
          ws.onmessage = function (evt) {
@@ -148,7 +161,6 @@
             }
 
             if (!isFiringClip) {
-               console.log("Not Firing")
                HandleClips()
             }
          };
