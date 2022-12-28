@@ -15,7 +15,7 @@
    <div id="wrapper">
       <img id="animim">
   </div>
-   <div class="animthing">
+   <div id="animthing" class="animthing">
       <figure>
          <img src="images/Follow.gif" alt="Couldn't find image">
          <p>WTFDarky stürmt den Hörsaal mit 23 wilden Studierenden!</p>
@@ -25,7 +25,7 @@
 <script type="text/javascript">
    // Get all relevant elements.
    const audioelem = document.querySelector("audio");
-   const imageelem = document.querySelector("div");
+   const imageelem = document.getElementById("animthing");
    const animimagewrapper = document.getElementById("wrapper");
    const animim = document.getElementById("animim");
    const textelem = document.querySelector("p");
@@ -91,6 +91,7 @@
       animimagewrapper.style.display = "none";
       if(isFiringAlert){
          setTimeout(HandleClips, 8500);
+         return;
       }
       if (audioqueue.length > 0) {
          var current = audioqueue.shift()
