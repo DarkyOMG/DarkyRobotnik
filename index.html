@@ -64,6 +64,7 @@
    function HandleAlerts() {
       isFiringAlert = true
       if(isFiringClip){
+         isFiringAlert = false;
          setTimeout(HandleAlerts, 8500);
          return;
       }
@@ -90,6 +91,7 @@
       animim.src = "";
       animimagewrapper.style.display = "none";
       if(isFiringAlert){
+         isFiringClip = false;
          setTimeout(HandleClips, 8500);
          return;
       }
