@@ -412,7 +412,7 @@ if (apienabled) {
           // You can further filter the event by it's title
           if (notification.event['reward']['title'] == "Ich bin da!"){
             var filename = ""
-            if(File.existsSync(folderroot+'clips/'+notification.event['user_name']+'.wav')){
+            if(fs.existsSync(folderroot+'clips/'+notification.event['user_name']+'.wav')){
               filename = notification.event['user_name'];
             } else {
               filename = "default";
