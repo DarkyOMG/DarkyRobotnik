@@ -422,8 +422,8 @@ if (apienabled) {
               durationstring = duration <10? "0"+duration.toString() : duration.toString();
               webconnections.forEach(key => key.send('anim' + durationstring + filename));
             })
-            }
           }
+          
           if (notification.event['reward']['title'].slice(0, 4) == "Clip") {
             getAudioDurationInSeconds(folderroot+'clips/'+notification.event['reward']['title'].slice(6)+'.wav').then((duration) => {
               duration = Math.ceil(duration);
