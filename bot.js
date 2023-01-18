@@ -410,6 +410,20 @@ if (apienabled) {
         // This event is triggered whenever a viewer redeems a custom reward. 
         if (notification.subscription.type == "channel.channel_points_custom_reward_redemption.add") {
           // You can further filter the event by it's title
+          if (notification.event['reward']['title'] == "Ich bin da!"){
+            var filename = ""
+            if(File.existsSync(folderroot+'clips/'+notification.event['user_name']+'.wav')){
+              filename = notification.event['user_name'];
+            } else {
+              filename = "default";
+            }
+            getAudioDurationInSeconds(folderroot+'clips/'+filename+'.wav').then((duration) => {
+              duration = Math.ceil(duration);
+              durationstring = duration <10? "0"+duration.toString() : duration.toString();
+              webconnections.forEach(key => key.send('anim' + durationstring + filename));
+            })
+            }
+          }
           if (notification.event['reward']['title'].slice(0, 4) == "Clip") {
             getAudioDurationInSeconds(folderroot+'clips/'+notification.event['reward']['title'].slice(6)+'.wav').then((duration) => {
               duration = Math.ceil(duration);
