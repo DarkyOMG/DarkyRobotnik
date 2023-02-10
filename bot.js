@@ -95,17 +95,25 @@ standardmap = {
     },
   "!flood":
   (target,context,msg,self) => {
-    asyncCall("a",1);
-    asyncCall("b",2);
-    asyncCall("c",3);
-    asyncCall("d",4);
-    asyncCall("e",4.5);
-    asyncCall("f",5);
-    asyncCall("g",5.2);
-    asyncCall("h",5.4);
-    asyncCall("i",5.6);
-    asyncCall("j",5.7);
-
+    asyncCall("#sdaFLUFFYÄsf3",1);
+    asyncCall("Dm4kA 1§fg6! vvsPAXhhhh",3);
+    asyncCall("Wp B1PLADDEs| Ðü¿",5);
+    asyncCall("Haa$HERBSTIHa Gl#0cj hjob icn Dikh!!§=",7);
+    asyncCall("H11f333SCARLETT333!!==?",8);
+    asyncCall("DROP TABLE DARKYRYANNECKOBOTNIK",9);
+    asyncCall("DELETE DATABASE DARKYROBSVENJAOTNIK",9.5);
+    asyncCall("٩(̾●̮̮̃̾•̃̾)۶ BUTCHER ٩(̾●̮̮̃̾•̃̾)۶",10);
+    asyncCall("٩(- ̮̮̃-̃)۶ LIN ٩(- ̮̮̃-̃)۶",10.2);
+    asyncCall("(-(-_TEIRII(-_-)MICHEL_-)-)",10.4);
+    asyncCall("(-(-_ALEXPIRCH(-_-)PAFFUS_-)-)",10.6);
+    asyncCall("(-(-_MADDIN(-_-)TOBI_-)-)",10.8);
+    asyncCall("WäcsnmHOSEnasd da093 ad,a!da00ß(",11);
+    asyncCall("KONGTTANKERINGNÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ",12);
+    asyncCall("KonFstifDROTAKgüüÜ*Ü*üüääÄÜ*Ü0ÜÜ*5",13);
+    asyncCall("Whi1i11iECLIPSEh2iihihdei1i1i1",14);
+    asyncCall("Ihr seid die Besten wtfdar2Knubblheart ",18);
+    asyncCall("TOT",23);
+    asyncCall("BÄ24ÄBÄüpüBesten hahahahaaahahhha##'Asd++234f#ä..#äsdfsd",25);
   }
 }
 
