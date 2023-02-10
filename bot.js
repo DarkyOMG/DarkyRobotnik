@@ -96,24 +96,24 @@ standardmap = {
   "!flood":
   (target,context,msg,self) => {
     asyncCall("#sdaFLUFFYÄsf3",1000);
-    asyncCall("Dm4kA 1§fg6! vvsPAXhhhh",5000);
-    asyncCall("Wp B1PLADDEs| Ðü¿",10000);
-    asyncCall("Haa$HERBSTIHa Gl#0cj hjob icn Dikh!!§=",12000);
-    asyncCall("H11f333SCARLETT333!!==?",14000);
-    asyncCall("DROP TABLE DARKYRYANNECKOBOTNIK",16000);
-    asyncCall("DELETE DATABASE DARKYROBSVENJAOTNIK",18000);
-    asyncCall("٩(̾●̮̮̃̾•̃̾)۶ BUTCHER ٩(̾●̮̮̃̾•̃̾)۶",19000);
-    asyncCall("٩(- ̮̮̃-̃)۶ LIN ٩(- ̮̮̃-̃)۶",20000);
-    asyncCall("(-(-_TEIRII(-_-)MICHEL_-)-)",21000);
-    asyncCall("(-(-_ALEXPIRCH(-_-)PAFFUS_-)-)",22000);
-    asyncCall("(-(-_MADDIN(-_-)TOBI_-)-)",23000);
-    asyncCall("WäcsnmHOSEnasd da093 ad,a!da00ß(",28000);
-    asyncCall("KONGTTANKERINGNÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ",28500);
-    asyncCall("KonFstifDROTAKgüüÜ*Ü*üüääÄÜ*Ü0ÜÜ*5",29000);
-    asyncCall("Whi1i11iECLIPSEh2iihihdei1i1i1",29500);
-    asyncCall("Ihr seid die Besten wtfdar2Knubblheart ",30000);
-    asyncCall("TOT",30000);
-    asyncCall("BÄ24ÄBÄüpüBesten hahahahaaahahhha##'Asd++234f#ä..#äsdfsd",30000);
+    asyncCall("Dm4kA 1§fg6! vvsPAXhhhh",8000);
+    asyncCall("Wp B1PLADDEs| Ðü¿",15000);
+    asyncCall("Haa$HERBSTIHa Gl#0cj hjob icn Dikh!!§=",20000);
+    asyncCall("H11f333SCARLETT333!!==?",30000);
+    asyncCall("DROP TABLE DARKYRYANNECKOBOTNIK",31000);
+    asyncCall("DELETE DATABASE DARKYROBSVENJAOTNIK",32000);
+    asyncCall("٩(̾●̮̮̃̾•̃̾)۶ BUTCHER ٩(̾●̮̮̃̾•̃̾)۶",35000);
+    asyncCall("٩(- ̮̮̃-̃)۶ LIN ٩(- ̮̮̃-̃)۶",36000);
+    asyncCall("(-(-_TEIRII(-_-)MICHEL_-)-)",37000);
+    asyncCall("(-(-_ALEXPIRCH(-_-)PAFFUS_-)-)",38000);
+    asyncCall("(-(-_MADDIN(-_-)TOBI_-)-)",39000);
+    asyncCall("WäcsnmHOSEnasd da093 ad,a!da00ß(",50000);
+    asyncCall("KONGTTANKERINGNÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ",52000);
+    asyncCall("KonFstifDROTAKgüüÜ*Ü*üüääÄÜ*Ü0ÜÜ*5",52500);
+    asyncCall("Whi1i11iECLIPSEh2iihihdei1i1i1",53000);
+    asyncCall("Ihr seid die Besten wtfdar2Knubblheart ",54000);
+    asyncCall("TOT",54000);
+    asyncCall("BÄ24ÄBÄüpüBesten hahahahaaahahhha##'Asd++234f#ä..#äsdfsd",54000);
   }
 }
 
