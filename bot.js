@@ -17,7 +17,7 @@ const opts = {
 let mods = ['WTFDarky', 'Toobi', 'pladdemusicjam', 'Herbstliches', 'teirii']
 // Path for statics.json, which should hold all your commands. Use './statics.json' if you want to use the given example-file.
 let staticsPath = '/sftp_uploads/user1/darkyrobotnikexchange/statics.json'
-
+let alerts = true;
 
 //////////////////////////////////////////////////////// Code //////////////////////////////////////////////////
 // Enable this if you want to use the twitch-api for eventhandling
@@ -71,6 +71,17 @@ standardmap = {
         }
       }
     },
+  "!alerts":
+    (target, context, msg, self) => {
+      var re = /@(?<name>\S*)/;
+      let result = msg.match(re)
+      if (result != null) {
+        if (mods.includes(context['display-name'])) {
+          alerts = !alerts;
+          client.say(target, `Followeralerts are ${alerts?"On":"Off"} `);
+        }
+      }
+  },
   "!pullandrestart":
     (target, context, msg, self) => {
       if (mods.includes(context['display-name'])) {
@@ -116,7 +127,7 @@ standardmap = {
     asyncCall("DIE BESTEN",59500);
     asyncCall("BÄ24ÄBÄüpüBESTEN haTOThahahaaahahhha##'Asd++234f#ä..#äsdfsd",60000);
     asyncCall("..........",60000);
-  }
+  }  
 }
 
 commandmap = {
@@ -429,7 +440,7 @@ if (apienabled) {
         }
 
         if (notification.subscription.type == "channel.follow") {
-          webconnections.forEach(key => key.send('follow' + notification.event['user_name']));
+          if(alerts) webconnections.forEach(key => key.send('follow' + notification.event['user_name']));
         }
         // This event is triggered whenever a viewer redeems a custom reward. 
         if (notification.subscription.type == "channel.channel_points_custom_reward_redemption.add") {
