@@ -23,7 +23,7 @@ let staticsPath = '/sftp_uploads/user1/darkyrobotnikexchange/statics.json'
 // Enable this if you want to use the twitch-api for eventhandling
 const apienabled = true
 // Anwers for Bot to automatically react to random messages
-let answers = [` haha, ja genau!`, ` lol, du sagst es :D`, ` ich genieße jedes einzelne dieser Worte!`, ` Da wird man ja fuchsig!`, ` das hast du doch von jemandem abgeschrieben!`, ` für die Nachricht gibt's 5 ECTS!`, ` du wirkst müde. Bestell dir doch mal einen !kaffee mit !milch!`]
+let answers = [` haha, ja genau!`,` lol, du sagst es :D`, ` ich genieße jedes einzelne dieser Worte!`, ` Da wird man ja fuchsig!`, ` das hast du doch von jemandem abgeschrieben!`, ` für die Nachricht gibt's 5 ECTS!`, ` du wirkst müde. Bestell dir doch mal einen !kaffee mit !milch!`,` haha, ja gleich bist du tot!`,` lol, du schweigst gleich :D`, ` ich genieße jedes einzelne deiner Haare!`, ` Da wird man ja fu..fuuaAHAHahhahh!`, ` das hast du doch von jemandem abgeschnitten!`, ` für die Nachricht gibt's 5 Peitschenhiebe!`, ` du wirkst müde. Bestell dir doch mal einen !Affenkopf mit !Eis!`]
 // Adverts the bot says periodically while there are still chatters.
 let adverts = [`Du willst auch an den Präsenzveranstaltungen teilnehmen? Dann klicke hier: https://discord.gg/VaJfZVKWhK`, `Alle Hintergrundmusik wurde von Martin Platte @pladdemusicjam (https://www.instagram.com/die_pladde/) erstellt.`, `Alle 3D-Flow-Simulationen wurden von @Toobi (https://www.twitch.tv/Toobi) erstellt.`, `Alle gezeichneten Emotes wurden von @Teirii (https://www.twitch.tv/Teirii) erstellt.`]
 let currentadvert = 0;
@@ -92,7 +92,21 @@ standardmap = {
   "!stats":
     (target, context, msg, self) => {
       client.say(target, `Stats: Secret:${statistics['deterioration']}, Messages since last start: ${statistics['messagecount']}`);
-    }
+    },
+  "!flood":
+  (target,context,msg,self) => {
+    asyncCall("a",1);
+    asyncCall("b",2);
+    asyncCall("c",3);
+    asyncCall("d",4);
+    asyncCall("e",4.5);
+    asyncCall("f",5);
+    asyncCall("g",5.2);
+    asyncCall("h",5.4);
+    asyncCall("i",5.6);
+    asyncCall("j",5.7);
+
+  }
 }
 
 commandmap = {
