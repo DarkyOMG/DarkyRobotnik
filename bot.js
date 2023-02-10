@@ -102,18 +102,18 @@ standardmap = {
     asyncCall("H11f333SCARLETT333!!==?",30000);
     asyncCall("DROP TABLE DARKYRYANNECKOBOTNIK",31000);
     asyncCall("DELETE DATABASE DARKYROBSVENJAOTNIK",32000);
-    asyncCall("٩(̾●̮̮̃̾•̃̾)۶ BUTCHER ٩(̾●̮̮̃̾•̃̾)۶",35000);
-    asyncCall("٩(- ̮̮̃-̃)۶ LIN ٩(- ̮̮̃-̃)۶",36000);
-    asyncCall("(-(-_TEIRII(-_-)MICHEL_-)-)",37000);
-    asyncCall("(-(-_ALEXPIRCH(-_-)PAFFUS_-)-)",38000);
-    asyncCall("(-(-_MADDIN(-_-)TOBI_-)-)",39000);
-    asyncCall("WäcsnmHOSEnasd da093 ad,a!da00ß(",50000);
-    asyncCall("KONGTTANKERINGNÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ",52000);
-    asyncCall("KonFstifDROTAKgüüÜ*Ü*üüääÄÜ*Ü0ÜÜ*5",52500);
-    asyncCall("Whi1i11iECLIPSEh2iihihdei1i1i1",53000);
-    asyncCall("Ihr seid die Besten wtfdar2Knubblheart ",54000);
-    asyncCall("TOT",54000);
-    asyncCall("BÄ24ÄBÄüpüBesten hahahahaaahahhha##'Asd++234f#ä..#äsdfsd",54000);
+    asyncCall("٩(̾●̮̮̃̾•̃̾)۶ BUTCHER ٩(̾●̮̮̃̾•̃̾)۶",40000);
+    asyncCall("٩(- ̮̮̃-̃)۶ LIN ٩(- ̮̮̃-̃)۶",41000);
+    asyncCall("(-(-_TEIRII(-_-)MICHEL_-)-)",42000);
+    asyncCall("(-(-_ALEXPIRCH(-_-)PAFFUS_-)-)",43000);
+    asyncCall("(-(-_MADDIN(-_-)TOBI_-)-)",44000);
+    asyncCall("WäcsnmHOSEnasd da093 ad,a!da00ß(",55000);
+    asyncCall("KONGTTANKERINGNÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ",57000);
+    asyncCall("KonFstifDROTAKgüüÜ*Ü*üüääÄÜ*Ü0ÜÜ*5",57500);
+    asyncCall("Whi1i11iECLIPSEh2iihihdei1i1i1",58000);
+    asyncCall("Ihr seid die Besten wtfdar2Knubblheart ",59000);
+    asyncCall("TOT",59000);
+    asyncCall("BÄ24ÄBÄüpüBesten hahahahaaahahhha##'Asd++234f#ä..#äsdfsd",60000);
   }
 }
 
