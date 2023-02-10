@@ -96,24 +96,24 @@ standardmap = {
   "!flood":
   (target,context,msg,self) => {
     asyncCall("#sdaFLUFFYÄsf3",1);
-    asyncCall("Dm4kA 1§fg6! vvsPAXhhhh",3);
-    asyncCall("Wp B1PLADDEs| Ðü¿",5);
-    asyncCall("Haa$HERBSTIHa Gl#0cj hjob icn Dikh!!§=",7);
-    asyncCall("H11f333SCARLETT333!!==?",8);
-    asyncCall("DROP TABLE DARKYRYANNECKOBOTNIK",9);
-    asyncCall("DELETE DATABASE DARKYROBSVENJAOTNIK",9.5);
-    asyncCall("٩(̾●̮̮̃̾•̃̾)۶ BUTCHER ٩(̾●̮̮̃̾•̃̾)۶",10);
-    asyncCall("٩(- ̮̮̃-̃)۶ LIN ٩(- ̮̮̃-̃)۶",10.2);
-    asyncCall("(-(-_TEIRII(-_-)MICHEL_-)-)",10.4);
-    asyncCall("(-(-_ALEXPIRCH(-_-)PAFFUS_-)-)",10.6);
-    asyncCall("(-(-_MADDIN(-_-)TOBI_-)-)",10.8);
-    asyncCall("WäcsnmHOSEnasd da093 ad,a!da00ß(",11);
-    asyncCall("KONGTTANKERINGNÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ",12);
-    asyncCall("KonFstifDROTAKgüüÜ*Ü*üüääÄÜ*Ü0ÜÜ*5",13);
-    asyncCall("Whi1i11iECLIPSEh2iihihdei1i1i1",14);
-    asyncCall("Ihr seid die Besten wtfdar2Knubblheart ",18);
-    asyncCall("TOT",23);
-    asyncCall("BÄ24ÄBÄüpüBesten hahahahaaahahhha##'Asd++234f#ä..#äsdfsd",25);
+    asyncCall("Dm4kA 1§fg6! vvsPAXhhhh",5);
+    asyncCall("Wp B1PLADDEs| Ðü¿",10);
+    asyncCall("Haa$HERBSTIHa Gl#0cj hjob icn Dikh!!§=",15);
+    asyncCall("H11f333SCARLETT333!!==?",20);
+    asyncCall("DROP TABLE DARKYRYANNECKOBOTNIK",25);
+    asyncCall("DELETE DATABASE DARKYROBSVENJAOTNIK",30);
+    asyncCall("٩(̾●̮̮̃̾•̃̾)۶ BUTCHER ٩(̾●̮̮̃̾•̃̾)۶",35);
+    asyncCall("٩(- ̮̮̃-̃)۶ LIN ٩(- ̮̮̃-̃)۶",37);
+    asyncCall("(-(-_TEIRII(-_-)MICHEL_-)-)",39);
+    asyncCall("(-(-_ALEXPIRCH(-_-)PAFFUS_-)-)",45);
+    asyncCall("(-(-_MADDIN(-_-)TOBI_-)-)",50);
+    asyncCall("WäcsnmHOSEnasd da093 ad,a!da00ß(",51);
+    asyncCall("KONGTTANKERINGNÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ",52);
+    asyncCall("KonFstifDROTAKgüüÜ*Ü*üüääÄÜ*Ü0ÜÜ*5",53);
+    asyncCall("Whi1i11iECLIPSEh2iihihdei1i1i1",54);
+    asyncCall("Ihr seid die Besten wtfdar2Knubblheart ",55);
+    asyncCall("TOT",56);
+    asyncCall("BÄ24ÄBÄüpüBesten hahahahaaahahhha##'Asd++234f#ä..#äsdfsd",57);
   }
 }
 
