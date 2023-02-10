@@ -14,7 +14,7 @@ const opts = {
   ]
 };
 // List your admins and Mods
-let mods = ['WTFDarky', 'Toobi', 'pladdemusicjam', 'Herbstliches', 'teirii']
+let mods = ['WTFDarky', 'Toobi', 'pladdemusicjam', 'Herbstliches', 'teirii','earth_dragon_pax'];
 // Path for statics.json, which should hold all your commands. Use './statics.json' if you want to use the given example-file.
 let staticsPath = '/sftp_uploads/user1/darkyrobotnikexchange/statics.json'
 let alerts = true;
@@ -73,13 +73,9 @@ standardmap = {
     },
   "!alerts":
     (target, context, msg, self) => {
-      var re = /@(?<name>\S*)/;
-      let result = msg.match(re)
-      if (result != null) {
-        if (mods.includes(context['display-name'])) {
-          alerts = !alerts;
-          client.say(target, `Followeralerts are ${alerts?"On":"Off"} `);
-        }
+      if (mods.includes(context['display-name'])) {
+        alerts = !alerts;
+        client.say(target, `Followeralerts are ${alerts?"On":"Off"} `);
       }
   },
   "!pullandrestart":
