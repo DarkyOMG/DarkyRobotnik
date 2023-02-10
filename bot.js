@@ -111,9 +111,11 @@ standardmap = {
     asyncCall("KONGTTANKERINGNÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ",57000);
     asyncCall("KonFstifDROTAKgüüÜ*Ü*üüääÄÜ*Ü0ÜÜ*5",57500);
     asyncCall("Whi1i11iECLIPSEh2iihihdei1i1i1",58000);
-    asyncCall("Ihr seid die Besten wtfdar2Knubblheart ",59000);
+    asyncCall("Ihr alle seid.. ",58500);
     asyncCall("TOT",59000);
-    asyncCall("BÄ24ÄBÄüpüBesten hahahahaaahahhha##'Asd++234f#ä..#äsdfsd",60000);
+    asyncCall("DIE BESTEN",59500);
+    asyncCall("BÄ24ÄBÄüpüBESTEN haTOThahahaaahahhha##'Asd++234f#ä..#äsdfsd",60000);
+    asyncCall("..........",60000);
   }
 }
 
