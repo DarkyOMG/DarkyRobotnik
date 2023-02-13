@@ -351,8 +351,8 @@ if (apienabled) {
       // Provide the private and public key to the server by reading each
       // file's content with the readFileSync() method.
       {
-        key: fs.readFileSync("privkey.pem"),
-        cert: fs.readFileSync("fullchain.pem"),
+        key: fs.readFileSync("/etc/letsencrypt/live/muskatnuss.duckdns.org/privkey.pem"),
+        cert: fs.readFileSync("/etc/letsencrypt/live/muskatnuss.duckdns.org/fullchain.pem"),
       },
       app
     )
