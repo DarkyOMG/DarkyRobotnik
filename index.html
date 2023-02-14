@@ -135,7 +135,9 @@
             if(received_msg.slice(0,2) == 'so'){
                document.querySelector("iframe").src="https://clips.twitch.tv/embed?clip=TangentialOutstandingCarabeefJebaited-zumbIKUc0Vtt2c_F&parent=muskatnuss.duckdns.org&autoplay=true"
                document.querySelector("iframe").style="position: absolute; width:640; height:360; border:1;"
-               
+               document.querySelector("iframe").width = 640;
+               document.querySelector("iframe").height = 360;
+               document.querySelector("iframe").border = 1;
                console.log("Test"+document.querySelector("iframe").width);
 
             }
