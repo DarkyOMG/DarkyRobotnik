@@ -3,6 +3,7 @@ const tmi = require('tmi.js');
 const fs = require('fs');
 const exec = require('child_process').exec;
 const { getAudioDurationInSeconds } = require('get-audio-duration')
+let webconnections = new Set()
 //////////////////////////////////////////////////////// Variables (Change this) //////////////////////////////////////////////////
 // Define configuration options
 const opts = {
@@ -367,7 +368,7 @@ if (apienabled) {
 
   // This server also serves as a websocketserver for different websockets. This can be used to send events to webclients or other websockets.
   // This set will contain all open websocket-connections
-  let webconnections = new Set()
+  
 
   // Starting the webserver onto the already started https server to be able to use secure websocketserving. 
   // This is only needed if you want to fire your own alerts on-stream.
