@@ -21,12 +21,14 @@
          <p>WTFDarky stürmt den Hörsaal mit 23 wilden Studierenden!</p>
       </figure>
    </div>
-   <iframe
-    src="https://clips.twitch.tv/embed?clip=TangentialOutstandingCarabeefJebaited-zumbIKUc0Vtt2c_F&parent=muskatnuss.duckdns.org&autoplay=true"
-    height="360"
-    width="640"
-    allowfullscreen>
-</iframe>
+   <div id="clip">
+      <iframe
+       src=""
+       height="360"
+       width="640"
+       allowfullscreen>
+   </iframe>
+   </div>
 
 
 </body>
@@ -130,6 +132,10 @@
          ws.onmessage = function (evt) {
             var received_msg = evt.data;
 
+
+            if(received_msg.slice(0,2) == 'so'){
+               querySelector("iframe").src="https://clips.twitch.tv/embed?clip=TangentialOutstandingCarabeefJebaited-zumbIKUc0Vtt2c_F&parent=muskatnuss.duckdns.org&autoplay=true"
+            }
             // Handle follows
             if (received_msg.slice(0, 6) == 'follow') {
                var username = received_msg.slice(6);
