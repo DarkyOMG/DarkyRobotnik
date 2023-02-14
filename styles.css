@@ -1,6 +1,6 @@
   div {
     display: flex;
-    width: 20rem;
+    width: 100%;
     background-color: black;
     justify-content: center;
   }
