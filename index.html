@@ -24,9 +24,7 @@
    <div id="clip">
       <iframe
        src=""
-       height="360"
-       width="640"
-       style.display = "none"
+       style="position: absolute; width:0; height:0; border:0;"
        allowfullscreen>
    </iframe>
    </div>
@@ -136,7 +134,7 @@
 
             if(received_msg.slice(0,2) == 'so'){
                document.querySelector("iframe").src="https://clips.twitch.tv/embed?clip=TangentialOutstandingCarabeefJebaited-zumbIKUc0Vtt2c_F&parent=muskatnuss.duckdns.org&autoplay=true"
-               document.querySelector("iframe").style.display= "block"
+               document.querySelector("iframe").style="position: absolute; width:640; height:360; border:1;"
                
                console.log("Test"+document.querySelector("iframe").width);
 
