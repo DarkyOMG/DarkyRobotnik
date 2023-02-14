@@ -26,6 +26,7 @@
        src=""
        height="360"
        width="640"
+       style.display = "none"
        allowfullscreen>
    </iframe>
    </div>
@@ -135,6 +136,8 @@
 
             if(received_msg.slice(0,2) == 'so'){
                document.querySelector("iframe").src="https://clips.twitch.tv/embed?clip=TangentialOutstandingCarabeefJebaited-zumbIKUc0Vtt2c_F&parent=muskatnuss.duckdns.org&autoplay=true"
+               document.querySelector("iframe").style.display= "block"
+               
                console.log("Test"+document.querySelector("iframe").width);
 
             }
