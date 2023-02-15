@@ -66,12 +66,12 @@ riddlemap = {
 function GetClips(raidername,data,headers){
   endpoint = `https://api.twitch.tv/helix/clips?broadcaster_id=${data["id"]}`
 
-  console.log("HERE");
+  console.log(data);
   fetch(endpoint, {
   headers,
   })
   .then((res) => res.json())
-  .then((data) => webconnections.forEach(key => key.send(`so ${raidername} ${data[0]["id"]} ${data[0]["duration"]}`)));
+  .then((data) => console.log(data));
   
 }
 // Standardcommands. Including Shoutout (usage: !so @streamername) and pullandrestart, which pulls the repo and restarts the bot.
@@ -88,11 +88,12 @@ standardmap = {
             "Client-Id": auths.ClientId
           };
           let endpoint = `https://api.twitch.tv/helix/users?login=${result[0]}`
+          console.log(
           fetch(endpoint, {
             headers,
             })
             .then((res) => res.json())
-            .then((data) => GetClips(result[0],data,headers));       
+            .then((data) => GetClips(result[0],data,headers)))  
         }
       }
     },
