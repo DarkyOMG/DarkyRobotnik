@@ -70,7 +70,11 @@ function GetClips(raidername,data,headers){
   headers,
   })
   .then((res) => res.json())
-  .then((data) => webconnections.forEach(key => key.send(`so ${raidername} ${data["data"][0]["id"]} ${data["data"][0]["duration"]}`)));
+  .then((data) => ShowClip(raidername,data));
+}
+function ShowClip(raidername,clips){
+  var clip = clips["data"][Math.floor(Math.random()*clips["data"].length)];
+  webconnections.forEach(key => key.send(`so ${raidername} ${clip["id"]} ${clip["duration"]}`))
 }
 // Standardcommands. Including Shoutout (usage: !so @streamername) and pullandrestart, which pulls the repo and restarts the bot.
 standardmap = {
