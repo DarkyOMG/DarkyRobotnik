@@ -63,7 +63,17 @@ riddlemap = {
   "!firstwinner":
     firstwinner == "" ? "Bisher noch kein Gewinner :(" : firstwinner
 };
+function GetClips(data,headers){
+  endpoint = `https://api.twitch.tv/helix/clips?broadcaster_id=${data["id"]}`
 
+        
+  fetch(endpoint, {
+  headers,
+  })
+  .then((res) => res.json())
+  .then((data) => webconnections.forEach(key => key.send(`so ${result[0]} ${data[0]["id"]} ${data[0]["duration"]}`)));
+  
+}
 // Standardcommands. Including Shoutout (usage: !so @streamername) and pullandrestart, which pulls the repo and restarts the bot.
 standardmap = {
   "!so":
@@ -73,8 +83,6 @@ standardmap = {
       if (result != null) {
         if (mods.includes(context['display-name'])) {
           client.say(target, `${result[0]} hat unsere Vorlesung gestört. Was für eine Ehre. Schaut doch auch mal die letzten Publikationen von ${result[0]} an! https://www.twitch.tv/${result['groups']['name']}`);
-          var clipslug = ""
-          var cliplength = 0
           let headers = {
             "Authorization": auths.Authorization,
             "Client-Id": auths.ClientId
@@ -84,25 +92,7 @@ standardmap = {
             headers,
             })
             .then((res) => res.json())
-            .then((data) => 
-            endpoint = `https://api.twitch.tv/helix/clips?broadcaster_id=${data["id"]}`,
-
-        
-            fetch(endpoint, {
-            headers,
-            })
-            .then((res) => res.json())
-            .then((data) => webconnections.forEach(key => key.send(`so ${result[0]} ${clipslug} ${cliplength}`))
-            
-            
-            ));
-
-
-
-
-          
-          
-          
+            .then((data) => GetClips(data,headers));       
         }
       }
     },
