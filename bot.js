@@ -66,7 +66,7 @@ riddlemap = {
 function GetClips(raidername,data,headers){
   endpoint = `https://api.twitch.tv/helix/clips?broadcaster_id=${data["id"]}`
 
-  console.log(data);
+  console.log(endpoint);
   fetch(endpoint, {
   headers,
   })
@@ -88,12 +88,12 @@ standardmap = {
             "Client-Id": auths.ClientId
           };
           let endpoint = `https://api.twitch.tv/helix/users?login=${result[0].slice(1)}`
-          console.log(
+          
           fetch(endpoint, {
             headers,
             })
             .then((res) => res.json())
-            .then((data) => GetClips(result[0],data,headers)))  
+            .then((data) => GetClips(result[0],data,headers))
         }
       }
     },
