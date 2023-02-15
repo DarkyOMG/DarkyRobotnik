@@ -4,6 +4,13 @@
     background-color: black;
     justify-content: center;
   }
+  h1 {
+    position: absolute;
+    height: 100px;
+    width: 640px;
+    margin: -50px;
+    text-align: center;
+  }
   .clip {
     display: none;
     width: 100%;
