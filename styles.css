@@ -7,11 +7,12 @@
   h1 {
     position: absolute;
     height: 100px;
-    width: 644px;
+    width: 640px;
     margin: -50px;
     text-align: center;
     background-color: black;
     color: yellow;
+    border:2px;
   }
   .clip {
     display: none;
