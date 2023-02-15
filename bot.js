@@ -87,7 +87,7 @@ standardmap = {
             "Authorization": auths.Authorization,
             "Client-Id": auths.ClientId
           };
-          let endpoint = `https://api.twitch.tv/helix/users?login=${result[0]}`
+          let endpoint = `https://api.twitch.tv/helix/users?login=${result[0].slice(1)}`
           console.log(
           fetch(endpoint, {
             headers,
