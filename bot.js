@@ -14,6 +14,10 @@ const opts = {
   channels: [     // Example: ["WTFDarky"]
   ]
 };
+const auths = {
+  Authorization: "",
+  ClientId: ""
+}
 // List your admins and Mods
 let mods = ['WTFDarky', 'Toobi', 'pladdemusicjam', 'Herbstliches', 'teirii','earth_dragon_pax'];
 // Path for statics.json, which should hold all your commands. Use './statics.json' if you want to use the given example-file.
@@ -69,7 +73,32 @@ standardmap = {
       if (result != null) {
         if (mods.includes(context['display-name'])) {
           client.say(target, `${result[0]} hat unsere Vorlesung gestört. Was für eine Ehre. Schaut doch auch mal die letzten Publikationen von ${result[0]} an! https://www.twitch.tv/${result['groups']['name']}`);
-          webconnections.forEach(key => key.send('so WTFDarky TangentialOutstandingCarabeefJebaited-zumbIKUc0Vtt2c_F 18.7'));
+          var clipslug = ""
+          var cliplength = 0
+          let headers = {
+            "Authorization": auths.Authorization,
+            "Client-Id": auths.ClientId
+          };
+          let endpoint = `https://api.twitch.tv/helix/users?login=${result[0]}`
+          fetch(endpoint, {
+            headers,
+            })
+            .then((res) => res.json())
+            .then((data) => console.log(data));
+
+
+
+
+          endpoint = `https://api.twitch.tv/helix/clips?broadcaster_id=${data["id"]}`
+
+        
+            fetch(endpoint, {
+            headers,
+            })
+            .then((res) => res.json())
+            .then((data) => console.log(data));
+          
+          webconnections.forEach(key => key.send(`so ${result[0]} ${clipslug} ${cliplength}`));
         }
       }
     },
@@ -148,6 +177,8 @@ fs.readFile('opts.json', 'utf-8', (err, data) => {
   opts.identity.username = optstemp.identity.username;
   opts.identity.password = optstemp.identity.password;
   opts.channels = optstemp.channels;
+  auths.Authorization = optstemp.auth;
+  auths.ClientId = optstemp.clientid;
 });
 
 if (!fs.existsSync("./stats.json")) {
@@ -525,3 +556,4 @@ if (apienabled) {
     return crypto.timingSafeEqual(Buffer.from(hmac), Buffer.from(verifySignature));
   }
 }
+
