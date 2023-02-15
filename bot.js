@@ -64,7 +64,8 @@ riddlemap = {
     firstwinner == "" ? "Bisher noch kein Gewinner :(" : firstwinner
 };
 function GetClips(raidername,data,headers){
-  endpoint = `https://api.twitch.tv/helix/clips?broadcaster_id=${data["id"]}`
+  console.log(data);
+  endpoint = `https://api.twitch.tv/helix/clips?broadcaster_id=${data.id}`
 
   console.log(endpoint);
   fetch(endpoint, {
