@@ -84,21 +84,25 @@ standardmap = {
             headers,
             })
             .then((res) => res.json())
-            .then((data) => console.log(data));
-
-
-
-
-          endpoint = `https://api.twitch.tv/helix/clips?broadcaster_id=${data["id"]}`
+            .then((data) => 
+            endpoint = `https://api.twitch.tv/helix/clips?broadcaster_id=${data["id"]}`,
 
         
             fetch(endpoint, {
             headers,
             })
             .then((res) => res.json())
-            .then((data) => console.log(data));
+            .then((data) => webconnections.forEach(key => key.send(`so ${result[0]} ${clipslug} ${cliplength}`))
+            
+            
+            ));
+
+
+
+
           
-          webconnections.forEach(key => key.send(`so ${result[0]} ${clipslug} ${cliplength}`));
+          
+          
         }
       }
     },
