@@ -16,6 +16,7 @@
       <img id="animim">
   </div>
   <div id="clip" class="clip">
+      <h1 id="clipheader">Darky Raidet uns!</h1>
      <iframe
       src=""
       style="position: absolute; width:0; height:0; border:0;"
@@ -39,6 +40,7 @@
    const animim = document.getElementById("animim");
    const textelem = document.querySelector("p");
    const clipdiv = document.getElementById("clip");
+   const clipheader = document.getElementById("clipheader");
    // This list is used for overlaid audioelements.
    animimagewrapper.style.display = "none";
    animim.src = "";
@@ -135,7 +137,10 @@
 
             if(received_msg.slice(0,2) == 'so'){
                clipdiv.style.display = "flex";
-               document.querySelector("iframe").src="https://clips.twitch.tv/embed?clip=TangentialOutstandingCarabeefJebaited-zumbIKUc0Vtt2c_F&parent=muskatnuss.duckdns.org&autoplay=true"
+               var raidername = received_msg.split(" ")[1];
+               var clipname = received_msg.split(" ")[2];
+               clipheader.innerText = `${raidername} ist da!`;
+               document.querySelector("iframe").src=`https://clips.twitch.tv/embed?clip=${clipname}&parent=muskatnuss.duckdns.org&autoplay=true`
                document.querySelector("iframe").style="position: absolute;"
                document.querySelector("iframe").width = 640;
                document.querySelector("iframe").height = 360;

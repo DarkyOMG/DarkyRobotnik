@@ -69,7 +69,7 @@ standardmap = {
       if (result != null) {
         if (mods.includes(context['display-name'])) {
           client.say(target, `${result[0]} hat unsere Vorlesung gestört. Was für eine Ehre. Schaut doch auch mal die letzten Publikationen von ${result[0]} an! https://www.twitch.tv/${result['groups']['name']}`);
-          webconnections.forEach(key => key.send('so'));
+          webconnections.forEach(key => key.send('so WTFDarky TangentialOutstandingCarabeefJebaited-zumbIKUc0Vtt2c_F 18.7'));
         }
       }
     },
