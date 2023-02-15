@@ -63,15 +63,15 @@ riddlemap = {
   "!firstwinner":
     firstwinner == "" ? "Bisher noch kein Gewinner :(" : firstwinner
 };
-function GetClips(data,headers){
+function GetClips(raidername,data,headers){
   endpoint = `https://api.twitch.tv/helix/clips?broadcaster_id=${data["id"]}`
 
-        
+  console.log("HERE");
   fetch(endpoint, {
   headers,
   })
   .then((res) => res.json())
-  .then((data) => webconnections.forEach(key => key.send(`so ${result[0]} ${data[0]["id"]} ${data[0]["duration"]}`)));
+  .then((data) => webconnections.forEach(key => key.send(`so ${raidername} ${data[0]["id"]} ${data[0]["duration"]}`)));
   
 }
 // Standardcommands. Including Shoutout (usage: !so @streamername) and pullandrestart, which pulls the repo and restarts the bot.
@@ -92,7 +92,7 @@ standardmap = {
             headers,
             })
             .then((res) => res.json())
-            .then((data) => GetClips(data,headers));       
+            .then((data) => GetClips(result[0],data,headers));       
         }
       }
     },
