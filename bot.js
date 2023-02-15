@@ -65,7 +65,7 @@ riddlemap = {
 };
 function GetClips(raidername,data,headers){
   console.log(data);
-  endpoint = `https://api.twitch.tv/helix/clips?broadcaster_id=${data["data"]["id"]}`
+  endpoint = `https://api.twitch.tv/helix/clips?broadcaster_id=${data[0]["id"]}`
 
   console.log(endpoint);
   fetch(endpoint, {
