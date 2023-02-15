@@ -73,6 +73,7 @@ function GetClips(raidername,data,headers){
   .then((data) => ShowClip(raidername,data));
 }
 function ShowClip(raidername,clips){
+  if(clips["data"].length <= 0) return;
   var clip = clips["data"][Math.floor(Math.random()*clips["data"].length)];
   webconnections.forEach(key => key.send(`so ${raidername} ${clip["id"]} ${(clip["duration"]+3)*1000.0}`))
 }
