@@ -115,7 +115,7 @@ fs.readFileSync('opts.json', 'utf-8', (err, data) => {
   opts.channels = optstemp.channels;
   auths.Authorization = optstemp.auth;
   auths.ClientId = optstemp.clientid;
-  staticsPath = optstemp.statics;
+  this.staticsPath = optstemp.statics;
 });
 console.log(staticsPath);
 // Create a client with our options
@@ -245,9 +245,9 @@ if (apienabled) {
   
       const optstemp = JSON.parse(data.toString());
       console.log(optstemp);
-      secret = optstemp.secret;
-      sslfolderpath = optstemp.sslfolderpath;
-      folderroot = optstemp.folderroot;
+      this.secret = optstemp.secret;
+      this.sslfolderpath = optstemp.sslfolderpath;
+      this.folderroot = optstemp.folderroot;
     });
   // This part is given by Twitch and is needed for certain identifications of message-parts. Nothing to change here.
   // Notification request headers
@@ -275,8 +275,8 @@ if (apienabled) {
       // Provide the private and public key to the server by reading each
       // file's content with the readFileSync() method.
       {
-        key: fs.readFileSync(`${sslfolderpath}/privkey.pem`),
-        cert: fs.readFileSync(`${sslfolderpath}/fullchain.pem`),
+        key: fs.readFileSync(`${this.sslfolderpath}/privkey.pem`),
+        cert: fs.readFileSync(`${this.sslfolderpath}/fullchain.pem`),
       },
       app
     )
