@@ -110,6 +110,7 @@ fs.readFileSync('opts.json', 'utf-8', (err, data) => {
   }
 
   const optstemp = JSON.parse(data.toString());
+  console.log(optstemp);
   opts.identity.username = optstemp.identity.username;
   opts.identity.password = optstemp.identity.password;
   opts.channels = optstemp.channels;
@@ -117,7 +118,6 @@ fs.readFileSync('opts.json', 'utf-8', (err, data) => {
   auths.ClientId = optstemp.clientid;
   this.staticsPath = optstemp.statics;
 });
-console.log(staticsPath);
 // Create a client with our options
 const client = new tmi.client(opts);
 
