@@ -3,9 +3,7 @@ const tmi = require('tmi.js');
 const fs = require('fs');
 const exec = require('child_process').exec;
 const { getAudioDurationInSeconds } = require('get-audio-duration')
-
-
-
+let webconnections = new Set()
 //////////////////////////////////////////////////////// Variables (Change this) //////////////////////////////////////////////////
 // Define configuration options
 const opts = {
@@ -21,22 +19,64 @@ const auths = {
   ClientId: ""
 }
 // List your admins and Mods
-let mods = ['WTFDarky', 'Toobi', 'pladdemusicjam', 'Herbstliches', 'teirii', 'earth_dragon_pax'];
+let mods = ['WTFDarky', 'Toobi', 'pladdemusicjam', 'Herbstliches', 'teirii','earth_dragon_pax'];
 // Path for statics.json, which should hold all your commands. Use './statics.json' if you want to use the given example-file.
-let staticsPath = ""
+let staticsPath = '/sftp_uploads/user1/darkyrobotnikexchange/statics.json'
 let alerts = true;
 
 //////////////////////////////////////////////////////// Code //////////////////////////////////////////////////
 // Enable this if you want to use the twitch-api for eventhandling
 const apienabled = true
 // Anwers for Bot to automatically react to random messages
-let answers = [` haha, ja genau!`, ` lol, du sagst es :D`, ` ich genieße jedes einzelne dieser Worte!`, ` Da wird man ja fuchsig!`, ` das hast du doch von jemandem abgeschrieben!`, ` für die Nachricht gibt's 5 ECTS!`, ` du wirkst müde. Bestell dir doch mal einen !kaffee mit !milch!`, ` haha, ja gleich bist du tot!`, ` lol, du schweigst gleich :D`, ` ich genieße jedes einzelne deiner Haare!`, ` Da wird man ja fu..fuuaAHAHahhahh!`, ` das hast du doch von jemandem abgeschnitten!`, ` für die Nachricht gibt's 5 Peitschenhiebe!`, ` du wirkst müde. Bestell dir doch mal einen !Affenkopf mit !Eis!`]
+let answers = [` haha, ja genau!`,` lol, du sagst es :D`, ` ich genieße jedes einzelne dieser Worte!`, ` Da wird man ja fuchsig!`, ` das hast du doch von jemandem abgeschrieben!`, ` für die Nachricht gibt's 5 ECTS!`, ` du wirkst müde. Bestell dir doch mal einen !kaffee mit !milch!`,` haha, ja gleich bist du tot!`,` lol, du schweigst gleich :D`, ` ich genieße jedes einzelne deiner Haare!`, ` Da wird man ja fu..fuuaAHAHahhahh!`, ` das hast du doch von jemandem abgeschnitten!`, ` für die Nachricht gibt's 5 Peitschenhiebe!`, ` du wirkst müde. Bestell dir doch mal einen !Affenkopf mit !Eis!`]
 // Adverts the bot says periodically while there are still chatters.
 let adverts = [`Du willst auch an den Präsenzveranstaltungen teilnehmen? Dann klicke hier: https://discord.gg/VaJfZVKWhK`, `Alle Hintergrundmusik wurde von Martin Platte @pladdemusicjam (https://www.instagram.com/die_pladde/) erstellt.`, `Alle 3D-Flow-Simulationen wurden von @Toobi (https://www.twitch.tv/Toobi) erstellt.`, `Alle gezeichneten Emotes wurden von @Teirii (https://www.twitch.tv/Teirii) erstellt.`]
 let currentadvert = 0;
 let nextcall = new Date()
 
+// Special variables for secret feature
+var statistics = {
+  "deterioration": 1,
+  "messagecount": 0
+}
 
+// Variables and Commandmap for riddle
+let firstwinner = "@pinkfluffyfluffycorn hat das Rätsel als erstes gelöst und hat sich damit einen 10€-Steam-Gutschein verdient :)"
+riddlemap = {
+  "!riddle":
+    "104 116 116 112 115 058 047 047 119 119 119 046 121 111 117 116 117 098 101 046 099 111 109 047 119 097 116 099 104 063 118 061 100 086 098 053 080 102 112 109 119 073 069",
+  "!0765":
+    "Zhofkhq Lqwhusuhwhq pxvv vlfk RWEW riw yrq Doha jhidoohq odvvhq?",
+  "!eminem":
+    "CompSys - The Game ist ein echt cooles Spiel... Aber was ist der Titel?",
+  "!konzeption und implementierung von videospielen zur lernunterstützung in unity3d":
+    "Welche Sprache spricht eigentlich Gilly?",
+  "!ruby":
+    "Wiki ist ein Wikinger.. Oder so.. Oder was anderes? Hauptsache heiß!.. Aber wie heiß nun eigentlich?",
+  "!superhot":
+    "No spaces. All lowercase. No '+'.\n Max Lieblingsspiel + OTBT-Chef-Vorname + BA-Betreuer-vorname + Gillys Lieblingsspiel + Wiki-Artikel-last-editor",
+  "!maplestoryjenstimhangmandobiko":
+    (target, context, msg, self) => {
+      firstwinner = context['display-name'];
+      client.say(target, `@${context['display-name']}, Du hast gewonnen!`);
+    },
+  "!firstwinner":
+    firstwinner == "" ? "Bisher noch kein Gewinner :(" : firstwinner
+};
+function GetClips(raidername,data,headers){
+  
+  endpoint = `https://api.twitch.tv/helix/clips?broadcaster_id=${data["data"][0]["id"]}`
+  fetch(endpoint, {
+  headers,
+  })
+  .then((res) => res.json())
+  .then((data) => ShowClip(raidername,data));
+}
+function ShowClip(raidername,clips){
+  if(clips["data"].length <= 0) return;
+  var clip = clips["data"][Math.floor(Math.random()*clips["data"].length)];
+  webconnections.forEach(key => key.send(`so ${raidername} ${clip["id"]} ${(clip["duration"]+3)*1000.0}`))
+}
 // Standardcommands. Including Shoutout (usage: !so @streamername) and pullandrestart, which pulls the repo and restarts the bot.
 standardmap = {
   "!so":
@@ -46,7 +86,17 @@ standardmap = {
       if (result != null) {
         if (mods.includes(context['display-name'])) {
           client.say(target, `${result[0]} hat unsere Vorlesung gestört. Was für eine Ehre. Schaut doch auch mal die letzten Publikationen von ${result[0]} an! https://www.twitch.tv/${result['groups']['name']}`);
-          ShowClip(result[0].slice(1));
+          let headers = {
+            "Authorization": auths.Authorization,
+            "Client-Id": auths.ClientId
+          };
+          let endpoint = `https://api.twitch.tv/helix/users?login=${result[0].slice(1)}`
+          
+          fetch(endpoint, {
+            headers,
+            })
+            .then((res) => res.json())
+            .then((data) => GetClips(result[0],data,headers))
         }
       }
     },
@@ -54,9 +104,9 @@ standardmap = {
     (target, context, msg, self) => {
       if (mods.includes(context['display-name'])) {
         alerts = !alerts;
-        client.say(target, `Followeralerts are ${alerts ? "On" : "Off"} `);
+        client.say(target, `Followeralerts are ${alerts?"On":"Off"} `);
       }
-    },
+  },
   "!pullandrestart":
     (target, context, msg, self) => {
       if (mods.includes(context['display-name'])) {
@@ -74,26 +124,37 @@ standardmap = {
       else {
         client.say(target, `${context['display-name']} läuft wild herum und umarmt wahllos Leute. Achtung!`);
       }
-    }
+    },
+  "!stats":
+    (target, context, msg, self) => {
+      client.say(target, `Stats: Secret:${statistics['deterioration']}, Messages since last start: ${statistics['messagecount']}`);
+    },
+  "!flood":
+  (target,context,msg,self) => {
+    asyncCall("#sdaFLUFFYÄsf3",1000);
+    asyncCall("Dm4kA 1§fg6! vvsPAXhhhh",8000);
+    asyncCall("Wp B1PLADDEs| Ðü¿",15000);
+    asyncCall("Haa$HERBSTIHa Gl#0cj hjob icn Dikh!!§=",20000);
+    asyncCall("H11f333SCARLETT333!!==?",30000);
+    asyncCall("DROP TABLE DARKYRYANNECKOBOTNIK",31000);
+    asyncCall("DELETE DATABASE DARKYROBSVENJAOTNIK",32000);
+    asyncCall("٩(̾●̮̮̃̾•̃̾)۶ BUTCHER ٩(̾●̮̮̃̾•̃̾)۶",40000);
+    asyncCall("٩(- ̮̮̃-̃)۶ LIN ٩(- ̮̮̃-̃)۶",41000);
+    asyncCall("(-(-_TEIRII(-_-)MICHEL_-)-)",42000);
+    asyncCall("(-(-_ALEXPIRCH(-_-)PAFFUS_-)-)",43000);
+    asyncCall("(-(-_MADDIN(-_-)TOBI_-)-)",44000);
+    asyncCall("WäcsnmHOSEnasd da093 ad,a!da00ß(",55000);
+    asyncCall("KONGTTANKERINGNÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ",57000);
+    asyncCall("KonFstifDROTAKgüüÜ*Ü*üüääÄÜ*Ü0ÜÜ*5",57500);
+    asyncCall("Whi1i11iECLIPSEh2iihihdei1i1i1",58000);
+    asyncCall("Ihr alle seid.. ",58500);
+    asyncCall("TOT",59000);
+    asyncCall("DIE BESTEN",59500);
+    asyncCall("BÄ24ÄBÄüpüBESTEN haTOThahahaaahahhha##'Asd++234f#ä..#äsdfsd",60000);
+    asyncCall("..........",60000);
+  }  
 }
-const riddlemap = {
-  "!riddle":
-    "104 116 116 112 115 058 047 047 119 119 119 046 121 111 117 116 117 098 101 046 099 111 109 047 119 097 116 099 104 063 118 061 100 086 098 053 080 102 112 109 119 073 069",
-  "!0765":
-    "Zhofkhq Lqwhusuhwhq pxvv vlfk RWEW riw yrq Doha jhidoohq odvvhq?",
-  "!eminem":
-    "CompSys - The Game ist ein echt cooles Spiel... Aber was ist der Titel?",
-  "!konzeption und implementierung von videospielen zur lernunterstützung in unity3d":
-    "Welche Sprache spricht eigentlich Gilly?",
-  "!ruby":
-    "Wiki ist ein Wikinger.. Oder so.. Oder was anderes? Hauptsache heiß!.. Aber wie heiß nun eigentlich?",
-  "!superhot":
-    "No spaces. All lowercase. No '+'.\n Max Lieblingsspiel + OTBT-Chef-Vorname + BA-Betreuer-vorname + Gillys Lieblingsspiel + Wiki-Artikel-last-editor",
-  "!maplestoryjenstimhangmandobiko":
-      "Du hast gewonnen!",
-  "!firstwinner":
-  "@pinkfluffyfluffycorn hat das Rätsel als erstes gelöst und hat sich damit einen 10€-Steam-Gutschein verdient :)"
-}
+
 commandmap = {
   "!reloadcommands":
     (target, context, msg, self) => {
@@ -103,21 +164,32 @@ commandmap = {
       }
     }
 }
+
 // read opts from file
-fs.readFileSync('opts.json', 'utf-8', (err, data) => {
+fs.readFile('opts.json', 'utf-8', (err, data) => {
   if (err) {
     console.log("Can't find opts.json. Using given opts.");
   }
 
   const optstemp = JSON.parse(data.toString());
-  console.log(optstemp);
   opts.identity.username = optstemp.identity.username;
   opts.identity.password = optstemp.identity.password;
   opts.channels = optstemp.channels;
   auths.Authorization = optstemp.auth;
   auths.ClientId = optstemp.clientid;
-  this.staticsPath = optstemp.statics;
 });
+
+if (!fs.existsSync("./stats.json")) {
+  fs.writeFile('stats.json', JSON.stringify(statistics), (err) => console.log(err));
+} else {
+  fs.readFile('stats.json', 'utf-8', (err, data) => {
+    if (err) {
+      throw err;
+    }
+    statistics['deterioration'] = JSON.parse(data.toString())['deterioration'];
+
+  });
+}
 // Create a client with our options
 const client = new tmi.client(opts);
 
@@ -131,8 +203,19 @@ client.connect();
 // Called every time a message comes in
 function onMessageHandler(target, context, msg, self) {
   if (self) { return; } // Ignore messages from the bot
-
-  HandleAdverts();
+  // Message counting for secret feature.
+  statistics['messagecount'] = statistics['messagecount'] + 1;
+  if (statistics['messagecount'] > 1000) {
+    statistics['deterioration'] = statistics['deterioration'] + 1
+    statistics['messagecount'] = 0;
+  }
+  // Show adverts sometimes.
+  if (new Date() > nextcall) {
+    asyncCall(adverts[currentadvert], 60000);
+    nextcall = new Date()
+    nextcall.setMinutes(nextcall.getMinutes() + 15)
+    currentadvert = (currentadvert + 1) % adverts.length;
+  }
 
   // Check if a command has been called. Commands start with "!".
   var re = /!\S*/;
@@ -145,11 +228,27 @@ function onMessageHandler(target, context, msg, self) {
     if (randomchat < 5) {
       // Shuffle array to pick a random answer
       var answer = answers[Math.floor(Math.random() * answers.length)]
+
+      // Secret feature. You can delete this if-clause part.
+      if (statistics['deterioration'] > 0) {
+        var arr = [];
+        while (arr.length < statistics['deterioration']) {
+          var r = Math.floor(Math.random() * answer.length) + 1;
+          if (arr.indexOf(r) === -1) arr.push(r);
+        }
+        for (let i = 0; i < arr.length; i++) {
+          var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+          var charactersLength = characters.length;
+          randomletter = characters.charAt(Math.floor(Math.random() *
+            charactersLength));
+
+          answer[arr[i]] = randomletter;
+        }
+      }
       client.say(target, `@${context['display-name']} ` + answer);
     }
     return
   }
-
   // If a command was found, this part is triggered.
   const commandName = result[0].trim();
   // Check if the command is valid and belongs to this commandmap
@@ -161,11 +260,6 @@ function onMessageHandler(target, context, msg, self) {
       client.say(target, `@${context['display-name']} ` + commandmap[commandName.toLowerCase()]);
     }
   }
-}
-// Called every time the bot connects to Twitch chat
-function onConnectedHandler(addr, port) {
-  console.log(`* Connected to ${addr}:${port}`);
-  client.say(opts.channels[0], `Bot connected successfully!`);
 }
 // Function to load all given commands by the standardmap and the statics.json file into the active commandmap.
 function LoadCommands() {
@@ -201,6 +295,14 @@ function PullAndRestart() {
   });
 }
 
+// Called every time the bot connects to Twitch chat
+function onConnectedHandler(addr, port) {
+  console.log(`* Connected to ${addr}:${port}`);
+  client.say(opts.channels[0], `Bot connected successfully!`);
+}
+
+
+
 // Option for times events
 function resolveAfterNSeconds(n) {
   return new Promise(resolve => {
@@ -209,6 +311,13 @@ function resolveAfterNSeconds(n) {
     }, n);
   });
 }
+
+// Function to call a function asynchronously.
+async function asnycFuncCall(func, time) {
+  const restult = await resolveAfterNSeconds(600000)
+  fs.writeFile('stats.json', JSON.stringify(statistics), (err) => console.log(err));
+}
+
 // Starting-function for timed events posts (e.g. Adverts) 
 async function asyncCall(text, time) {
   const result = await resolveAfterNSeconds(time);
@@ -228,28 +337,26 @@ if (apienabled) {
 
   const fs = require('fs');
 
-  // Rootfolder for all downloadable content, such as images or clips
-  let folderroot = ''
-  // Folder for SSL-Certificates
-  let sslfolderpath = ''
   // Read in the secret of the server. This can be any random string, but must be kept secret. (e.g. "thisisasecret" or "s92bd8nsu9a892nf8")
   // It is used to identify authorized events.
   var secret = ""
   // I save my secret in a file called api-secret.txt. If you don't want to use the same schema, just delete this try-catch block and write the
   // secret into the variable above.
-    // read opts from file
-    fs.readFileSync('api-opts.json', 'utf-8', (err, data) => {
-      if (err) {
-        console.log("Can't find opts.json. Using given opts.");
-      }
-  
-      const optstemp = JSON.parse(data.toString());
-      console.log(optstemp);
-      this.secret = optstemp.secret;
-      this.sslfolderpath = optstemp.sslfolderpath;
-      this.folderroot = optstemp.folderroot;
-    });
+  try {
+    // read contents of the file
+    const data = fs.readFileSync('api-secret.txt', 'UTF-8');
+
+    // split the contents by new line
+    const lines = data.split(/\r?\n/);
+
+    // print all lines
+    secret = lines[0]
+  } catch (err) {
+    console.error(err);
+  }
+
   // This part is given by Twitch and is needed for certain identifications of message-parts. Nothing to change here.
+
   // Notification request headers
   const TWITCH_MESSAGE_ID = 'Twitch-Eventsub-Message-Id'.toLowerCase();
   const TWITCH_MESSAGE_TIMESTAMP = 'Twitch-Eventsub-Message-Timestamp'.toLowerCase();
@@ -275,8 +382,8 @@ if (apienabled) {
       // Provide the private and public key to the server by reading each
       // file's content with the readFileSync() method.
       {
-        key: fs.readFileSync(`${this.sslfolderpath}/privkey.pem`),
-        cert: fs.readFileSync(`${this.sslfolderpath}/fullchain.pem`),
+        key: fs.readFileSync("/etc/letsencrypt/live/muskatnuss.duckdns.org/privkey.pem"),
+        cert: fs.readFileSync("/etc/letsencrypt/live/muskatnuss.duckdns.org/fullchain.pem"),
       },
       app
     )
@@ -288,11 +395,13 @@ if (apienabled) {
   }))
 
 
+  // This server also serves as a websocketserver for different websockets. This can be used to send events to webclients or other websockets.
+  // This set will contain all open websocket-connections
+  
+
   // Starting the webserver onto the already started https server to be able to use secure websocketserving. 
   // This is only needed if you want to fire your own alerts on-stream.
   const wss = new WebSocketServer({ server });
-  let webconnections = new Set()
-
   // Standard schema for usage of the webserver. wss.on('eventname')... will execute when a message reaches the websocketserver with message 'eventname'.
   wss.on('connection', (ws) => {
     console.log('Client connected');
@@ -318,7 +427,8 @@ if (apienabled) {
     }
   })
 
-
+  // Rootfolder for all downloadable content, such as images or clips
+  let folderroot = '/sftp_uploads/user1/'
 
   // Download images or clips using the folderroot and given folders. This is used for browser-alerts and such.
   app.get('/:folder/:filename', (req, res) => {
@@ -357,36 +467,36 @@ if (apienabled) {
         }
 
         if (notification.subscription.type == "channel.follow") {
-          if (alerts) webconnections.forEach(key => key.send('follow' + notification.event['user_name']));
+          if(alerts) webconnections.forEach(key => key.send('follow' + notification.event['user_name']));
         }
         // This event is triggered whenever a viewer redeems a custom reward. 
         if (notification.subscription.type == "channel.channel_points_custom_reward_redemption.add") {
           // You can further filter the event by it's title
-          if (notification.event['reward']['title'] == "Ich bin da!") {
+          if (notification.event['reward']['title'] == "Ich bin da!"){
             var filename = ""
-            if (fs.existsSync(folderroot + 'clips/' + notification.event['user_name'] + '.wav')) {
+            if(fs.existsSync(folderroot+'clips/'+notification.event['user_name']+'.wav')){
               filename = notification.event['user_name'];
             } else {
               filename = "default";
             }
-            getAudioDurationInSeconds(folderroot + 'clips/' + filename + '.wav').then((duration) => {
+            getAudioDurationInSeconds(folderroot+'clips/'+filename+'.wav').then((duration) => {
               duration = Math.ceil(duration);
-              durationstring = duration < 10 ? "0" + duration.toString() : duration.toString();
+              durationstring = duration <10? "0"+duration.toString() : duration.toString();
               webconnections.forEach(key => key.send('anim' + durationstring + filename));
             })
           }
-
+          
           if (notification.event['reward']['title'].slice(0, 4) == "Clip") {
-            getAudioDurationInSeconds(folderroot + 'clips/' + notification.event['reward']['title'].slice(6) + '.wav').then((duration) => {
+            getAudioDurationInSeconds(folderroot+'clips/'+notification.event['reward']['title'].slice(6)+'.wav').then((duration) => {
               duration = Math.ceil(duration);
-              durationstring = duration < 10 ? "0" + duration.toString() : duration.toString();
+              durationstring = duration <10? "0"+duration.toString() : duration.toString();
               webconnections.forEach(key => key.send('clip' + durationstring + notification.event['reward']['title'].slice(6)));
             })
-          }
-          if (notification.event['reward']['title'].slice(0, 9) == "Animation") {
-            getAudioDurationInSeconds(folderroot + 'clips/' + notification.event['reward']['title'].slice(11) + '.wav').then((duration) => {
+            }
+          if(notification.event['reward']['title'].slice(0,9) == "Animation"){
+            getAudioDurationInSeconds(folderroot+'clips/'+notification.event['reward']['title'].slice(11)+'.wav').then((duration) => {
               duration = Math.ceil(duration);
-              durationstring = duration < 10 ? "0" + duration.toString() : duration.toString();
+              durationstring = duration <10? "0"+duration.toString() : duration.toString();
               webconnections.forEach(key => key.send('anim' + durationstring + notification.event['reward']['title'].slice(11)));
             })
           }
@@ -444,39 +554,4 @@ if (apienabled) {
     return crypto.timingSafeEqual(Buffer.from(hmac), Buffer.from(verifySignature));
   }
 }
-function ShowClip(username) {
-  let headers = {
-    "Authorization": auths.Authorization,
-    "Client-Id": auths.ClientId
-  };
-  //GetUserID and start getting clips afterwards
-  let endpoint = `https://api.twitch.tv/helix/users?login=${username}`
-  fetch(endpoint, {
-    headers,
-  })
-    .then((res) => res.json())
-    .then((data) => GetClips(username, data, headers))
-}
 
-function GetClips(raidername, data, headers) {
-  endpoint = `https://api.twitch.tv/helix/clips?broadcaster_id=${data["data"][0]["id"]}`
-  fetch(endpoint, {
-    headers,
-  })
-    .then((res) => res.json())
-    .then((data) => SendClipInformation(raidername, data));
-}
-function SendClipInformation(raidername, clips) {
-  if (clips["data"].length <= 0) return;
-  var clip = clips["data"][Math.floor(Math.random() * clips["data"].length)];
-  webconnections.forEach(key => key.send(`so ${raidername} ${clip["id"]} ${(clip["duration"] + 8) * 1000.0}`))
-}
-function HandleAdverts() {
-  // Show adverts sometimes.
-  if (new Date() > nextcall) {
-    asyncCall(adverts[currentadvert], 60000);
-    nextcall = new Date()
-    nextcall.setMinutes(nextcall.getMinutes() + 15)
-    currentadvert = (currentadvert + 1) % adverts.length;
-  }
-}
