@@ -80,7 +80,7 @@
    function HandleClip(raidername, clipslug, length){
       clipdiv.style.display = "flex";
       clipheader.innerText = `${raidername} ist da!`;
-      document.querySelector("iframe").src=`https://clips.twitch.tv/embed?clip=${clipslug}&parent=muskatnuss.duckdns.org&autoplay=true`
+      document.querySelector("iframe").src=`https://clips.twitch.tv/embed?clip=${clipslug}&parent=muskatnuss.duckdns.org&autoplay=true&preload=auto`
       setTimeout(ResetClipDiv, length);
    }
    function ResetClipDiv(){
