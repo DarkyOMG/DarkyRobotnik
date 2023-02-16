@@ -103,9 +103,20 @@ commandmap = {
       }
     }
 }
+// read opts from file
+fs.readFile('opts.json', 'utf-8', (err, data) => {
+  if (err) {
+    console.log("Can't find opts.json. Using given opts.");
+  }
 
-FillVariables()
-
+  const optstemp = JSON.parse(data.toString());
+  opts.identity.username = optstemp.identity.username;
+  opts.identity.password = optstemp.identity.password;
+  opts.channels = optstemp.channels;
+  auths.Authorization = optstemp.auth;
+  auths.ClientId = optstemp.clientid;
+  staticsPath = optstemp.statics;
+});
 
 // Create a client with our options
 const client = new tmi.client(opts);
@@ -226,8 +237,17 @@ if (apienabled) {
   var secret = ""
   // I save my secret in a file called api-secret.txt. If you don't want to use the same schema, just delete this try-catch block and write the
   // secret into the variable above.
-  FillApiVariables()
-
+    // read opts from file
+    fs.readFile('api-opts.json', 'utf-8', (err, data) => {
+      if (err) {
+        console.log("Can't find opts.json. Using given opts.");
+      }
+  
+      const optstemp = JSON.parse(data.toString());
+      secret = optstemp.secret;
+      sslfolderpath = optstemp.sslfolderpath;
+      folderroot = optstemp.folderroot;
+    });
   // This part is given by Twitch and is needed for certain identifications of message-parts. Nothing to change here.
   // Notification request headers
   const TWITCH_MESSAGE_ID = 'Twitch-Eventsub-Message-Id'.toLowerCase();
@@ -458,36 +478,4 @@ function HandleAdverts() {
     nextcall.setMinutes(nextcall.getMinutes() + 15)
     currentadvert = (currentadvert + 1) % adverts.length;
   }
-}
-
-function FillVariables() {
-  // read opts from file
-  fs.readFile('opts.json', 'utf-8', (err, data) => {
-    if (err) {
-      console.log("Can't find opts.json. Using given opts.");
-    }
-
-    const optstemp = JSON.parse(data.toString());
-    opts.identity.username = optstemp.identity.username;
-    opts.identity.password = optstemp.identity.password;
-    opts.channels = optstemp.channels;
-    auths.Authorization = optstemp.auth;
-    auths.ClientId = optstemp.clientid;
-    staticsPath = optstemp.statics;
-  });
-}
-function FillApiVariables() {
-
-  // read opts from file
-  fs.readFile('api-opts.json', 'utf-8', (err, data) => {
-    if (err) {
-      console.log("Can't find opts.json. Using given opts.");
-    }
-
-    const optstemp = JSON.parse(data.toString());
-    secret = optstemp.secret;
-    sslfolderpath = optstemp.sslfolderpath;
-    folderroot = optstemp.folderroot;
-  });
-
 }
