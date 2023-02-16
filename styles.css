@@ -59,5 +59,6 @@
   #wrapper, #animim{
     width: 1280px;
     height: 720px;
+    object-fit: none;
     background-color: transparent;
   }
