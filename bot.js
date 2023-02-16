@@ -104,7 +104,7 @@ commandmap = {
     }
 }
 // read opts from file
-fs.readFile('opts.json', 'utf-8', (err, data) => {
+fs.readFileSync('opts.json', 'utf-8', (err, data) => {
   if (err) {
     console.log("Can't find opts.json. Using given opts.");
   }
@@ -238,7 +238,7 @@ if (apienabled) {
   // I save my secret in a file called api-secret.txt. If you don't want to use the same schema, just delete this try-catch block and write the
   // secret into the variable above.
     // read opts from file
-    fs.readFile('api-opts.json', 'utf-8', (err, data) => {
+    fs.readFileSync('api-opts.json', 'utf-8', (err, data) => {
       if (err) {
         console.log("Can't find opts.json. Using given opts.");
       }
