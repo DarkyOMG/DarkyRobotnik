@@ -3,7 +3,7 @@ const tmi = require('tmi.js');
 const fs = require('fs');
 const exec = require('child_process').exec;
 const { getAudioDurationInSeconds } = require('get-audio-duration')
-const riddlemap = require('/utils/riddlemap');
+const riddlemap = require('./utils/riddlemap');
 
 
 
