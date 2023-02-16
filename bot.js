@@ -117,7 +117,7 @@ fs.readFile('opts.json', 'utf-8', (err, data) => {
   auths.ClientId = optstemp.clientid;
   staticsPath = optstemp.statics;
 });
-
+console.log(staticsPath);
 // Create a client with our options
 const client = new tmi.client(opts);
 
@@ -244,6 +244,7 @@ if (apienabled) {
       }
   
       const optstemp = JSON.parse(data.toString());
+      console.log(optstemp);
       secret = optstemp.secret;
       sslfolderpath = optstemp.sslfolderpath;
       folderroot = optstemp.folderroot;
