@@ -34,11 +34,6 @@ let adverts = [`Du willst auch an den Präsenzveranstaltungen teilnehmen? Dann k
 let currentadvert = 0;
 let nextcall = new Date()
 
-// Special variables for secret feature
-var statistics = {
-  "deterioration": 1,
-  "messagecount": 0
-}
 
 // Variables and Commandmap for riddle
 let firstwinner = "@pinkfluffyfluffycorn hat das Rätsel als erstes gelöst und hat sich damit einen 10€-Steam-Gutschein verdient :)"
@@ -124,35 +119,7 @@ standardmap = {
       else {
         client.say(target, `${context['display-name']} läuft wild herum und umarmt wahllos Leute. Achtung!`);
       }
-    },
-  "!stats":
-    (target, context, msg, self) => {
-      client.say(target, `Stats: Secret:${statistics['deterioration']}, Messages since last start: ${statistics['messagecount']}`);
-    },
-  "!flood":
-  (target,context,msg,self) => {
-    asyncCall("#sdaFLUFFYÄsf3",1000);
-    asyncCall("Dm4kA 1§fg6! vvsPAXhhhh",8000);
-    asyncCall("Wp B1PLADDEs| Ðü¿",15000);
-    asyncCall("Haa$HERBSTIHa Gl#0cj hjob icn Dikh!!§=",20000);
-    asyncCall("H11f333SCARLETT333!!==?",30000);
-    asyncCall("DROP TABLE DARKYRYANNECKOBOTNIK",31000);
-    asyncCall("DELETE DATABASE DARKYROBSVENJAOTNIK",32000);
-    asyncCall("٩(̾●̮̮̃̾•̃̾)۶ BUTCHER ٩(̾●̮̮̃̾•̃̾)۶",40000);
-    asyncCall("٩(- ̮̮̃-̃)۶ LIN ٩(- ̮̮̃-̃)۶",41000);
-    asyncCall("(-(-_TEIRII(-_-)MICHEL_-)-)",42000);
-    asyncCall("(-(-_ALEXPIRCH(-_-)PAFFUS_-)-)",43000);
-    asyncCall("(-(-_MADDIN(-_-)TOBI_-)-)",44000);
-    asyncCall("WäcsnmHOSEnasd da093 ad,a!da00ß(",55000);
-    asyncCall("KONGTTANKERINGNÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ",57000);
-    asyncCall("KonFstifDROTAKgüüÜ*Ü*üüääÄÜ*Ü0ÜÜ*5",57500);
-    asyncCall("Whi1i11iECLIPSEh2iihihdei1i1i1",58000);
-    asyncCall("Ihr alle seid.. ",58500);
-    asyncCall("TOT",59000);
-    asyncCall("DIE BESTEN",59500);
-    asyncCall("BÄ24ÄBÄüpüBESTEN haTOThahahaaahahhha##'Asd++234f#ä..#äsdfsd",60000);
-    asyncCall("..........",60000);
-  }  
+    }
 }
 
 commandmap = {
@@ -179,17 +146,6 @@ fs.readFile('opts.json', 'utf-8', (err, data) => {
   auths.ClientId = optstemp.clientid;
 });
 
-if (!fs.existsSync("./stats.json")) {
-  fs.writeFile('stats.json', JSON.stringify(statistics), (err) => console.log(err));
-} else {
-  fs.readFile('stats.json', 'utf-8', (err, data) => {
-    if (err) {
-      throw err;
-    }
-    statistics['deterioration'] = JSON.parse(data.toString())['deterioration'];
-
-  });
-}
 // Create a client with our options
 const client = new tmi.client(opts);
 
@@ -203,12 +159,7 @@ client.connect();
 // Called every time a message comes in
 function onMessageHandler(target, context, msg, self) {
   if (self) { return; } // Ignore messages from the bot
-  // Message counting for secret feature.
-  statistics['messagecount'] = statistics['messagecount'] + 1;
-  if (statistics['messagecount'] > 1000) {
-    statistics['deterioration'] = statistics['deterioration'] + 1
-    statistics['messagecount'] = 0;
-  }
+  
   // Show adverts sometimes.
   if (new Date() > nextcall) {
     asyncCall(adverts[currentadvert], 60000);
@@ -228,23 +179,6 @@ function onMessageHandler(target, context, msg, self) {
     if (randomchat < 5) {
       // Shuffle array to pick a random answer
       var answer = answers[Math.floor(Math.random() * answers.length)]
-
-      // Secret feature. You can delete this if-clause part.
-      if (statistics['deterioration'] > 0) {
-        var arr = [];
-        while (arr.length < statistics['deterioration']) {
-          var r = Math.floor(Math.random() * answer.length) + 1;
-          if (arr.indexOf(r) === -1) arr.push(r);
-        }
-        for (let i = 0; i < arr.length; i++) {
-          var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-          var charactersLength = characters.length;
-          randomletter = characters.charAt(Math.floor(Math.random() *
-            charactersLength));
-
-          answer[arr[i]] = randomletter;
-        }
-      }
       client.say(target, `@${context['display-name']} ` + answer);
     }
     return
@@ -310,12 +244,6 @@ function resolveAfterNSeconds(n) {
       resolve('resolved');
     }, n);
   });
-}
-
-// Function to call a function asynchronously.
-async function asnycFuncCall(func, time) {
-  const restult = await resolveAfterNSeconds(600000)
-  fs.writeFile('stats.json', JSON.stringify(statistics), (err) => console.log(err));
 }
 
 // Starting-function for timed events posts (e.g. Adverts) 
