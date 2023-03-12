@@ -177,7 +177,10 @@
             // I myself use soundsclips so a possible event could be the call of clip. Handling clip-calls
             if (received_msg.slice(0, 4) == 'clip' || received_msg.slice(0, 4) == 'anim') {
                // On certain clip-calls, we use overlaiable audioelements. In my example these are the clap and the tones-clips.
-               if (received_msg.slice(6) == "Clap" || tones.includes(received_msg.slice(6))) {
+               // If a normal clip is called, just play the clip and be done with it.
+                  audioqueue.push([received_msg.slice(4,7),received_msg.slice(6),received_msg.slice(0, 4) == 'anim'])
+            }
+               if (received_msg.slice(0,4) == "over") {
                   // For this, we create a new audio-element for each call and play the given soundclip. Notice that all files are called like the event.
                   var tempaudio = document.createElement("audio");
                   tempaudio.src = 'clips/' + received_msg.slice(6) + '.wav';
@@ -186,10 +189,6 @@
                   setTimeout(function () {
                      tempaudio.remove();
                   }, 2000);
-               }
-               // If a normal clip is called, just play the clip and be done with it.
-               else {
-                  audioqueue.push([received_msg.slice(4,7),received_msg.slice(6),received_msg.slice(0, 4) == 'anim'])
                }
             }
 

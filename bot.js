@@ -367,6 +367,7 @@ if (apienabled) {
     }
   })
 
+  let overlaplist = ["C","D","E","F","G","H","A","Clap"]
 
   // Main twitch-event subscription message. This will trigger whenever a twitch-event has been triggered.
   // To subscribe to events you need to have an app-access token and a client-ID. 
@@ -415,10 +416,18 @@ if (apienabled) {
           }
           
           if (notification.event['reward']['title'].slice(0, 4) == "Clip") {
-            getAudioDurationInSeconds(folderroot+'clips/'+notification.event['reward']['title'].slice(6)+'.wav').then((duration) => {
+            var rewardtitle = 'clip'
+            if(overlaplist.includes(notification.event['reward']['title'].slice(6))){
+              var filename = notification.event['reward']['title'].slice(6)
+              rewardtitle = 'over'
+            if(fs.existsSync(folderroot+'clips/'+notification.event['user_name']+filename+'.wav')){
+              filename = notification.event['user_name']+filename;
+            } 
+            }
+            getAudioDurationInSeconds(folderroot+'clips/'+filename+'.wav').then((duration) => {
               duration = Math.ceil(duration);
               durationstring = duration <10? "0"+duration.toString() : duration.toString();
-              webconnections.forEach(key => key.send('clip' + durationstring + notification.event['reward']['title'].slice(6)));
+              webconnections.forEach(key => key.send(rewardtitle + durationstring + filename));
             })
             }
           if(notification.event['reward']['title'].slice(0,9) == "Animation"){
