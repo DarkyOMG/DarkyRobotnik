@@ -417,8 +417,8 @@ if (apienabled) {
           
           if (notification.event['reward']['title'].slice(0, 4) == "Clip") {
             var rewardtitle = 'clip'
+            var filename = notification.event['reward']['title'].slice(6)
             if(overlaplist.includes(notification.event['reward']['title'].slice(6))){
-              var filename = notification.event['reward']['title'].slice(6)
               rewardtitle = 'over'
             if(fs.existsSync(folderroot+'clips/'+notification.event['user_name']+filename+'.wav')){
               filename = notification.event['user_name']+filename;
