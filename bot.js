@@ -413,6 +413,18 @@ if (apienabled) {
               durationstring = duration <10? "0"+duration.toString() : duration.toString();
               webconnections.forEach(key => key.send('anim' + durationstring + filename));
             })
+            let headers = {
+              "Authorization": auths.Authorization,
+              "Client-Id": auths.ClientId
+            };
+            var broadcaster_id = '75099671'
+            let endpoint = `https://api.twitch.tv/helix/subscriptions?broadcaster_id=${broadcaster_id}`
+            
+            fetch(endpoint, {
+              headers,
+              })
+              .then((res) => res.json())
+              .then((data) => synchronizeRainbow(data,notification.event['user_name']))
           }
           
           if (notification.event['reward']['title'].slice(0, 4) == "Clip") {
@@ -471,7 +483,14 @@ if (apienabled) {
     // when you subscribed to the event.
     return secret;
   }
-
+  function synchronizeRainbow(data,username){
+    data["data"].forEach(element => {
+      if(element['user_name'] == username){
+        console.log("Found user in Subs")
+        webconnections.forEach(key => key.send('rainbow'+username));
+      }
+    });
+  }
   // Build the message used to get the HMAC.
   function getHmacMessage(request) {
     return (request.headers[TWITCH_MESSAGE_ID] +
