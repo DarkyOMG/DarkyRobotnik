@@ -484,6 +484,7 @@ if (apienabled) {
     return secret;
   }
   function synchronizeRainbow(data,username){
+    console.log(data);
     data["data"].forEach(element => {
       if(element['user_name'] == username){
         console.log("Found user in Subs")
