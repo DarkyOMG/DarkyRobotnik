@@ -161,6 +161,7 @@ fs.readFile('opts.json', 'utf-8', (err, data) => {
 fs.readFile('colors.json', 'utf-8', (err,data) => {
   if (err) {
     console.log("Can't find colors.json.");
+    return;
   }
 
   colors = JSON.parse(data.toString());
