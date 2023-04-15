@@ -373,6 +373,8 @@ if (apienabled) {
   // To subscribe to events you need to have an app-access token and a client-ID. 
   // On how to subscribe to events check the documentation: https://dev.twitch.tv/docs/eventsub
   app.post('/eventsub', (req, res) => {
+    console.log(req);
+    console.log(res);
     let secret = getSecret();
     let message = getHmacMessage(req);
     let hmac = HMAC_PREFIX + getHmac(secret, message);  // Signature to compare
@@ -413,18 +415,18 @@ if (apienabled) {
               durationstring = duration <10? "0"+duration.toString() : duration.toString();
               webconnections.forEach(key => key.send('anim' + durationstring + filename));
             })
-          //   let headers = {
-          //     "Authorization": auths.Authorization,
-          //     "Client-Id": auths.ClientId
-          //   };
-          //   var broadcaster_id = '75099671'
-          //   let endpoint = `https://api.twitch.tv/helix/subscriptions?broadcaster_id=${broadcaster_id}`
+             let headers = {
+               "Authorization": auths.Authorization,
+               "Client-Id": auths.ClientId
+             };
+             var broadcaster_id = '75099671'
+             let endpoint = `https://api.twitch.tv/helix/subscriptions?broadcaster_id=${broadcaster_id}`
             
-          //   fetch(endpoint, {
-          //     headers,
-          //     })
-          //     .then((res) => res.json())
-          //     .then((data) => synchronizeRainbow(data,notification.event['user_name']))
+             fetch(endpoint, {
+               headers,
+               })
+               .then((res) => res.json())
+               .then((data) => synchronizeRainbow(data,notification.event['user_name']))
            }
           
           if (notification.event['reward']['title'].slice(0, 4) == "Clip") {
