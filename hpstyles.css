@@ -1,0 +1,112 @@
+body {
+    background: black;
+    color: #f6e704;
+    font-family: 'IBM Plex Sans Condensed';font-size: 22px;
+    caret-color: transparent;
+  }
+  
+  h1{
+    font-size: 2vw;
+    text-shadow: 0px 0px 30px #f6e704;
+    animation: anim 1s linear infinite alternate;
+  }
+  
+  @keyframes anim {
+    from {text-shadow: 0px 0px 20px #f6e704;}
+    to {text-shadow: 0px 0px 35px #f6e704;}
+  }
+  @keyframes animmusic {
+    from {text-shadow: 0px 0px 20px #80B9E4;}
+    to {text-shadow: 0px 0px 35px #80B9E4;}
+  }
+  @keyframes animcomp {
+    from {text-shadow: 0px 0px 20px #003d86;}
+    to {text-shadow: 0px 0px 35px #003d86;}
+  }
+  .top-container {
+    background-color: transparent;
+    padding: 30px;
+    text-align: center;
+    height: 5rem;
+    display: flex;
+  }
+  
+  .header {
+    padding-left: 1rem;
+    display: flex;
+    background: black;
+    color: #f6e704;
+    box-shadow: 4px 2px 4px orange;
+    animation: anim 1s linear infinite alternate;
+  }
+  .coloumnheadermusic{
+    font-size: 2vw;
+    color: #80B9E4;
+    text-shadow: 0px 0px 30px #80B9E4;
+    animation: animmusic 1s linear infinite alternate;
+  }
+  .coloumnheadercomp{
+    font-size: 2vw;
+    color:#003d86;
+    text-shadow: 0px 0px 30px #003d86;
+    animation: animcomp 1s linear infinite alternate;
+  }
+  h2{
+    cursor: pointer;
+    margin-right: 2rem;
+    line-height: 0;
+    padding-top: 1vw;
+    font-size: 2vw;
+    text-shadow: 0px 0px 30px #f6e704;
+    caret-color: transparent;
+  }  
+  p {
+    font-size: 1vw;
+    text-shadow: 0px 0px 30px #f6e704;
+    animation: anim 1s linear infinite alternate;
+    margin: 0 auto;
+    line-height: 1.5em;
+    text-align: justify;
+    border: 2px solid rgb(40, 40, 40);
+  }
+              
+a::after {
+  content: "";
+  display: block;
+  width: 32px;
+  padding-top: 3px;
+  border-bottom: 2px solid #f9dd94;
+}
+    
+
+ 
+
+span {
+  background-image: linear-gradient(to right, peru 0%, peru 100%);
+  background-repeat: repeat-x; 
+  background-position: 0 100%; 
+  background-size: 100% 3px; 
+}
+    
+
+  .content {
+    padding: 16px;
+  }
+  .vertical-row {
+    Float:left;
+    height:100px;
+    width:1px; /* edit this if you want */
+    background-color: your color
+   } 
+  
+  .sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+  }
+  
+  .sticky + .content {
+    padding-top: 102px;
+  }
+
+  
