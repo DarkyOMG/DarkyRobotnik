@@ -123,7 +123,7 @@ standardmap = {
     },
     "!color":
     (target, context, msg, self) => {
-      colors[context['display-name']] = msg.split(" ")[1];
+      colors[context['display-name'].toLowerCase()] = msg.split(" ")[1];
       client.say(target, `${context['display-name']}, verstanden. Deine Farbe ist jetzt ${msg.split(" ")[1]}`);
     }
 }
@@ -494,7 +494,7 @@ if (apienabled) {
   function synchronizeRainbow(data,username){
     data["data"].forEach(element => {
       if(element['user_name'] == username){
-        webconnections.forEach(key => key.send('rainbow'+username));
+        webconnections.forEach(key => key.send('rainbow'+colors[username.toLowerCase()]));
       }
     });
   }

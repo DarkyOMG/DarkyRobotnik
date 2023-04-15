@@ -190,7 +190,9 @@
                      tempaudio.remove();
                   }, 2000);
             }
-            
+            if(received_msg.slice(0,7) == "rainbow"){
+               alert("RAINBOW");
+            }
 
             if (!isFiringClip) {
                HandleClips()
