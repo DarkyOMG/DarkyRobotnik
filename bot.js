@@ -20,6 +20,7 @@ const auths = {
 }
 // List your admins and Mods
 let mods = ['WTFDarky', 'Toobi', 'pladdemusicjam', 'Herbstliches', 'teirii','earth_dragon_pax'];
+let colors = {};
 // Path for statics.json, which should hold all your commands. Use './statics.json' if you want to use the given example-file.
 let staticsPath = '/sftp_uploads/user1/darkyrobotnikexchange/statics.json'
 let alerts = true;
@@ -119,6 +120,11 @@ standardmap = {
       else {
         client.say(target, `${context['display-name']} läuft wild herum und umarmt wahllos Leute. Achtung!`);
       }
+    },
+    "!color":
+    (target, context, msg, self) => {
+      colors[context['display-name']] = msg.split(" ")[1];
+      client.say(target, `${context['display-name']}, verstanden. Deine Farbe ist jetzt ${msg.split(" ")[1]}`);
     }
 }
 
@@ -486,10 +492,8 @@ if (apienabled) {
     return secret;
   }
   function synchronizeRainbow(data,username){
-    console.log(data);
     data["data"].forEach(element => {
       if(element['user_name'] == username){
-        console.log("Found user in Subs")
         webconnections.forEach(key => key.send('rainbow'+username));
       }
     });
