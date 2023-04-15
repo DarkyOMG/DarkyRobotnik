@@ -104,6 +104,13 @@ standardmap = {
         client.say(target, `Followeralerts are ${alerts?"On":"Off"} `);
       }
   },
+  "!resetrainbow":
+    (target, context, msg, self) => {
+      if (mods.includes(context['display-name'])) {
+        rainbowusersdone = [];
+        client.say(target, `Rainbow is reset`);
+      }
+  },
   "!pullandrestart":
     (target, context, msg, self) => {
       if (mods.includes(context['display-name'])) {
