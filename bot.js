@@ -21,6 +21,7 @@ const auths = {
 // List your admins and Mods
 let mods = ['WTFDarky', 'Toobi', 'pladdemusicjam', 'Herbstliches', 'teirii','earth_dragon_pax'];
 let colors = {};
+let rainbowusersdone = [];
 // Path for statics.json, which should hold all your commands. Use './statics.json' if you want to use the given example-file.
 let staticsPath = '/sftp_uploads/user1/darkyrobotnikexchange/statics.json'
 let alerts = true;
@@ -124,6 +125,12 @@ standardmap = {
     "!color":
     (target, context, msg, self) => {
       colors[context['display-name'].toLowerCase()] = msg.split(" ")[1];
+      fs.writeFile('colors.json', JSON.stringify(colors), err => {
+        if (err) {
+          console.error(err);
+        }
+        // file written successfully
+      });
       client.say(target, `${context['display-name']}, verstanden. Deine Farbe ist jetzt ${msg.split(" ")[1]}`);
     }
 }
@@ -151,6 +158,13 @@ fs.readFile('opts.json', 'utf-8', (err, data) => {
   auths.Authorization = optstemp.auth;
   auths.ClientId = optstemp.clientid;
 });
+fs.readFile('colors.json', 'utf-8', (err,data) => {
+  if (err) {
+    console.log("Can't find colors.json.");
+  }
+
+  colors = JSON.parse(data.toString());
+})
 
 // Create a client with our options
 const client = new tmi.client(opts);
@@ -379,8 +393,6 @@ if (apienabled) {
   // To subscribe to events you need to have an app-access token and a client-ID. 
   // On how to subscribe to events check the documentation: https://dev.twitch.tv/docs/eventsub
   app.post('/eventsub', (req, res) => {
-    console.log(req);
-    console.log(res);
     let secret = getSecret();
     let message = getHmacMessage(req);
     let hmac = HMAC_PREFIX + getHmac(secret, message);  // Signature to compare
@@ -493,8 +505,9 @@ if (apienabled) {
   }
   function synchronizeRainbow(data,username){
     data["data"].forEach(element => {
-      if(element['user_name'] == username){
+      if(element['user_name'] == username && !rainbowusersdone.includes(username.toLowerCase())){
         webconnections.forEach(key => key.send('rainbow'+colors[username.toLowerCase()]));
+        rainbowusersdone.push(username.toLowerCase());
       }
     });
   }
