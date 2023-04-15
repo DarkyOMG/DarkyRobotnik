@@ -34,7 +34,9 @@
       </figure>
    </div>
 
-
+   <div class="footer" id="footer">
+      <p>Footer</p>
+    </div>
 </body>
 <script type="text/javascript">
    // Get all relevant elements.
@@ -45,6 +47,7 @@
    const textelem = document.querySelector("p");
    const clipdiv = document.getElementById("clip");
    const clipheader = document.getElementById("clipheader");
+   const footer = document.getElementsById("footer");
    // This list is used for overlaid audioelements.
    animimagewrapper.style.display = "none";
    animim.src = "";
@@ -191,6 +194,10 @@
                   }, 2000);
             }
             if(received_msg.slice(0,7) == "rainbow"){
+               var tempcolor = document.createElement("div");
+               tempcolor.classList.add("child");
+               tempcolor.style.backgroundColor = received_msg.slice(7);
+               footer.appendChild(tempcolor);
                alert("RAINBOW");
             }
 

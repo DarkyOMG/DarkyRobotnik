@@ -62,3 +62,26 @@
     object-fit: scale-down;
     background-color: transparent;
   }
+  .footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: red;
+    color: white;
+    text-align: center;
+ }
+ .parent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.child {
+  width: 100px;
+  height: 100px;
+  background: green;
+}
