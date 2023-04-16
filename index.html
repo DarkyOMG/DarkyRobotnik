@@ -34,28 +34,6 @@
    </div>
 </body>
 <script type="text/javascript">
-   /**
-      * Validates hex value
-      * Credits: https://gist.github.com/rijkvanzanten/560dd06c4e2143aebd552abaeeee3e9b
-      * @param  {String} color hex color value
-      * @return {Boolean}
-      */
-   export function isValidHex(color) {
-      if (!color || typeof color !== 'string') return false;
-
-      // Validate hex values
-      if (color.substring(0, 1) === '#') color = color.substring(1);
-
-      switch (color.length) {
-         case 3: return /^[0-9A-F]{3}$/i.test(color);
-         case 6: return /^[0-9A-F]{6}$/i.test(color);
-         case 8: return /^[0-9A-F]{8}$/i.test(color);
-         default: return false;
-      }
-
-      return false;
-   }
-
    // Get all relevant elements.
    const audioelem = document.querySelector("audio");
    const imageelem = document.getElementById("animthing");
@@ -212,12 +190,6 @@
             }
             if (received_msg.slice(0, 7) == "rainbow") {
                var color = received_msg.slice(7);
-               const isColor = (color) => {
-                  const s = new Option().style;
-                  s.color = color;
-                  return s.color !== '';
-               }
-               if (!isColor && !isValidHex(color)) return;
                var tempcolor = document.createElement("div");
                tempcolor.classList.add("child");
                tempcolor.style.backgroundColor = received_msg.slice(7);

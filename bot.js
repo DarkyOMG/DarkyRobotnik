@@ -131,6 +131,10 @@ standardmap = {
     },
     "!color":
     (target, context, msg, self) => {
+      if(!isValidHex(msg.split(" "))[1]){
+        client.say(target, `${context['display-name']}, ${msg.split(" ")[1]} ist leider keine Farbe. Bitte gib deine Farbe in der Form #A61E2f (Hex) an. Farben picken kannst du hier: https://htmlcolorcodes.com/color-picker/`);      
+        return;
+      }
       colors[context['display-name'].toLowerCase()] = msg.split(" ")[1];
       fs.writeFile('colors.json', JSON.stringify(colors), err => {
         if (err) {
@@ -535,6 +539,27 @@ if (apienabled) {
       .digest('hex');
   }
 
+     /**
+      * Validates hex value
+      * Credits: https://gist.github.com/rijkvanzanten/560dd06c4e2143aebd552abaeeee3e9b
+      * @param  {String} color hex color value
+      * @return {Boolean}
+      */
+      function isValidHex(color) {
+      if (!color || typeof color !== 'string') return false;
+
+      // Validate hex values
+      if (color.substring(0, 1) === '#') color = color.substring(1);
+
+      switch (color.length) {
+         case 3: return /^[0-9A-F]{3}$/i.test(color);
+         case 6: return /^[0-9A-F]{6}$/i.test(color);
+         case 8: return /^[0-9A-F]{8}$/i.test(color);
+         default: return false;
+      }
+
+      return false;
+   }
   // Verify whether our hash matches the hash that Twitch passed in the header.
   function verifyMessage(hmac, verifySignature) {
     return crypto.timingSafeEqual(Buffer.from(hmac), Buffer.from(verifySignature));
