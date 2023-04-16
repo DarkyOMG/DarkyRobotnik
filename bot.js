@@ -19,7 +19,7 @@ const auths = {
   ClientId: ""
 }
 // List your admins and Mods
-let mods = ['WTFDarky', 'Toobi', 'pladdemusicjam', 'Herbstliches', 'teirii','earth_dragon_pax'];
+let mods = ['WTFDarky', 'Toobi', 'pladdemusicjam', 'Herbstliches', 'teirii', 'earth_dragon_pax'];
 let colors = {};
 let rainbowusersdone = [];
 // Path for statics.json, which should hold all your commands. Use './statics.json' if you want to use the given example-file.
@@ -30,7 +30,7 @@ let alerts = true;
 // Enable this if you want to use the twitch-api for eventhandling
 const apienabled = true
 // Anwers for Bot to automatically react to random messages
-let answers = [` haha, ja genau!`,` lol, du sagst es :D`, ` ich genieße jedes einzelne dieser Worte!`, ` Da wird man ja fuchsig!`, ` das hast du doch von jemandem abgeschrieben!`, ` für die Nachricht gibt's 5 ECTS!`, ` du wirkst müde. Bestell dir doch mal einen !kaffee mit !milch!`,` haha, ja gleich bist du tot!`,` lol, du schweigst gleich :D`, ` ich genieße jedes einzelne deiner Haare!`, ` Da wird man ja fu..fuuaAHAHahhahh!`, ` das hast du doch von jemandem abgeschnitten!`, ` für die Nachricht gibt's 5 Peitschenhiebe!`, ` du wirkst müde. Bestell dir doch mal einen !Affenkopf mit !Eis!`]
+let answers = [` haha, ja genau!`, ` lol, du sagst es :D`, ` ich genieße jedes einzelne dieser Worte!`, ` Da wird man ja fuchsig!`, ` das hast du doch von jemandem abgeschrieben!`, ` für die Nachricht gibt's 5 ECTS!`, ` du wirkst müde. Bestell dir doch mal einen !kaffee mit !milch!`, ` haha, ja gleich bist du tot!`, ` lol, du schweigst gleich :D`, ` ich genieße jedes einzelne deiner Haare!`, ` Da wird man ja fu..fuuaAHAHahhahh!`, ` das hast du doch von jemandem abgeschnitten!`, ` für die Nachricht gibt's 5 Peitschenhiebe!`, ` du wirkst müde. Bestell dir doch mal einen !Affenkopf mit !Eis!`]
 // Adverts the bot says periodically while there are still chatters.
 let adverts = [`Du willst auch an den Präsenzveranstaltungen teilnehmen? Dann klicke hier: https://discord.gg/VaJfZVKWhK`, `Alle Hintergrundmusik wurde von Martin Platte @pladdemusicjam (https://www.instagram.com/die_pladde/) erstellt.`, `Alle 3D-Flow-Simulationen wurden von @Toobi (https://www.twitch.tv/Toobi) erstellt.`, `Alle gezeichneten Emotes wurden von @Teirii (https://www.twitch.tv/Teirii) erstellt.`]
 let currentadvert = 0;
@@ -60,19 +60,19 @@ riddlemap = {
   "!firstwinner":
     firstwinner == "" ? "Bisher noch kein Gewinner :(" : firstwinner
 };
-function GetClips(raidername,data,headers){
+function GetClips(raidername, data, headers) {
   console.log(data);
   endpoint = `https://api.twitch.tv/helix/clips?broadcaster_id=${data["data"][0]["id"]}`
   fetch(endpoint, {
-  headers,
+    headers,
   })
-  .then((res) => res.json())
-  .then((data) => ShowClip(raidername,data));
+    .then((res) => res.json())
+    .then((data) => ShowClip(raidername, data));
 }
-function ShowClip(raidername,clips){
-  if(clips["data"].length <= 0) return;
-  var clip = clips["data"][Math.floor(Math.random()*clips["data"].length)];
-  webconnections.forEach(key => key.send(`so ${raidername} ${clip["id"]} ${(clip["duration"]+3)*1000.0}`))
+function ShowClip(raidername, clips) {
+  if (clips["data"].length <= 0) return;
+  var clip = clips["data"][Math.floor(Math.random() * clips["data"].length)];
+  webconnections.forEach(key => key.send(`so ${raidername} ${clip["id"]} ${(clip["duration"] + 3) * 1000.0}`))
 }
 // Standardcommands. Including Shoutout (usage: !so @streamername) and pullandrestart, which pulls the repo and restarts the bot.
 standardmap = {
@@ -88,12 +88,12 @@ standardmap = {
             "Client-Id": auths.ClientId
           };
           let endpoint = `https://api.twitch.tv/helix/users?login=${result[0].slice(1)}`
-          
+
           fetch(endpoint, {
             headers,
-            })
+          })
             .then((res) => res.json())
-            .then((data) => GetClips(result[0],data,headers))
+            .then((data) => GetClips(result[0], data, headers))
         }
       }
     },
@@ -101,16 +101,16 @@ standardmap = {
     (target, context, msg, self) => {
       if (mods.includes(context['display-name'])) {
         alerts = !alerts;
-        client.say(target, `Followeralerts are ${alerts?"On":"Off"} `);
+        client.say(target, `Followeralerts are ${alerts ? "On" : "Off"} `);
       }
-  },
+    },
   "!resetrainbow":
     (target, context, msg, self) => {
       if (mods.includes(context['display-name'])) {
         rainbowusersdone = [];
         client.say(target, `Rainbow is reset`);
       }
-  },
+    },
   "!pullandrestart":
     (target, context, msg, self) => {
       if (mods.includes(context['display-name'])) {
@@ -129,10 +129,10 @@ standardmap = {
         client.say(target, `${context['display-name']} läuft wild herum und umarmt wahllos Leute. Achtung!`);
       }
     },
-    "!color":
+  "!color":
     (target, context, msg, self) => {
-      if(!isValidHex(msg.split(" "))[1]){
-        client.say(target, `${context['display-name']}, ${msg.split(" ")[1]} ist leider keine Farbe. Bitte gib deine Farbe in der Form #A61E2f (Hex) an. Farben picken kannst du hier: https://htmlcolorcodes.com/color-picker/`);      
+      if (!isValidHex(msg.split(" "))[1]) {
+        client.say(target, `${context['display-name']}, ${msg.split(" ")[1]} ist leider keine Farbe. Bitte gib deine Farbe in der Form #A61E2f (Hex) an. Farben picken kannst du hier: https://htmlcolorcodes.com/color-picker/`);
         return;
       }
       colors[context['display-name'].toLowerCase()] = msg.split(" ")[1];
@@ -169,7 +169,7 @@ fs.readFile('opts.json', 'utf-8', (err, data) => {
   auths.Authorization = optstemp.auth;
   auths.ClientId = optstemp.clientid;
 });
-fs.readFile('colors.json', 'utf-8', (err,data) => {
+fs.readFile('colors.json', 'utf-8', (err, data) => {
   if (err) {
     console.log("Can't find colors.json.");
     return;
@@ -191,7 +191,7 @@ client.connect();
 // Called every time a message comes in
 function onMessageHandler(target, context, msg, self) {
   if (self) { return; } // Ignore messages from the bot
-  
+
   // Show adverts sometimes.
   if (new Date() > nextcall) {
     asyncCall(adverts[currentadvert], 60000);
@@ -357,7 +357,7 @@ if (apienabled) {
 
   // This server also serves as a websocketserver for different websockets. This can be used to send events to webclients or other websockets.
   // This set will contain all open websocket-connections
-  
+
 
   // Starting the webserver onto the already started https server to be able to use secure websocketserving. 
   // This is only needed if you want to fire your own alerts on-stream.
@@ -399,7 +399,7 @@ if (apienabled) {
     }
   })
 
-  let overlaplist = ["C","D","E","F","G","H","A","Clap"]
+  let overlaplist = ["C", "D", "E", "F", "G", "H", "A", "Clap"]
 
   // Main twitch-event subscription message. This will trigger whenever a twitch-event has been triggered.
   // To subscribe to events you need to have an app-access token and a client-ID. 
@@ -428,56 +428,56 @@ if (apienabled) {
         }
 
         if (notification.subscription.type == "channel.follow") {
-          if(alerts) webconnections.forEach(key => key.send('follow' + notification.event['user_name']));
+          if (alerts) webconnections.forEach(key => key.send('follow' + notification.event['user_name']));
         }
         // This event is triggered whenever a viewer redeems a custom reward. 
         if (notification.subscription.type == "channel.channel_points_custom_reward_redemption.add") {
           // You can further filter the event by it's title
-          if (notification.event['reward']['title'] == "Ich bin da!"){
+          if (notification.event['reward']['title'] == "Ich bin da!") {
             var filename = ""
-            if(fs.existsSync(folderroot+'clips/'+notification.event['user_name']+'.wav')){
+            if (fs.existsSync(folderroot + 'clips/' + notification.event['user_name'] + '.wav')) {
               filename = notification.event['user_name'];
             } else {
               filename = "default";
             }
-            getAudioDurationInSeconds(folderroot+'clips/'+filename+'.wav').then((duration) => {
+            getAudioDurationInSeconds(folderroot + 'clips/' + filename + '.wav').then((duration) => {
               duration = Math.ceil(duration);
-              durationstring = duration <10? "0"+duration.toString() : duration.toString();
+              durationstring = duration < 10 ? "0" + duration.toString() : duration.toString();
               webconnections.forEach(key => key.send('anim' + durationstring + filename));
             })
-             let headers = {
-               "Authorization": auths.Authorization,
-               "Client-Id": auths.ClientId
-             };
-             var broadcaster_id = '75099671'
-             let endpoint = `https://api.twitch.tv/helix/subscriptions?broadcaster_id=${broadcaster_id}`
-            
-             fetch(endpoint, {
-               headers,
-               })
-               .then((res) => res.json())
-               .then((data) => synchronizeRainbow(data,notification.event['user_name']))
-           }
-          
+            let headers = {
+              "Authorization": auths.Authorization,
+              "Client-Id": auths.ClientId
+            };
+            var broadcaster_id = '75099671'
+            let endpoint = `https://api.twitch.tv/helix/subscriptions?broadcaster_id=${broadcaster_id}`
+
+            fetch(endpoint, {
+              headers,
+            })
+              .then((res) => res.json())
+              .then((data) => synchronizeRainbow(data, notification.event['user_name']))
+          }
+
           if (notification.event['reward']['title'].slice(0, 4) == "Clip") {
             var rewardtitle = 'clip'
             var filename = notification.event['reward']['title'].slice(6)
-            if(overlaplist.includes(notification.event['reward']['title'].slice(6))){
+            if (overlaplist.includes(notification.event['reward']['title'].slice(6))) {
               rewardtitle = 'over'
-            if(fs.existsSync(folderroot+'clips/'+notification.event['user_name']+filename+'.wav')){
-              filename = notification.event['user_name']+filename;
-            } 
+              if (fs.existsSync(folderroot + 'clips/' + notification.event['user_name'] + filename + '.wav')) {
+                filename = notification.event['user_name'] + filename;
+              }
             }
-            getAudioDurationInSeconds(folderroot+'clips/'+filename+'.wav').then((duration) => {
+            getAudioDurationInSeconds(folderroot + 'clips/' + filename + '.wav').then((duration) => {
               duration = Math.ceil(duration);
-              durationstring = duration <10? "0"+duration.toString() : duration.toString();
+              durationstring = duration < 10 ? "0" + duration.toString() : duration.toString();
               webconnections.forEach(key => key.send(rewardtitle + durationstring + filename));
             })
-            }
-          if(notification.event['reward']['title'].slice(0,9) == "Animation"){
-            getAudioDurationInSeconds(folderroot+'clips/'+notification.event['reward']['title'].slice(11)+'.wav').then((duration) => {
+          }
+          if (notification.event['reward']['title'].slice(0, 9) == "Animation") {
+            getAudioDurationInSeconds(folderroot + 'clips/' + notification.event['reward']['title'].slice(11) + '.wav').then((duration) => {
               duration = Math.ceil(duration);
-              durationstring = duration <10? "0"+duration.toString() : duration.toString();
+              durationstring = duration < 10 ? "0" + duration.toString() : duration.toString();
               webconnections.forEach(key => key.send('anim' + durationstring + notification.event['reward']['title'].slice(11)));
             })
           }
@@ -515,11 +515,11 @@ if (apienabled) {
     // when you subscribed to the event.
     return secret;
   }
-  function synchronizeRainbow(data,username){
+  function synchronizeRainbow(data, username) {
     data["data"].forEach(element => {
-      if(element['user_name'] == username && !rainbowusersdone.includes(username.toLowerCase())){
-        if(username.toLowerCase() in colors){
-          webconnections.forEach(key => key.send('rainbow'+colors[username.toLowerCase()]));
+      if (element['user_name'] == username && !rainbowusersdone.includes(username.toLowerCase())) {
+        if (username.toLowerCase() in colors) {
+          webconnections.forEach(key => key.send('rainbow' + colors[username.toLowerCase()]));
           rainbowusersdone.push(username.toLowerCase());
         }
       }
@@ -539,27 +539,14 @@ if (apienabled) {
       .digest('hex');
   }
 
-     /**
-      * Validates hex value
-      * Credits: https://gist.github.com/rijkvanzanten/560dd06c4e2143aebd552abaeeee3e9b
-      * @param  {String} color hex color value
-      * @return {Boolean}
-      */
-      function isValidHex(color) {
-      if (!color || typeof color !== 'string') return false;
 
-      // Validate hex values
-      if (color.substring(0, 1) === '#') color = color.substring(1);
+  function isValidHex(color) {
+    var rex = /^#(([0-9a-fA-F]{2}){3}|([0-9a-fA-F]){3})$/
+    var result = color.match(rex);
 
-      switch (color.length) {
-         case 3: return /^[0-9A-F]{3}$/i.test(color);
-         case 6: return /^[0-9A-F]{6}$/i.test(color);
-         case 8: return /^[0-9A-F]{8}$/i.test(color);
-         default: return false;
-      }
 
-      return false;
-   }
+    return result != null;
+  }
   // Verify whether our hash matches the hash that Twitch passed in the header.
   function verifyMessage(hmac, verifySignature) {
     return crypto.timingSafeEqual(Buffer.from(hmac), Buffer.from(verifySignature));
