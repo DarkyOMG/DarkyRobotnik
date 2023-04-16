@@ -131,7 +131,7 @@ standardmap = {
     },
   "!color":
     (target, context, msg, self) => {
-      if (!isValidHex(msg.split(" "))[1]) {
+      if (!isValidHex(msg.split(" ")[1])) {
         client.say(target, `${context['display-name']}, ${msg.split(" ")[1]} ist leider keine Farbe. Bitte gib deine Farbe in der Form #A61E2f (Hex) an. Farben picken kannst du hier: https://htmlcolorcodes.com/color-picker/`);
         return;
       }
