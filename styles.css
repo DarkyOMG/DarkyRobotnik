@@ -88,6 +88,6 @@
   animation-timing-function: cubic-bezier(0,1.66,.99,.63);
 }
 @keyframes mymove {
-  from {bottom: 100%;}
-  to{bottom:0%;}
+  from {margin-bottom: 100%;}
+  to{margin-bottom:0%;}
 }
