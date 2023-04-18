@@ -84,4 +84,10 @@
   width: 40px;
   height: 40px;
   background: green;
+  animation: mymove 2s forwards;
+  animation-timing-function: cubic-bezier(0,1.66,.99,.63);
+}
+@keyframes mymove {
+  from {bottom: 100%;}
+  to{bottom:0%;}
 }
