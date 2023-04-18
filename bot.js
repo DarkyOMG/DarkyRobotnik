@@ -200,6 +200,10 @@ function onMessageHandler(target, context, msg, self) {
     currentadvert = (currentadvert + 1) % adverts.length;
   }
 
+  if(context['display-name'].toLowerCase() in rainbowusersdone){
+    console.log("wiggling");
+    webconnections.forEach(key => key.send('wiggle' + context['display-name'].toLowerCase()));
+  }
   // Check if a command has been called. Commands start with "!".
   var re = /!\S*/;
   let result = msg.match(re)
@@ -216,9 +220,7 @@ function onMessageHandler(target, context, msg, self) {
     return
   }
 
-  if(context['display-name'].toLowerCase() in rainbowusersdone){
-    webconnections.forEach(key => key.send('wiggle' + context['display-name'].toLowerCase()));
-  }
+
   // If a command was found, this part is triggered.
   const commandName = result[0].trim();
   // Check if the command is valid and belongs to this commandmap
