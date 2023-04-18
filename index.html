@@ -205,7 +205,10 @@
             }
             if(received_msg.slice(0,6) == "wiggle"){
                if(received_msg.slice(6) in rainbowdict){
-                  rainbowdict[received_msg.slice(6)].style.animation = "wiggle 2s forwards";
+                  rainbowdict[received_msg.slice(6)].style.animation = 'none';
+               setTimeout(function () {
+                  rainbowdict[received_msg.slice(6)].style.animation = "wiggle 2s forwards";;
+               }, 0);
                }
             }
 

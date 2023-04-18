@@ -200,7 +200,7 @@ function onMessageHandler(target, context, msg, self) {
     currentadvert = (currentadvert + 1) % adverts.length;
   }
 
-  if(context['display-name'].toLowerCase() in rainbowusersdone){
+  if(rainbowusersdone.indexOf(context['display-name'].toLowerCase())!=-1){
     console.log("wiggling");
     webconnections.forEach(key => key.send('wiggle' + context['display-name'].toLowerCase()));
   }
