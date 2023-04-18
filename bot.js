@@ -517,10 +517,8 @@ if (apienabled) {
   }
   function synchronizeRainbow(data, username) {
     data["data"].forEach(element => {
-      console.log(data);
       if (element['user_name'] == username && !rainbowusersdone.includes(username.toLowerCase())) {
         if (username.toLowerCase() in colors) {
-          console.log("Sending color "+colors[username.toLowerCase()]);
           webconnections.forEach(key => key.send('rainbow' + colors[username.toLowerCase()]));
           rainbowusersdone.push(username.toLowerCase());
         }
