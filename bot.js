@@ -215,6 +215,10 @@ function onMessageHandler(target, context, msg, self) {
     }
     return
   }
+
+  if(context['display-name'].toLowerCase() in rainbowusersdone){
+    webconnections.forEach(key => key.send('wiggle' + context['display-name'].toLowerCase()));
+  }
   // If a command was found, this part is triggered.
   const commandName = result[0].trim();
   // Check if the command is valid and belongs to this commandmap

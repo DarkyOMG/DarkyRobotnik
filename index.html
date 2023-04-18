@@ -203,6 +203,11 @@
                tempcolor.style.backgroundColor = received_msg.slice(7,14);
                footer.appendChild(tempcolor);
             }
+            if(received_msg.slice(0,6) == "wiggle"){
+               if(received_msg.slice(6) in rainbowdict){
+                  rainbowdict[received_msg.slice(6)].style.animation = "wiggle 2s forwards";
+               }
+            }
 
             if (!isFiringClip) {
                HandleClips()
