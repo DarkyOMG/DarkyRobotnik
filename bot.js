@@ -450,7 +450,7 @@ if (apienabled) {
               "Client-Id": auths.ClientId
             };
             var broadcaster_id = '75099671'
-            let endpoint = `https://api.twitch.tv/helix/subscriptions?broadcaster_id=${broadcaster_id}`
+            let endpoint = `https://api.twitch.tv/helix/subscriptions?broadcaster_id=${broadcaster_id}&first=100`
 
             fetch(endpoint, {
               headers,
@@ -517,6 +517,7 @@ if (apienabled) {
   }
   function synchronizeRainbow(data, username) {
     data["data"].forEach(element => {
+      console.log(data);
       if (element['user_name'] == username && !rainbowusersdone.includes(username.toLowerCase())) {
         if (username.toLowerCase() in colors) {
           console.log("Sending color "+colors[username.toLowerCase()]);
