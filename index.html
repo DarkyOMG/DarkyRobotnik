@@ -43,9 +43,11 @@
    const clipdiv = document.getElementById("clip");
    const clipheader = document.getElementById("clipheader");
    const footer = document.getElementById("footer");
+   
    // This list is used for overlaid audioelements.
    animimagewrapper.style.display = "none";
    animim.src = "";
+   let rainbowdict = {}
    let audioelemlist = []
    let audioqueue = []
    let isFiringClip = false
@@ -190,9 +192,15 @@
             }
             if (received_msg.slice(0, 7) == "rainbow") {
                var color = received_msg.slice(7);
-               var tempcolor = document.createElement("div");
-               tempcolor.classList.add("child");
-               tempcolor.style.backgroundColor = received_msg.slice(7);
+               var tempcolor;
+               if(received_msg.slice(14) in rainbowdict){
+                  tempcolor = rainbowdict[received_msg.slice(14)];
+               } else {
+                  tempcolor = document.createElement("div");
+                  tempcolor.classList.add("child");
+                  rainbowdict[received_msg.slice(14)] = tempcolor;
+               }
+               tempcolor.style.backgroundColor = received_msg.slice(7,14);
                footer.appendChild(tempcolor);
             }
 

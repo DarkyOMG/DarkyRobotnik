@@ -517,9 +517,9 @@ if (apienabled) {
   }
   function synchronizeRainbow(data, username) {
     data["data"].forEach(element => {
-      if (element['user_name'] == username && !rainbowusersdone.includes(username.toLowerCase())) {
+      if (element['user_name'] == username) {
         if (username.toLowerCase() in colors) {
-          webconnections.forEach(key => key.send('rainbow' + colors[username.toLowerCase()]));
+          webconnections.forEach(key => key.send('rainbow' + colors[username.toLowerCase()]+username.toLowerCase()));
           rainbowusersdone.push(username.toLowerCase());
         }
       }
