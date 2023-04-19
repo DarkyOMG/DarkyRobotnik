@@ -84,6 +84,7 @@
   width: 40px;
   height: 40px;
   background: green;
+  border-radius: 10px;
 }
 .child {
   animation: mymove 2s forwards;
