@@ -80,17 +80,16 @@
   justify-content: center;
 }
 
-.child {
+.nullchild {
   width: 40px;
   height: 40px;
   background: green;
+}
+.child {
   animation: mymove 2s forwards;
   animation-timing-function: cubic-bezier(0,1.66,.99,.63);
 }
 .wigglechild {
-  width: 40px;
-  height: 40px;
-  background: green;
   animation: jump 2s forwards;
   animation-timing-function: cubic-bezier(0,1.19,1,.92);
 }

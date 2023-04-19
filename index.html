@@ -197,6 +197,8 @@
                   tempcolor = rainbowdict[received_msg.slice(14)];
                } else {
                   tempcolor = document.createElement("div");
+                  tempcolor.classList.add("nullchild");
+                  
                   tempcolor.classList.add("child");
                   rainbowdict[received_msg.slice(14)] = tempcolor;
                }
@@ -209,9 +211,9 @@
                
                   
                if(received_msg.slice(6) in rainbowdict){
-                  rainbowdict[received_msg.slice(6)].style.animation = ""
+                  rainbowdict[received_msg.slice(6)].classList.remove('wigglechild');
                setTimeout(function () {
-                  rainbowdict[received_msg.slice(6)].style.animation = "jump";
+                  rainbowdict[received_msg.slice(6)].classList.add('wigglechild');
                   
                }, 0);
                }
