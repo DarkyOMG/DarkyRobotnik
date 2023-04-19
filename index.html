@@ -209,9 +209,9 @@
                
                   
                if(received_msg.slice(6) in rainbowdict){
-                  rainbowdict[received_msg.slice(6)].classList.remove('wigglechild');
+                  rainbowdict[received_msg.slice(6)].style.animation = ""
                setTimeout(function () {
-                  rainbowdict[received_msg.slice(6)].classList.add('wigglechild');
+                  rainbowdict[received_msg.slice(6)].style.animation = "jump";
                   
                }, 0);
                }
