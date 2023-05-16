@@ -197,24 +197,19 @@
                   tempcolor = rainbowdict[received_msg.slice(14)];
                } else {
                   tempcolor = document.createElement("div");
+                  tempcolor.style = "animation: mymove 2s forwards;animation-timing-function: cubic-bezier(0,1.66,.99,.63);"
                   tempcolor.classList.add("nullchild");
-                  
-                  tempcolor.classList.add("child");
+                  footer.appendChild(tempcolor);
                   rainbowdict[received_msg.slice(14)] = tempcolor;
                }
                tempcolor.style.backgroundColor = received_msg.slice(7,14);
-               footer.appendChild(tempcolor);
             }
             if(received_msg.slice(0,6) == "wiggle"){
-               rainbowdict[received_msg.slice(6)].classList.remove('child');
-               rainbowdict[received_msg.slice(6)].classList.add('wigglechild');
-               
-                  
                if(received_msg.slice(6) in rainbowdict){
-                  rainbowdict[received_msg.slice(6)].classList.remove('wigglechild');
+                  rainbowdict[received_msg.slice(6)].style.animation = "";
                setTimeout(function () {
-                  rainbowdict[received_msg.slice(6)].classList.add('wigglechild');
-                  
+                  rainbowdict[received_msg.slice(6)].style.animation = "jump 2s forwards"
+                  rainbowdict[received_msg.slice(6)].style.animationTimingFunction  = "cubic-bezier(0,1.19,1,.92)"
                }, 0);
                }
             }
