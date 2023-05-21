@@ -19,7 +19,7 @@ const auths = {
   ClientId: ""
 }
 // List your admins and Mods
-let mods = ['WTFDarky', 'Toobi', 'pladdemusicjam', 'Herbstliches', 'teirii', 'pinkfluffyfluffycorn'];
+let mods = ['WTFDarky', 'Toobi', 'pladdemusicjam', 'Herbstliches', 'teirii', 'pinkfluffyfluffycorn', 'orangeautumnleaf'];
 let colors = {};
 let rainbowusersdone = [];
 // Path for statics.json, which should hold all your commands. Use './statics.json' if you want to use the given example-file.
@@ -202,7 +202,6 @@ function onMessageHandler(target, context, msg, self) {
   }
 
   if(rainbowusersdone.indexOf(context['display-name'].toLowerCase())!=-1){
-    console.log("wiggling");
     webconnections.forEach(key => key.send('wiggle' + context['display-name'].toLowerCase()));
   }
   // Check if a command has been called. Commands start with "!".
