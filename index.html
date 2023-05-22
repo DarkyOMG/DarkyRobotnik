@@ -49,7 +49,7 @@
    document.querySelector("iframe").volume = 0.9;
    let rainbowdict = {}
    let audioelemlist = []
-   let audioqueue = []
+   let audioqueue = [] // Array of structs in form of [cliplength (float),clipname(string),isAnimation(bool)]
    let isFiringClip = false
    let alertqueue = []
    let isFiringAlert = false
@@ -162,13 +162,13 @@
                var cliplength = data[1]
                // On certain clip-calls, we use overlaiable audioelements. In my example these are the clap and the tones-clips.
                // If a normal clip is called, just play the clip and be done with it.
-               audioqueue.push([clipname, cliplength, false])
+               audioqueue.push([cliplength, clipname, false])
             }
             // Same procedure as clips, just with animation
             if (action == 'anim') {
                var clipname = data[2]
                var cliplength = data[1]
-               audioqueue.push([clipname, cliplength, true])
+               audioqueue.push([cliplength, clipname, true])
             }
             if (action == "over") {
                var clipname = data[2];
