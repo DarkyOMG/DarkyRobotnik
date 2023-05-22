@@ -3,7 +3,7 @@ const tmi = require('tmi.js');
 const fs = require('fs');
 const exec = require('child_process').exec;
 const { getAudioDurationInSeconds } = require('get-audio-duration')
-let webconnections = new Set()
+const webconnections = new Set()
 //////////////////////////////////////////////////////// Variables (Change this) //////////////////////////////////////////////////
 // Define configuration options
 const opts = {
@@ -19,49 +19,26 @@ const auths = {
   ClientId: ""
 }
 // List your admins and Mods
-let mods = ['WTFDarky', 'Toobi', 'pladdemusicjam', 'Herbstliches', 'teirii', 'pinkfluffyfluffycorn', 'orangeautumnleaf'];
-let colors = {};
-let rainbowusersdone = [];
+const mods = ['WTFDarky', 'Toobi', 'pladdemusicjam', 'Herbstliches', 'teirii', 'pinkfluffyfluffycorn', 'orangeautumnleaf'];
+const colors = {};
+const rainbowusersdone = [];
 // Path for statics.json, which should hold all your commands. Use './statics.json' if you want to use the given example-file.
-let staticsPath = '/sftp_uploads/user1/darkyrobotnikexchange/statics.json'
+const staticsPath = '/sftp_uploads/user1/darkyrobotnikexchange/statics.json'
 let alerts = true;
-
+const verbose = false;
 //////////////////////////////////////////////////////// Code //////////////////////////////////////////////////
 // Enable this if you want to use the twitch-api for eventhandling
 const apienabled = true
 // Anwers for Bot to automatically react to random messages
-let answers = [` haha, ja genau!`, ` lol, du sagst es :D`, ` ich genieße jedes einzelne dieser Worte!`, ` Da wird man ja fuchsig!`, ` das hast du doch von jemandem abgeschrieben!`, ` für die Nachricht gibt's 5 ECTS!`, ` du wirkst müde. Bestell dir doch mal einen !kaffee mit !milch!`, ` haha, ja gleich bist du tot!`, ` lol, du schweigst gleich :D`, ` ich genieße jedes einzelne deiner Haare!`, ` Da wird man ja fu..fuuaAHAHahhahh!`, ` das hast du doch von jemandem abgeschnitten!`, ` für die Nachricht gibt's 5 Peitschenhiebe!`, ` du wirkst müde. Bestell dir doch mal einen !Affenkopf mit !Eis!`]
+const answers = [` haha, ja genau!`, ` lol, du sagst es :D`, ` ich genieße jedes einzelne dieser Worte!`, ` Da wird man ja fuchsig!`, ` das hast du doch von jemandem abgeschrieben!`, ` für die Nachricht gibt's 5 ECTS!`, ` du wirkst müde. Bestell dir doch mal einen !kaffee mit !milch!`, ` haha, ja gleich bist du tot!`, ` lol, du schweigst gleich :D`, ` ich genieße jedes einzelne deiner Haare!`, ` Da wird man ja fu..fuuaAHAHahhahh!`, ` das hast du doch von jemandem abgeschnitten!`, ` für die Nachricht gibt's 5 Peitschenhiebe!`, ` du wirkst müde. Bestell dir doch mal einen !Affenkopf mit !Eis!`]
 // Adverts the bot says periodically while there are still chatters.
-let adverts = [`Du willst auch an den Präsenzveranstaltungen teilnehmen? Dann klicke hier: https://discord.gg/VaJfZVKWhK`, `Alle Hintergrundmusik wurde von Martin Platte @pladdemusicjam (https://www.instagram.com/die_pladde/) erstellt.`, `Alle 3D-Flow-Simulationen wurden von @Toobi (https://www.twitch.tv/Toobi) erstellt.`, `Alle gezeichneten Emotes wurden von @Teirii (https://www.twitch.tv/Teirii) erstellt.`]
+const adverts = [`Du willst auch an den Präsenzveranstaltungen teilnehmen? Dann klicke hier: https://discord.gg/VaJfZVKWhK`, `Alle Hintergrundmusik wurde von Martin Platte @pladdemusicjam (https://www.instagram.com/die_pladde/) erstellt.`, `Alle 3D-Flow-Simulationen wurden von @Toobi (https://www.twitch.tv/Toobi) erstellt.`, `Alle gezeichneten Emotes wurden von @Teirii (https://www.twitch.tv/Teirii) erstellt.`]
 let currentadvert = 0;
 let nextcall = new Date()
 
 
-// Variables and Commandmap for riddle
-let firstwinner = "@pinkfluffyfluffycorn hat das Rätsel als erstes gelöst und hat sich damit einen 10€-Steam-Gutschein verdient :)"
-riddlemap = {
-  "!riddle":
-    "104 116 116 112 115 058 047 047 119 119 119 046 121 111 117 116 117 098 101 046 099 111 109 047 119 097 116 099 104 063 118 061 100 086 098 053 080 102 112 109 119 073 069",
-  "!0765":
-    "Zhofkhq Lqwhusuhwhq pxvv vlfk RWEW riw yrq Doha jhidoohq odvvhq?",
-  "!eminem":
-    "CompSys - The Game ist ein echt cooles Spiel... Aber was ist der Titel?",
-  "!konzeption und implementierung von videospielen zur lernunterstützung in unity3d":
-    "Welche Sprache spricht eigentlich Gilly?",
-  "!ruby":
-    "Wiki ist ein Wikinger.. Oder so.. Oder was anderes? Hauptsache heiß!.. Aber wie heiß nun eigentlich?",
-  "!superhot":
-    "No spaces. All lowercase. No '+'.\n Max Lieblingsspiel + OTBT-Chef-Vorname + BA-Betreuer-vorname + Gillys Lieblingsspiel + Wiki-Artikel-last-editor",
-  "!maplestoryjenstimhangmandobiko":
-    (target, context, msg, self) => {
-      firstwinner = context['display-name'];
-      client.say(target, `@${context['display-name']}, Du hast gewonnen!`);
-    },
-  "!firstwinner":
-    firstwinner == "" ? "Bisher noch kein Gewinner :(" : firstwinner
-};
+// Functions used by !so to get clip-Data from the raiding Streamer
 function GetClips(raidername, data, headers) {
-  console.log(data);
   endpoint = `https://api.twitch.tv/helix/clips?broadcaster_id=${data["data"][0]["id"]}`
   fetch(endpoint, {
     headers,
@@ -74,8 +51,15 @@ function ShowClip(raidername, clips) {
   var clip = clips["data"][Math.floor(Math.random() * clips["data"].length)];
   webconnections.forEach(key => key.send(`so ${raidername} ${clip["id"]} ${(clip["duration"] + 3) * 1000.0}`))
 }
-// Standardcommands. Including Shoutout (usage: !so @streamername) and pullandrestart, which pulls the repo and restarts the bot.
-standardmap = {
+// Standardcommands which are loaded and not changed during runtime
+const commandmap = {
+  "!reloadcommands":
+    (target, context, msg, self) => {
+      if (mods.includes(context['display-name'])) {
+        LoadCommands()
+        client.say(target, `Reload successfull!`);
+      }
+    },
   "!so":
     (target, context, msg, self) => {
       var re = /@(?<name>\S*)/;
@@ -107,7 +91,7 @@ standardmap = {
   "!resetrainbow":
     (target, context, msg, self) => {
       if (mods.includes(context['display-name'])) {
-        rainbowusersdone = [];
+        rainbowusersdone.length = 0;
         client.say(target, `Rainbow is reset`);
       }
     },
@@ -131,7 +115,7 @@ standardmap = {
     },
   "!color":
     (target, context, msg, self) => {
-      if(msg.split(" ").length != 2) return;
+      if (msg.split(" ").length != 2) return;
       if (!isValidHex(msg.split(" ")[1])) {
         client.say(target, `${context['display-name']}, ${msg.split(" ")[1]} ist leider keine Farbe. Bitte gib deine Farbe in der Form #A61E2f (Hex) an. Farben picken kannst du hier: https://htmlcolorcodes.com/color-picker/`);
         return;
@@ -144,23 +128,26 @@ standardmap = {
         // file written successfully
       });
       client.say(target, `${context['display-name']}, verstanden. Deine Farbe ist jetzt ${msg.split(" ")[1]}`);
-    }
+    },
+  "!riddle":
+    "104 116 116 112 115 058 047 047 119 119 119 046 121 111 117 116 117 098 101 046 099 111 109 047 119 097 116 099 104 063 118 061 100 086 098 053 080 102 112 109 119 073 069",
+  "!0765":
+    "Zhofkhq Lqwhusuhwhq pxvv vlfk RWEW riw yrq Doha jhidoohq odvvhq?",
+  "!eminem":
+    "CompSys - The Game ist ein echt cooles Spiel... Aber was ist der Titel?",
+  "!konzeption und implementierung von videospielen zur lernunterstützung in unity3d":
+    "Welche Sprache spricht eigentlich Gilly?",
+  "!ruby":
+    "Wiki ist ein Wikinger.. Oder so.. Oder was anderes? Hauptsache heiß!.. Aber wie heiß nun eigentlich?",
+  "!superhot":
+    "No spaces. All lowercase. No '+'.\n Max Lieblingsspiel + OTBT-Chef-Vorname + BA-Betreuer-vorname + Gillys Lieblingsspiel + Wiki-Artikel-last-editor",
+  "!maplestoryjenstimhangmandobiko":
+    ", Du hast gewonnen!"
 }
-
-commandmap = {
-  "!reloadcommands":
-    (target, context, msg, self) => {
-      if (mods.includes(context['display-name'])) {
-        LoadCommands()
-        client.say(target, `Reload successfull!`);
-      }
-    }
-}
-
 // read opts from file
 fs.readFile('opts.json', 'utf-8', (err, data) => {
   if (err) {
-    console.log("Can't find opts.json. Using given opts.");
+    debugLog("Can't find opts.json. Using given opts.");
   }
 
   const optstemp = JSON.parse(data.toString());
@@ -172,78 +159,79 @@ fs.readFile('opts.json', 'utf-8', (err, data) => {
 });
 fs.readFile('colors.json', 'utf-8', (err, data) => {
   if (err) {
-    console.log("Can't find colors.json.");
+    debugLog("Can't find colors.json.");
     return;
   }
 
   colors = JSON.parse(data.toString());
 })
-
 // Create a client with our options
 const client = new tmi.client(opts);
-
 // Register our event handlers (defined below)
 client.on('message', onMessageHandler);
 client.on('connected', onConnectedHandler);
-
 // Connect to Twitch:
 client.connect();
-
 // Called every time a message comes in
 function onMessageHandler(target, context, msg, self) {
   if (self) { return; } // Ignore messages from the bot
 
   // Show adverts sometimes.
   if (new Date() > nextcall) {
-    asyncCall(adverts[currentadvert], 60000);
-    nextcall = new Date()
-    nextcall.setMinutes(nextcall.getMinutes() + 15)
-    currentadvert = (currentadvert + 1) % adverts.length;
+    startOrRefreshAdverts();
   }
+  // Check if User is sub and wiggle it's block if present.
+  wiggleSubBlock();
 
-  if(rainbowusersdone.indexOf(context['display-name'].toLowerCase())!=-1){
-    webconnections.forEach(key => key.send('wiggle' + context['display-name'].toLowerCase()));
-  }
+
   // Check if a command has been called. Commands start with "!".
-  var re = /!\S*/;
-  let result = msg.match(re)
+  const re = /!\S*/;
+  const result = msg.match(re)
 
   // If no command has been called, randomly answer chatters with predefined messages.
   if (result == null) {
-    // Answer if a random number between 1 and 100 is below 5.
-    randomchat = Math.floor(Math.random() * 100)
-    if (randomchat < 5) {
-      // Shuffle array to pick a random answer
-      var answer = answers[Math.floor(Math.random() * answers.length)]
-      client.say(target, `@${context['display-name']} ` + answer);
-    }
+    answerRandomly();
     return
   }
 
-
   // If a command was found, this part is triggered.
-  const commandName = result[0].trim();
-  // Check if the command is valid and belongs to this commandmap
-  if (commandName[0] == "!" && commandName.toLowerCase() in commandmap) {
-    // The commandmap has either strings or functions. If it is a function, invoke it. Otherwise just post the string in the chat.
-    if (typeof commandmap[commandName.toLowerCase()] === 'function') {
-      commandmap[commandName.toLowerCase()](target, context, msg, self)
-    } else if (typeof commandmap[commandName.toLowerCase()] === 'string') {
-      client.say(target, `@${context['display-name']} ` + commandmap[commandName.toLowerCase()]);
+  ExecuteCommand();
+
+  function startOrRefreshAdverts() {
+    asyncCall(adverts[currentadvert], 60000);
+    nextcall = new Date();
+    nextcall.setMinutes(nextcall.getMinutes() + 15);
+    currentadvert = (currentadvert + 1) % adverts.length;
+  }
+  function wiggleSubBlock() {
+    if (rainbowusersdone.indexOf(context['display-name'].toLowerCase()) != -1) {
+      webconnections.forEach(key => key.send('wiggle' + context['display-name'].toLowerCase()));
+    }
+  }
+  function answerRandomly() {
+    // Answer if a random number between 1 and 100 is below 5.
+    randomchat = Math.floor(Math.random() * 100);
+    if (randomchat < 3) {
+      // Shuffle array to pick a random answer
+      var answer = answers[Math.floor(Math.random() * answers.length)];
+      client.say(target, `@${context['display-name']} ` + answer);
+    }
+  }
+  function ExecuteCommand() {
+    const commandName = result[0].trim();
+    // Check if the command is valid and belongs to this commandmap
+    if (commandName[0] == "!" && commandName.toLowerCase() in commandmap) {
+      // The commandmap has either strings or functions. If it is a function, invoke it. Otherwise just post the string in the chat.
+      if (typeof commandmap[commandName.toLowerCase()] === 'function') {
+        commandmap[commandName.toLowerCase()](target, context, msg, self);
+      } else if (typeof commandmap[commandName.toLowerCase()] === 'string') {
+        client.say(target, `@${context['display-name']} ` + commandmap[commandName.toLowerCase()]);
+      }
     }
   }
 }
 // Function to load all given commands by the standardmap and the statics.json file into the active commandmap.
 function LoadCommands() {
-  commandmap = {
-    "!reloadcommands":
-      (target, context, msg, self) => {
-        LoadCommands()
-        client.say(target, `Reload successfull!`);
-      }
-  }
-  commandmap = Object.assign(commandmap, riddlemap)
-  commandmap = Object.assign(commandmap, standardmap)
   fs.readFile(staticsPath, 'utf-8', (err, data) => {
     if (err) {
       throw err;
@@ -254,7 +242,6 @@ function LoadCommands() {
     }
   });
 }
-
 // Function to call a script that pulls the current repository and restarts the bot.
 function PullAndRestart() {
   exec('./restart.sh', (e, stdout, stderr) => {
@@ -266,15 +253,11 @@ function PullAndRestart() {
     console.log('stderr ', stderr);
   });
 }
-
 // Called every time the bot connects to Twitch chat
 function onConnectedHandler(addr, port) {
-  console.log(`* Connected to ${addr}:${port}`);
+  debugLog(`* Connected to ${addr}:${port}`);
   client.say(opts.channels[0], `Bot connected successfully!`);
 }
-
-
-
 // Option for times events
 function resolveAfterNSeconds(n) {
   return new Promise(resolve => {
@@ -283,14 +266,11 @@ function resolveAfterNSeconds(n) {
     }, n);
   });
 }
-
 // Starting-function for timed events posts (e.g. Adverts) 
 async function asyncCall(text, time) {
   const result = await resolveAfterNSeconds(time);
   client.say(opts.channels[0], text);
 }
-
-
 ///////////////////////////////////////////////////// Twitch-API Eventhandler ////////////////////////////////////////////////////////
 if (apienabled) {
 
@@ -354,7 +334,7 @@ if (apienabled) {
       app
     )
     .listen(port, () => {
-      console.log(`server is running at port ${port}`);
+      debugLog(`server is running at port ${port}`);
     });
   app.use(express.raw({          // Need raw message body for signature verification
     type: 'application/json'
@@ -370,10 +350,10 @@ if (apienabled) {
   const wss = new WebSocketServer({ server });
   // Standard schema for usage of the webserver. wss.on('eventname')... will execute when a message reaches the websocketserver with message 'eventname'.
   wss.on('connection', (ws) => {
-    console.log('Client connected');
+    debugLog('Client connected');
     webconnections.add(ws)
     ws.on('close', () => {
-      console.log('Client disconnected');
+      debugLog('Client disconnected');
       webconnections.delete(ws)
     });
   });
@@ -416,15 +396,14 @@ if (apienabled) {
     let hmac = HMAC_PREFIX + getHmac(secret, message);  // Signature to compare
 
     if (true === verifyMessage(hmac, req.headers[TWITCH_MESSAGE_SIGNATURE])) {
-      console.log("signatures match");
 
       // Get JSON object from body, so you can process the message.
       let notification = JSON.parse(req.body);
 
       // Main segment for event-handling
       if (MESSAGE_TYPE_NOTIFICATION === req.headers[MESSAGE_TYPE]) {
-        console.log(`Event type: ${notification.subscription.type}`);
-        console.log(JSON.stringify(notification.event, null, 4));
+        debugLog(`Event type: ${notification.subscription.type}`);
+        debugLog(JSON.stringify(notification.event, null, 4));
         // Here different events are handled differently. The subscription type is used to identify which kind of event happened.
         if (notification.subscription.type == "channel.raid") {
           // Give a shoutout to whoever raided the channel.
@@ -501,17 +480,17 @@ if (apienabled) {
       else if (MESSAGE_TYPE_REVOCATION === req.headers[MESSAGE_TYPE]) {
         res.sendStatus(204);
 
-        console.log(`${notification.subscription.type} notifications revoked!`);
-        console.log(`reason: ${notification.subscription.status}`);
-        console.log(`condition: ${JSON.stringify(notification.subscription.condition, null, 4)}`);
+        debugLog(`${notification.subscription.type} notifications revoked!`);
+        debugLog(`reason: ${notification.subscription.status}`);
+        debugLog(`condition: ${JSON.stringify(notification.subscription.condition, null, 4)}`);
       }
       else {
         res.sendStatus(204);
-        console.log(`Unknown message type: ${req.headers[MESSAGE_TYPE]}`);
+        debugLog(`Unknown message type: ${req.headers[MESSAGE_TYPE]}`);
       }
     }
     else {
-      console.log('403');    // Signatures didn't match.
+      debugLog('403');    // Signatures didn't match.
       res.sendStatus(403);
     }
   })
@@ -525,7 +504,7 @@ if (apienabled) {
     data["data"].forEach(element => {
       if (element['user_name'] == username) {
         if (username.toLowerCase() in colors) {
-          webconnections.forEach(key => key.send('rainbow' + colors[username.toLowerCase()]+username.toLowerCase()));
+          webconnections.forEach(key => key.send('rainbow' + colors[username.toLowerCase()] + username.toLowerCase()));
           rainbowusersdone.push(username.toLowerCase());
         }
       }
@@ -557,5 +536,9 @@ if (apienabled) {
   function verifyMessage(hmac, verifySignature) {
     return crypto.timingSafeEqual(Buffer.from(hmac), Buffer.from(verifySignature));
   }
+}
+// Change Debug-log function to enable or disable debug-Messages.
+function debugLog(textmessage) {
+  if (verbose) console.log(textmessage);
 }
 
