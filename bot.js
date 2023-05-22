@@ -20,7 +20,7 @@ const auths = {
 }
 // List your admins and Mods
 const mods = ['WTFDarky', 'Toobi', 'pladdemusicjam', 'Herbstliches', 'teirii', 'pinkfluffyfluffycorn', 'orangeautumnleaf'];
-const colors = {};
+let colors = {};
 const rainbowusersdone = [];
 // Path for statics.json, which should hold all your commands. Use './statics.json' if you want to use the given example-file.
 const staticsPath = '/sftp_uploads/user1/darkyrobotnikexchange/statics.json'
