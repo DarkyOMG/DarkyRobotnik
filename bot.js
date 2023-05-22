@@ -98,6 +98,13 @@ const COMMANDMAP = {
         client.say(target, `Rainbow is reset`);
       }
     },
+    "!redrawrainbow":
+    (target, context, msg, self) => {
+      if (MODS.includes(context['display-name'])) {
+        redrawRainbow();
+        client.say(target, `Redrawing rainbow..`);
+      }
+    },
   "!pullandrestart":
     (target, context, msg, self) => {
       if (MODS.includes(context['display-name'])) {
@@ -512,6 +519,11 @@ if (APIENABLED) {
         }
       }
     });
+  }
+  function redrawRainbow(){
+    RAINBOWUSERSDONE.forEach(function(username) {
+      WEBCONNECTIONS.forEach(key => key.send('rainbow'+";" + COLORS[username.toLowerCase()] +";"+ username.toLowerCase()));
+    })
   }
   // Build the message used to get the HMAC.
   function getHmacMessage(request) {

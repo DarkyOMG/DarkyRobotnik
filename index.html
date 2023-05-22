@@ -16,7 +16,7 @@
       <img id="animim">
    </div>
    <div id="clip" class="clip">
-      <iframe src="" height="360px" width="640px" style="position: absolute;" style="border:2px solid black;"
+      <iframe src="" height="360px" width="640px" loading="eager" style="position: absolute;" style="border:2px solid black;"
          allowfullscreen>
       </iframe>
 
@@ -183,24 +183,26 @@
             }
             if (action == "rainbow") {
                var color = data[1];
+               var username = data[2];
                var blockElement;
-               if (data[2] in rainbowdict) {
-                  blockElement = rainbowdict[data[2]];
+               if (username in rainbowdict) {
+                  blockElement = rainbowdict[username];
                } else {
                   blockElement = document.createElement("div");
                   blockElement.style = "animation: mymove 2s forwards;animation-timing-function: cubic-bezier(0,1.66,.99,.63);"
                   blockElement.classList.add("nullchild");
                   footer.appendChild(blockElement);
-                  rainbowdict[data[2]] = blockElement;
+                  rainbowdict[username] = blockElement;
                }
                blockElement.style.backgroundColor = color;
             }
             if (action == "wiggle") {
-               if (data[1] in rainbowdict) {
-                  rainbowdict[data[1]].style.animation = "";
+               var username = data[1];
+               if (username in rainbowdict) {
+                  rainbowdict[username].style.animation = "";
                   setTimeout(function () {
-                     rainbowdict[data[1]].style.animation = "jump 2s forwards"
-                     rainbowdict[data[1]].style.animationTimingFunction = "cubic-bezier(0,1.19,1,.92)"
+                     rainbowdict[username].style.animation = "jump 2s forwards"
+                     rainbowdict[username].style.animationTimingFunction = "cubic-bezier(0,1.19,1,.92)"
                   }, 0);
                }
             }
