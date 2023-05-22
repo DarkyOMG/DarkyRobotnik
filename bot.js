@@ -98,7 +98,7 @@ const COMMANDMAP = {
         client.say(target, `Rainbow is reset`);
       }
     },
-    "!redrawrainbow":
+  "!redrawrainbow":
     (target, context, msg, self) => {
       if (MODS.includes(context['display-name'])) {
         redrawRainbow();
@@ -187,6 +187,35 @@ function loadColorsAndOpts() {
     COLORS = JSON.parse(data.toString());
   });
 }
+
+// Function to load all given commands by the standardmap and the statics.json file into the active commandmap.
+function loadCommands() {
+  fs.readFile(STATICSPATH, 'utf-8', (err, data) => {
+    if (err) {
+      throw err;
+    }
+    const temp = JSON.parse(data.toString());
+    for (const [key, value] of Object.entries(temp.commands)) {
+      COMMANDMAP[key] = value
+    }
+  });
+}
+// Function to call a script that pulls the current repository and restarts the bot.
+function pullAndRestart() {
+  exec('./restart.sh', (e, stdout, stderr) => {
+    if (e instanceof Error) {
+      console.error(e);
+      throw e;
+    }
+    console.log('stdout ', stdout);
+    console.log('stderr ', stderr);
+  });
+}
+// Called every time the bot connects to Twitch chat
+function onConnectedHandler(addr, port) {
+  debugLog(`* Connected to ${addr}:${port}`);
+  client.say(OPTS.channels[0], `Bot connected successfully!`);
+}
 // Called every time a message comes in
 function onMessageHandler(target, context, msg, self) {
   if (self) { return; } // Ignore messages from the bot
@@ -245,34 +274,6 @@ function onMessageHandler(target, context, msg, self) {
     }
   }
 }
-// Function to load all given commands by the standardmap and the statics.json file into the active commandmap.
-function loadCommands() {
-  fs.readFile(STATICSPATH, 'utf-8', (err, data) => {
-    if (err) {
-      throw err;
-    }
-    const temp = JSON.parse(data.toString());
-    for (const [key, value] of Object.entries(temp.commands)) {
-      COMMANDMAP[key] = value
-    }
-  });
-}
-// Function to call a script that pulls the current repository and restarts the bot.
-function pullAndRestart() {
-  exec('./restart.sh', (e, stdout, stderr) => {
-    if (e instanceof Error) {
-      console.error(e);
-      throw e;
-    }
-    console.log('stdout ', stdout);
-    console.log('stderr ', stderr);
-  });
-}
-// Called every time the bot connects to Twitch chat
-function onConnectedHandler(addr, port) {
-  debugLog(`* Connected to ${addr}:${port}`);
-  client.say(OPTS.channels[0], `Bot connected successfully!`);
-}
 // Option for times events
 function resolveAfterNSeconds(n) {
   return new Promise(resolve => {
@@ -296,8 +297,6 @@ if (APIENABLED) {
   // Standard port for https communication. Change this if needed.
   const port = 443;
 
-  const fs = require('fs');
-
   // Read in the secret of the server. This can be any random string, but must be kept secret. (e.g. "thisisasecret" or "s92bd8nsu9a892nf8")
   // It is used to identify authorized events.
   var secret = ""
@@ -305,8 +304,7 @@ if (APIENABLED) {
   // secret into the variable above.
   try {
     // read contents of the file
-    const data = fs.readFileSync('api-secret.txt', 'UTF-8');
-    secret = data.split(/\r?\n/)[0]
+    secret = fs.readFileSync('api-secret.txt', 'UTF-8');
   } catch (err) {
     console.error(err);
   }
@@ -438,7 +436,7 @@ if (APIENABLED) {
             getAudioDurationInSeconds(folderroot + 'clips/' + filename + '.wav').then((duration) => {
               duration = Math.ceil(duration);
               durationstring = duration < 10 ? "0" + duration.toString() : duration.toString();
-              WEBCONNECTIONS.forEach(key => key.send('anim' + ";"+ durationstring +";"+ filename));
+              WEBCONNECTIONS.forEach(key => key.send('anim' + ";" + durationstring + ";" + filename));
             })
             let headers = {
               "Authorization": AUTHS.Authorization,
@@ -466,14 +464,14 @@ if (APIENABLED) {
             getAudioDurationInSeconds(folderroot + 'clips/' + filename + '.wav').then((duration) => {
               duration = Math.ceil(duration);
               durationstring = duration < 10 ? "0" + duration.toString() : duration.toString();
-              WEBCONNECTIONS.forEach(key => key.send(rewardtitle + ";"+ durationstring + ";"+ filename));
+              WEBCONNECTIONS.forEach(key => key.send(rewardtitle + ";" + durationstring + ";" + filename));
             })
           }
           if (notification.event['reward']['title'].slice(0, 9) == "Animation") {
             getAudioDurationInSeconds(folderroot + 'clips/' + notification.event['reward']['title'].slice(11) + '.wav').then((duration) => {
               duration = Math.ceil(duration);
               durationstring = duration < 10 ? "0" + duration.toString() : duration.toString();
-              WEBCONNECTIONS.forEach(key => key.send('anim' +";" +durationstring +";"+ notification.event['reward']['title'].slice(11)));
+              WEBCONNECTIONS.forEach(key => key.send('anim' + ";" + durationstring + ";" + notification.event['reward']['title'].slice(11)));
             })
           }
         }
@@ -514,15 +512,15 @@ if (APIENABLED) {
     data["data"].forEach(element => {
       if (element['user_name'] == username) {
         if (username.toLowerCase() in COLORS) {
-          WEBCONNECTIONS.forEach(key => key.send('rainbow'+";" + COLORS[username.toLowerCase()] +";"+ username.toLowerCase()));
+          WEBCONNECTIONS.forEach(key => key.send('rainbow' + ";" + COLORS[username.toLowerCase()] + ";" + username.toLowerCase()));
           RAINBOWUSERSDONE.push(username.toLowerCase());
         }
       }
     });
   }
-  function redrawRainbow(){
-    RAINBOWUSERSDONE.forEach(function(username) {
-      WEBCONNECTIONS.forEach(key => key.send('rainbow'+";" + COLORS[username.toLowerCase()] +";"+ username.toLowerCase()));
+  function redrawRainbow() {
+    RAINBOWUSERSDONE.forEach(function (username) {
+      WEBCONNECTIONS.forEach(key => key.send('rainbow' + ";" + COLORS[username.toLowerCase()] + ";" + username.toLowerCase()));
     })
   }
   // Build the message used to get the HMAC.
@@ -543,8 +541,6 @@ if (APIENABLED) {
   function isValidHex(color) {
     var rex = /^#(([0-9a-fA-F]{2}){3}|([0-9a-fA-F]){3})$/
     var result = color.match(rex);
-
-
     return result != null;
   }
   // Verify whether our hash matches the hash that Twitch passed in the header.
