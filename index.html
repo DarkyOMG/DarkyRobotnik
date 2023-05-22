@@ -158,18 +158,23 @@
 
             // I myself use soundsclips so a possible event could be the call of clip. Handling clip-calls
             if (action == 'clip') {
+               var clipname = data[2]
+               var cliplength = data[1]
                // On certain clip-calls, we use overlaiable audioelements. In my example these are the clap and the tones-clips.
                // If a normal clip is called, just play the clip and be done with it.
-               audioqueue.push([data[1], data[2], false])
+               audioqueue.push([clipname, cliplength, false])
             }
             // Same procedure as clips, just with animation
             if (action == 'anim') {
-               audioqueue.push([data[1], data[2], true])
+               var clipname = data[2]
+               var cliplength = data[1]
+               audioqueue.push([clipname, cliplength, true])
             }
             if (action == "over") {
+               var clipname = data[2];
                // For this, we create a new audio-element for each call and play the given soundclip. Notice that all files are called like the event.
                var tempaudio = document.createElement("audio");
-               tempaudio.src = 'clips/' + data[1] + '.wav';
+               tempaudio.src = 'clips/' + clipname + '.wav';
                // Play the sound and remove it's audioelement after 2 seconds (could be longer, doesn't really matter) to not fill up the ram.
                tempaudio.play();
                setTimeout(function () {
