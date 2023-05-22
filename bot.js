@@ -18,39 +18,26 @@ const auths = {
   Authorization: "",
   ClientId: ""
 }
+let colors = {};
 // List your admins and Mods
 const mods = ['WTFDarky', 'Toobi', 'pladdemusicjam', 'Herbstliches', 'teirii', 'pinkfluffyfluffycorn', 'orangeautumnleaf'];
-let colors = {};
 const rainbowusersdone = [];
 // Path for statics.json, which should hold all your commands. Use './statics.json' if you want to use the given example-file.
 const staticsPath = '/sftp_uploads/user1/darkyrobotnikexchange/statics.json'
 let alerts = true;
 const verbose = false;
-//////////////////////////////////////////////////////// Code //////////////////////////////////////////////////
 // Enable this if you want to use the twitch-api for eventhandling
 const apienabled = true
 // Anwers for Bot to automatically react to random messages
 const answers = [` haha, ja genau!`, ` lol, du sagst es :D`, ` ich genieße jedes einzelne dieser Worte!`, ` Da wird man ja fuchsig!`, ` das hast du doch von jemandem abgeschrieben!`, ` für die Nachricht gibt's 5 ECTS!`, ` du wirkst müde. Bestell dir doch mal einen !kaffee mit !milch!`, ` haha, ja gleich bist du tot!`, ` lol, du schweigst gleich :D`, ` ich genieße jedes einzelne deiner Haare!`, ` Da wird man ja fu..fuuaAHAHahhahh!`, ` das hast du doch von jemandem abgeschnitten!`, ` für die Nachricht gibt's 5 Peitschenhiebe!`, ` du wirkst müde. Bestell dir doch mal einen !Affenkopf mit !Eis!`]
 // Adverts the bot says periodically while there are still chatters.
 const adverts = [`Du willst auch an den Präsenzveranstaltungen teilnehmen? Dann klicke hier: https://discord.gg/VaJfZVKWhK`, `Alle Hintergrundmusik wurde von Martin Platte @pladdemusicjam (https://www.instagram.com/die_pladde/) erstellt.`, `Alle 3D-Flow-Simulationen wurden von @Toobi (https://www.twitch.tv/Toobi) erstellt.`, `Alle gezeichneten Emotes wurden von @Teirii (https://www.twitch.tv/Teirii) erstellt.`]
+
+//////////////////////////////////////////////////////// Code //////////////////////////////////////////////////
 let currentadvert = 0;
 let nextcall = new Date()
 
 
-// Functions used by !so to get clip-Data from the raiding Streamer
-function GetClips(raidername, data, headers) {
-  endpoint = `https://api.twitch.tv/helix/clips?broadcaster_id=${data["data"][0]["id"]}`
-  fetch(endpoint, {
-    headers,
-  })
-    .then((res) => res.json())
-    .then((data) => ShowClip(raidername, data));
-}
-function ShowClip(raidername, clips) {
-  if (clips["data"].length <= 0) return;
-  var clip = clips["data"][Math.floor(Math.random() * clips["data"].length)];
-  webconnections.forEach(key => key.send(`so ${raidername} ${clip["id"]} ${(clip["duration"] + 3) * 1000.0}`))
-}
 // Standardcommands which are loaded and not changed during runtime
 const commandmap = {
   "!reloadcommands":
@@ -79,6 +66,20 @@ const commandmap = {
             .then((res) => res.json())
             .then((data) => GetClips(result[0], data, headers))
         }
+      }
+      // Functions used by !so to get clip-Data from the raiding Streamer
+      function GetClips(raidername, data, headers) {
+        endpoint = `https://api.twitch.tv/helix/clips?broadcaster_id=${data["data"][0]["id"]}`
+        fetch(endpoint, {
+          headers,
+        })
+          .then((res) => res.json())
+          .then((data) => ShowClip(raidername, data));
+      }
+      function ShowClip(raidername, clips) {
+        if (clips["data"].length <= 0) return;
+        var clip = clips["data"][Math.floor(Math.random() * clips["data"].length)];
+        webconnections.forEach(key => key.send(`so ${raidername} ${clip["id"]} ${(clip["duration"] + 3) * 1000.0}`))
       }
     },
   "!alerts":
@@ -144,27 +145,8 @@ const commandmap = {
   "!maplestoryjenstimhangmandobiko":
     ", Du hast gewonnen!"
 }
-// read opts from file
-fs.readFile('opts.json', 'utf-8', (err, data) => {
-  if (err) {
-    debugLog("Can't find opts.json. Using given opts.");
-  }
-
-  const optstemp = JSON.parse(data.toString());
-  opts.identity.username = optstemp.identity.username;
-  opts.identity.password = optstemp.identity.password;
-  opts.channels = optstemp.channels;
-  auths.Authorization = optstemp.auth;
-  auths.ClientId = optstemp.clientid;
-});
-fs.readFile('colors.json', 'utf-8', (err, data) => {
-  if (err) {
-    debugLog("Can't find colors.json.");
-    return;
-  }
-
-  colors = JSON.parse(data.toString());
-})
+// Load Opts and Colors for the Bot to connect with
+loadColorsAndOpts();
 // Create a client with our options
 const client = new tmi.client(opts);
 // Register our event handlers (defined below)
@@ -172,6 +154,30 @@ client.on('message', onMessageHandler);
 client.on('connected', onConnectedHandler);
 // Connect to Twitch:
 client.connect();
+
+// read opts and Colors from file
+function loadColorsAndOpts() {
+  fs.readFile('opts.json', 'utf-8', (err, data) => {
+    if (err) {
+      debugLog("Can't find opts.json. Using given opts.");
+    }
+
+    const optstemp = JSON.parse(data.toString());
+    opts.identity.username = optstemp.identity.username;
+    opts.identity.password = optstemp.identity.password;
+    opts.channels = optstemp.channels;
+    auths.Authorization = optstemp.auth;
+    auths.ClientId = optstemp.clientid;
+  });
+  fs.readFile('colors.json', 'utf-8', (err, data) => {
+    if (err) {
+      debugLog("Can't find colors.json.");
+      return;
+    }
+
+    colors = JSON.parse(data.toString());
+  });
+}
 // Called every time a message comes in
 function onMessageHandler(target, context, msg, self) {
   if (self) { return; } // Ignore messages from the bot
