@@ -3,10 +3,10 @@ const tmi = require('tmi.js');
 const fs = require('fs');
 const exec = require('child_process').exec;
 const { getAudioDurationInSeconds } = require('get-audio-duration')
-const webconnections = new Set()
+const WEBCONNECTIONS = new Set()
 //////////////////////////////////////////////////////// Variables (Change this) //////////////////////////////////////////////////
 // Define configuration options
-const opts = {
+const OPTS = {
   identity: {
     username: "", // Example: "DarkyRobotnik"
     password: ""  // Example: "password123"
@@ -14,36 +14,38 @@ const opts = {
   channels: [     // Example: ["WTFDarky"]
   ]
 };
-const auths = {
+const AUTHS = {
   Authorization: "",
   ClientId: ""
 }
-let colors = {};
-// List your admins and Mods
-const mods = ['WTFDarky', 'Toobi', 'pladdemusicjam', 'Herbstliches', 'teirii', 'pinkfluffyfluffycorn', 'orangeautumnleaf'];
-const rainbowusersdone = [];
+let COLORS = {};
+// List your admins and Mods.
+const MODS = ['WTFDarky', 'Toobi', 'pladdemusicjam', 'Herbstliches', 'teirii', 'pinkfluffyfluffycorn', 'orangeautumnleaf'];
+const RAINBOWUSERSDONE = [];
 // Path for statics.json, which should hold all your commands. Use './statics.json' if you want to use the given example-file.
-const staticsPath = '/sftp_uploads/user1/darkyrobotnikexchange/statics.json'
-let alerts = true;
-const verbose = false;
-// Enable this if you want to use the twitch-api for eventhandling
-const apienabled = true
-// Anwers for Bot to automatically react to random messages
-const answers = [` haha, ja genau!`, ` lol, du sagst es :D`, ` ich genieße jedes einzelne dieser Worte!`, ` Da wird man ja fuchsig!`, ` das hast du doch von jemandem abgeschrieben!`, ` für die Nachricht gibt's 5 ECTS!`, ` du wirkst müde. Bestell dir doch mal einen !kaffee mit !milch!`, ` haha, ja gleich bist du tot!`, ` lol, du schweigst gleich :D`, ` ich genieße jedes einzelne deiner Haare!`, ` Da wird man ja fu..fuuaAHAHahhahh!`, ` das hast du doch von jemandem abgeschnitten!`, ` für die Nachricht gibt's 5 Peitschenhiebe!`, ` du wirkst müde. Bestell dir doch mal einen !Affenkopf mit !Eis!`]
+const STATICSPATH = '/sftp_uploads/user1/darkyrobotnikexchange/statics.json'
+// Used to prevent Follow-botting. If false, no Follow-Alerts will be triggered. Can be Changed at runtime with "!alerts" command.
+let ALERTS = true;
+// If true, logs will include a lot of infos about Events that are triggered.
+const VERBOSE = false;
+// Enable this if you want to use the twitch-api for eventhandling.
+const APIENABLED = true
+// Anwers for Bot to automatically react to random messages.
+const ANSWERS = [` haha, ja genau!`, ` lol, du sagst es :D`, ` ich genieße jedes einzelne dieser Worte!`, ` Da wird man ja fuchsig!`, ` das hast du doch von jemandem abgeschrieben!`, ` für die Nachricht gibt's 5 ECTS!`, ` du wirkst müde. Bestell dir doch mal einen !kaffee mit !milch!`, ` haha, ja gleich bist du tot!`, ` lol, du schweigst gleich :D`, ` ich genieße jedes einzelne deiner Haare!`, ` Da wird man ja fu..fuuaAHAHahhahh!`, ` das hast du doch von jemandem abgeschnitten!`, ` für die Nachricht gibt's 5 Peitschenhiebe!`, ` du wirkst müde. Bestell dir doch mal einen !Affenkopf mit !Eis!`]
 // Adverts the bot says periodically while there are still chatters.
-const adverts = [`Du willst auch an den Präsenzveranstaltungen teilnehmen? Dann klicke hier: https://discord.gg/VaJfZVKWhK`, `Alle Hintergrundmusik wurde von Martin Platte @pladdemusicjam (https://www.instagram.com/die_pladde/) erstellt.`, `Alle 3D-Flow-Simulationen wurden von @Toobi (https://www.twitch.tv/Toobi) erstellt.`, `Alle gezeichneten Emotes wurden von @Teirii (https://www.twitch.tv/Teirii) erstellt.`]
+const ADVERTS = [`Du willst auch an den Präsenzveranstaltungen teilnehmen? Dann klicke hier: https://discord.gg/VaJfZVKWhK`, `Alle Hintergrundmusik wurde von Martin Platte @pladdemusicjam (https://www.instagram.com/die_pladde/) erstellt.`, `Alle 3D-Flow-Simulationen wurden von @Toobi (https://www.twitch.tv/Toobi) erstellt.`, `Alle gezeichneten Emotes wurden von @Teirii (https://www.twitch.tv/Teirii) erstellt.`]
 
 //////////////////////////////////////////////////////// Code //////////////////////////////////////////////////
-let currentadvert = 0;
-let nextcall = new Date()
+let CURRENTADVERT = 0;
+let NEXTCALL = new Date()
 
 
 // Standardcommands which are loaded and not changed during runtime
-const commandmap = {
+const COMMANDMAP = {
   "!reloadcommands":
     (target, context, msg, self) => {
-      if (mods.includes(context['display-name'])) {
-        LoadCommands()
+      if (MODS.includes(context['display-name'])) {
+        loadCommands()
         client.say(target, `Reload successfull!`);
       }
     },
@@ -52,11 +54,11 @@ const commandmap = {
       var re = /@(?<name>\S*)/;
       let result = msg.match(re)
       if (result != null) {
-        if (mods.includes(context['display-name'])) {
+        if (MODS.includes(context['display-name'])) {
           client.say(target, `${result[0]} hat unsere Vorlesung gestört. Was für eine Ehre. Schaut doch auch mal die letzten Publikationen von ${result[0]} an! https://www.twitch.tv/${result['groups']['name']}`);
           let headers = {
-            "Authorization": auths.Authorization,
-            "Client-Id": auths.ClientId
+            "Authorization": AUTHS.Authorization,
+            "Client-Id": AUTHS.ClientId
           };
           let endpoint = `https://api.twitch.tv/helix/users?login=${result[0].slice(1)}`
 
@@ -79,28 +81,28 @@ const commandmap = {
       function ShowClip(raidername, clips) {
         if (clips["data"].length <= 0) return;
         var clip = clips["data"][Math.floor(Math.random() * clips["data"].length)];
-        webconnections.forEach(key => key.send(`so ${raidername} ${clip["id"]} ${(clip["duration"] + 3) * 1000.0}`))
+        WEBCONNECTIONS.forEach(key => key.send(`so ${raidername} ${clip["id"]} ${(clip["duration"] + 3) * 1000.0}`))
       }
     },
   "!alerts":
     (target, context, msg, self) => {
-      if (mods.includes(context['display-name'])) {
-        alerts = !alerts;
-        client.say(target, `Followeralerts are ${alerts ? "On" : "Off"} `);
+      if (MODS.includes(context['display-name'])) {
+        ALERTS = !ALERTS;
+        client.say(target, `Followeralerts are ${ALERTS ? "On" : "Off"} `);
       }
     },
   "!resetrainbow":
     (target, context, msg, self) => {
-      if (mods.includes(context['display-name'])) {
-        rainbowusersdone.length = 0;
+      if (MODS.includes(context['display-name'])) {
+        RAINBOWUSERSDONE.length = 0;
         client.say(target, `Rainbow is reset`);
       }
     },
   "!pullandrestart":
     (target, context, msg, self) => {
-      if (mods.includes(context['display-name'])) {
+      if (MODS.includes(context['display-name'])) {
         client.say(target, `Restarting...`);
-        PullAndRestart()
+        pullAndRestart()
       }
     },
   "!hug":
@@ -121,8 +123,8 @@ const commandmap = {
         client.say(target, `${context['display-name']}, ${msg.split(" ")[1]} ist leider keine Farbe. Bitte gib deine Farbe in der Form #A61E2f (Hex) an. Farben picken kannst du hier: https://htmlcolorcodes.com/color-picker/`);
         return;
       }
-      colors[context['display-name'].toLowerCase()] = msg.split(" ")[1];
-      fs.writeFile('colors.json', JSON.stringify(colors), err => {
+      COLORS[context['display-name'].toLowerCase()] = msg.split(" ")[1];
+      fs.writeFile('colors.json', JSON.stringify(COLORS), err => {
         if (err) {
           console.error(err);
         }
@@ -148,7 +150,7 @@ const commandmap = {
 // Load Opts and Colors for the Bot to connect with
 loadColorsAndOpts();
 // Create a client with our options
-const client = new tmi.client(opts);
+const client = new tmi.client(OPTS);
 // Register our event handlers (defined below)
 client.on('message', onMessageHandler);
 client.on('connected', onConnectedHandler);
@@ -163,11 +165,11 @@ function loadColorsAndOpts() {
     }
 
     const optstemp = JSON.parse(data.toString());
-    opts.identity.username = optstemp.identity.username;
-    opts.identity.password = optstemp.identity.password;
-    opts.channels = optstemp.channels;
-    auths.Authorization = optstemp.auth;
-    auths.ClientId = optstemp.clientid;
+    OPTS.identity.username = optstemp.identity.username;
+    OPTS.identity.password = optstemp.identity.password;
+    OPTS.channels = optstemp.channels;
+    AUTHS.Authorization = optstemp.auth;
+    AUTHS.ClientId = optstemp.clientid;
   });
   fs.readFile('colors.json', 'utf-8', (err, data) => {
     if (err) {
@@ -175,7 +177,7 @@ function loadColorsAndOpts() {
       return;
     }
 
-    colors = JSON.parse(data.toString());
+    COLORS = JSON.parse(data.toString());
   });
 }
 // Called every time a message comes in
@@ -183,7 +185,7 @@ function onMessageHandler(target, context, msg, self) {
   if (self) { return; } // Ignore messages from the bot
 
   // Show adverts sometimes.
-  if (new Date() > nextcall) {
+  if (new Date() > NEXTCALL) {
     startOrRefreshAdverts();
   }
   // Check if User is sub and wiggle it's block if present.
@@ -204,14 +206,14 @@ function onMessageHandler(target, context, msg, self) {
   ExecuteCommand();
 
   function startOrRefreshAdverts() {
-    asyncCall(adverts[currentadvert], 60000);
-    nextcall = new Date();
-    nextcall.setMinutes(nextcall.getMinutes() + 15);
-    currentadvert = (currentadvert + 1) % adverts.length;
+    asyncCall(ADVERTS[CURRENTADVERT], 60000);
+    NEXTCALL = new Date();
+    NEXTCALL.setMinutes(NEXTCALL.getMinutes() + 15);
+    CURRENTADVERT = (CURRENTADVERT + 1) % ADVERTS.length;
   }
   function wiggleSubBlock() {
-    if (rainbowusersdone.indexOf(context['display-name'].toLowerCase()) != -1) {
-      webconnections.forEach(key => key.send('wiggle' + context['display-name'].toLowerCase()));
+    if (RAINBOWUSERSDONE.indexOf(context['display-name'].toLowerCase()) != -1) {
+      WEBCONNECTIONS.forEach(key => key.send('wiggle' + context['display-name'].toLowerCase()));
     }
   }
   function answerRandomly() {
@@ -219,37 +221,37 @@ function onMessageHandler(target, context, msg, self) {
     randomchat = Math.floor(Math.random() * 100);
     if (randomchat < 3) {
       // Shuffle array to pick a random answer
-      var answer = answers[Math.floor(Math.random() * answers.length)];
+      var answer = ANSWERS[Math.floor(Math.random() * ANSWERS.length)];
       client.say(target, `@${context['display-name']} ` + answer);
     }
   }
   function ExecuteCommand() {
     const commandName = result[0].trim();
     // Check if the command is valid and belongs to this commandmap
-    if (commandName[0] == "!" && commandName.toLowerCase() in commandmap) {
+    if (commandName[0] == "!" && commandName.toLowerCase() in COMMANDMAP) {
       // The commandmap has either strings or functions. If it is a function, invoke it. Otherwise just post the string in the chat.
-      if (typeof commandmap[commandName.toLowerCase()] === 'function') {
-        commandmap[commandName.toLowerCase()](target, context, msg, self);
-      } else if (typeof commandmap[commandName.toLowerCase()] === 'string') {
-        client.say(target, `@${context['display-name']} ` + commandmap[commandName.toLowerCase()]);
+      if (typeof COMMANDMAP[commandName.toLowerCase()] === 'function') {
+        COMMANDMAP[commandName.toLowerCase()](target, context, msg, self);
+      } else if (typeof COMMANDMAP[commandName.toLowerCase()] === 'string') {
+        client.say(target, `@${context['display-name']} ` + COMMANDMAP[commandName.toLowerCase()]);
       }
     }
   }
 }
 // Function to load all given commands by the standardmap and the statics.json file into the active commandmap.
-function LoadCommands() {
-  fs.readFile(staticsPath, 'utf-8', (err, data) => {
+function loadCommands() {
+  fs.readFile(STATICSPATH, 'utf-8', (err, data) => {
     if (err) {
       throw err;
     }
     const temp = JSON.parse(data.toString());
     for (const [key, value] of Object.entries(temp.commands)) {
-      commandmap[key] = value
+      COMMANDMAP[key] = value
     }
   });
 }
 // Function to call a script that pulls the current repository and restarts the bot.
-function PullAndRestart() {
+function pullAndRestart() {
   exec('./restart.sh', (e, stdout, stderr) => {
     if (e instanceof Error) {
       console.error(e);
@@ -262,7 +264,7 @@ function PullAndRestart() {
 // Called every time the bot connects to Twitch chat
 function onConnectedHandler(addr, port) {
   debugLog(`* Connected to ${addr}:${port}`);
-  client.say(opts.channels[0], `Bot connected successfully!`);
+  client.say(OPTS.channels[0], `Bot connected successfully!`);
 }
 // Option for times events
 function resolveAfterNSeconds(n) {
@@ -275,10 +277,10 @@ function resolveAfterNSeconds(n) {
 // Starting-function for timed events posts (e.g. Adverts) 
 async function asyncCall(text, time) {
   const result = await resolveAfterNSeconds(time);
-  client.say(opts.channels[0], text);
+  client.say(OPTS.channels[0], text);
 }
 ///////////////////////////////////////////////////// Twitch-API Eventhandler ////////////////////////////////////////////////////////
-if (apienabled) {
+if (APIENABLED) {
 
   const crypto = require('crypto')
   const express = require('express');
@@ -297,12 +299,7 @@ if (apienabled) {
   try {
     // read contents of the file
     const data = fs.readFileSync('api-secret.txt', 'UTF-8');
-
-    // split the contents by new line
-    const lines = data.split(/\r?\n/);
-
-    // print all lines
-    secret = lines[0]
+    secret = data.split(/\r?\n/)[0]
   } catch (err) {
     console.error(err);
   }
@@ -357,10 +354,10 @@ if (apienabled) {
   // Standard schema for usage of the webserver. wss.on('eventname')... will execute when a message reaches the websocketserver with message 'eventname'.
   wss.on('connection', (ws) => {
     debugLog('Client connected');
-    webconnections.add(ws)
+    WEBCONNECTIONS.add(ws)
     ws.on('close', () => {
       debugLog('Client disconnected');
-      webconnections.delete(ws)
+      WEBCONNECTIONS.delete(ws)
     });
   });
 
@@ -413,13 +410,13 @@ if (apienabled) {
         // Here different events are handled differently. The subscription type is used to identify which kind of event happened.
         if (notification.subscription.type == "channel.raid") {
           // Give a shoutout to whoever raided the channel.
-          client.say(opts.channels[0], `${notification.event['from_broadcaster_user_name']} hat unsere Vorlesung gestört. Was für eine Ehre. Schaut doch auch mal die letzten Publikationen von ${notification.event['from_broadcaster_user_name']} an! https://www.twitch.tv/${notification.event['from_broadcaster_user_name']}`);
+          client.say(OPTS.channels[0], `${notification.event['from_broadcaster_user_name']} hat unsere Vorlesung gestört. Was für eine Ehre. Schaut doch auch mal die letzten Publikationen von ${notification.event['from_broadcaster_user_name']} an! https://www.twitch.tv/${notification.event['from_broadcaster_user_name']}`);
           // Also send a notification with all important information to all connected websockets
-          webconnections.forEach(key => key.send('raid' + notification.event['from_broadcaster_user_name'] + ':' + notification.event['viewers']));
+          WEBCONNECTIONS.forEach(key => key.send('raid' + notification.event['from_broadcaster_user_name'] + ':' + notification.event['viewers']));
         }
 
         if (notification.subscription.type == "channel.follow") {
-          if (alerts) webconnections.forEach(key => key.send('follow' + notification.event['user_name']));
+          if (ALERTS) WEBCONNECTIONS.forEach(key => key.send('follow' + notification.event['user_name']));
         }
         // This event is triggered whenever a viewer redeems a custom reward. 
         if (notification.subscription.type == "channel.channel_points_custom_reward_redemption.add") {
@@ -434,11 +431,11 @@ if (apienabled) {
             getAudioDurationInSeconds(folderroot + 'clips/' + filename + '.wav').then((duration) => {
               duration = Math.ceil(duration);
               durationstring = duration < 10 ? "0" + duration.toString() : duration.toString();
-              webconnections.forEach(key => key.send('anim' + durationstring + filename));
+              WEBCONNECTIONS.forEach(key => key.send('anim' + durationstring + filename));
             })
             let headers = {
-              "Authorization": auths.Authorization,
-              "Client-Id": auths.ClientId
+              "Authorization": AUTHS.Authorization,
+              "Client-Id": AUTHS.ClientId
             };
             var broadcaster_id = '75099671'
             let endpoint = `https://api.twitch.tv/helix/subscriptions?broadcaster_id=${broadcaster_id}&first=100`
@@ -462,14 +459,14 @@ if (apienabled) {
             getAudioDurationInSeconds(folderroot + 'clips/' + filename + '.wav').then((duration) => {
               duration = Math.ceil(duration);
               durationstring = duration < 10 ? "0" + duration.toString() : duration.toString();
-              webconnections.forEach(key => key.send(rewardtitle + durationstring + filename));
+              WEBCONNECTIONS.forEach(key => key.send(rewardtitle + durationstring + filename));
             })
           }
           if (notification.event['reward']['title'].slice(0, 9) == "Animation") {
             getAudioDurationInSeconds(folderroot + 'clips/' + notification.event['reward']['title'].slice(11) + '.wav').then((duration) => {
               duration = Math.ceil(duration);
               durationstring = duration < 10 ? "0" + duration.toString() : duration.toString();
-              webconnections.forEach(key => key.send('anim' + durationstring + notification.event['reward']['title'].slice(11)));
+              WEBCONNECTIONS.forEach(key => key.send('anim' + durationstring + notification.event['reward']['title'].slice(11)));
             })
           }
         }
@@ -509,9 +506,9 @@ if (apienabled) {
   function synchronizeRainbow(data, username) {
     data["data"].forEach(element => {
       if (element['user_name'] == username) {
-        if (username.toLowerCase() in colors) {
-          webconnections.forEach(key => key.send('rainbow' + colors[username.toLowerCase()] + username.toLowerCase()));
-          rainbowusersdone.push(username.toLowerCase());
+        if (username.toLowerCase() in COLORS) {
+          WEBCONNECTIONS.forEach(key => key.send('rainbow' + COLORS[username.toLowerCase()] + username.toLowerCase()));
+          RAINBOWUSERSDONE.push(username.toLowerCase());
         }
       }
     });
@@ -545,6 +542,6 @@ if (apienabled) {
 }
 // Change Debug-log function to enable or disable debug-Messages.
 function debugLog(textmessage) {
-  if (verbose) console.log(textmessage);
+  if (VERBOSE) console.log(textmessage);
 }
 
