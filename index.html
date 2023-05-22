@@ -43,96 +43,83 @@
    const clipdiv = document.getElementById("clip");
    const clipheader = document.getElementById("clipheader");
    const footer = document.getElementById("footer");
-   
-   // This list is used for overlaid audioelements.
+
    animimagewrapper.style.display = "none";
    animim.src = "";
+   document.querySelector("iframe").volume = 0.9;
    let rainbowdict = {}
    let audioelemlist = []
    let audioqueue = []
    let isFiringClip = false
    let alertqueue = []
    let isFiringAlert = false
+
+
    // Start the websocket to recieve events fired by bot.js
-   WebSocketTest();
-   function TriggerFollow(username) {
-      imageelem.src = 'images/Follow.gif';
-      audioelem.src = 'clips/Follow.wav';
-      textelem.innerText = `${username} ist nun immatrikuliert!`;
-      audioelem.play();
-      // restart the animation
-      imageelem.classList.remove("animthing");
-      setTimeout(function () {
-         imageelem.classList.add("animthing");
-      }, 0);
-   }
-   function TriggerRaid(raidername, viewercount) {
-      textelem.innerText = `${raidername} stürmt den Hörsaal mit ${viewercount} wilden Studierenden!`;
-      imageelem.src = 'images/Raid.png';
-      audioelem.src = 'clips/Raid.wav';
-      audioelem.play();
-      // restart the animation
-      imageelem.classList.remove("animthing");
-      setTimeout(function () {
-         imageelem.classList.add("animthing");
-      }, 0);
-   }
-   function HandleClip(raidername, clipslug, length) {
+   webSocketStart();
+
+
+   function startVideoClip(raidername, clipslug, length) {
       clipdiv.style.display = "flex";
       clipheader.innerText = `${raidername} ist da!`;
       document.querySelector("iframe").src = `https://clips.twitch.tv/embed?clip=${clipslug}&parent=muskatnuss.duckdns.org&autoplay=true&preload=auto`
-      setTimeout(ResetClipDiv, length);
+      setTimeout(function () {
+         clipdiv.style.display = "none";
+      }, length);
    }
-   function ResetClipDiv() {
-      clipdiv.style.display = "none";
-   }
-   function HandleAlerts() {
+   function handleAlerts() {
       isFiringAlert = true
       if (isFiringClip) {
          isFiringAlert = false;
-         setTimeout(HandleAlerts, 8500);
+         setTimeout(handleAlerts, 8500);
          return;
       }
       if (alertqueue.length > 0) {
          var current = alertqueue.shift()
-         if (current['type'] == "follow") {
-            TriggerFollow(current['username'])
-         }
-         if (current['type'] == "raid") {
-            TriggerRaid(current['raidername'], current['viewercount'])
-         }
-         setTimeout(HandleAlerts, 8500);
+         triggerAlert(current['type'], current['username'], current['raidername'], current['viewercount'])
+         setTimeout(handleAlerts, 8500);
       } else {
          isFiringAlert = false
       }
+      function triggerAlert(type, username, raidername, viewercount) {
+         textelem.innerText = type == "raid" ? `${raidername} stürmt den Hörsaal mit ${viewercount} wilden Studierenden!` : `${username} ist nun immatrikuliert!`;
+         imageelem.src = `images/${type}.gif`;
+         audioelem.src = `clips/${type}.wav`;
+         audioelem.play();
+         // restart the animation
+         imageelem.classList.remove("animthing");
+         setTimeout(function () {
+            imageelem.classList.add("animthing");
+         }, 0);
+      }
    }
-   function PlaySingleClip(clipname) {
-
-      audioelem.src = 'clips/' + clipname + '.wav';
-      audioelem.play();
-   }
-   function HandleClips() {
+   function handleClips() {
       isFiringClip = true
       animim.src = "";
       animimagewrapper.style.display = "none";
       if (isFiringAlert) {
          isFiringClip = false;
-         setTimeout(HandleClips, 8500);
+         setTimeout(handleClips, 8500);
          return;
       }
       if (audioqueue.length > 0) {
          var current = audioqueue.shift()
-         PlaySingleClip(current[1])
+         playSingleClip(current[1])
          if (current[2]) {
             animim.src = 'images/' + current[1] + '.gif';
             animimagewrapper.style.display = "block";
          }
-         setTimeout(HandleClips, parseInt(current[0]) * 1000);
+         setTimeout(handleClips, parseInt(current[0]) * 1000);
       } else {
          isFiringClip = false;
       }
+
+      function playSingleClip(clipname) {
+         audioelem.src = 'clips/' + clipname + '.wav';
+         audioelem.play();
+      }
    }
-   function WebSocketTest() {
+   function webSocketStart() {
       // Check if your browers allows websockets
       if ("WebSocket" in window) {
          // Let us open a web socket
@@ -145,86 +132,82 @@
 
          // Handle any received message, such as raid or follow-alerts.
          ws.onmessage = function (evt) {
-            var received_msg = evt.data;
-
-
-            if (received_msg.slice(0, 2) == 'so') {
-               var parameters = received_msg.split(" ");
-               HandleClip(parameters[1], parameters[2], parameters[3]);
+            var data = evt.data.split(";");
+            var action = data[0];
+            // Handle Videoshoutouts
+            if (action == 'so') {
+               var streamername = data[1];
+               var clipId = data[2];
+               var cliplength = data[3];
+               startVideoClip(streamername, clipId, cliplength);
             }
             // Handle follows
-            if (received_msg.slice(0, 6) == 'follow') {
-               var username = received_msg.slice(6);
-               alertqueue.push({ type: "follow", username: username })
+            if (action == 'follow') {
+               var username = data[1];
+               alertqueue.push({ type: "Follow", username: username })
             }
-
             // Handle raids
-            if (received_msg.slice(0, 4) == 'raid') {
-               const regex = /raid(?<name>\S+):(?<viewers>\d+)/;
-               let result = received_msg.match(regex);
-               var raidername = result['groups']['name'];
-               var viewercount = result['groups']['viewers'];
-               alertqueue.push({ type: "raid", raidername: raidername, viewercount: viewercount })
+            if (action == 'raid') {
+               var raidername = data[1];
+               var viewercount = data[2];
+               alertqueue.push({ type: "Raid", raidername: raidername, viewercount: viewercount })
             }
-
             if (!isFiringAlert) {
-               HandleAlerts()
+               handleAlerts()
             }
-
-            // List for certain rewards. Only needed for filtering.
-            let tones = ["A", "H", "C", "D", "E", "F", "G"]
 
             // I myself use soundsclips so a possible event could be the call of clip. Handling clip-calls
-            if (received_msg.slice(0, 4) == 'clip' || received_msg.slice(0, 4) == 'anim') {
+            if (action == 'clip') {
                // On certain clip-calls, we use overlaiable audioelements. In my example these are the clap and the tones-clips.
                // If a normal clip is called, just play the clip and be done with it.
-               audioqueue.push([received_msg.slice(4, 7), received_msg.slice(6), received_msg.slice(0, 4) == 'anim'])
+               audioqueue.push([data[1], data[2], false])
             }
-            if (received_msg.slice(0, 4) == "over") {
+            // Same procedure as clips, just with animation
+            if (action == 'anim') {
+               audioqueue.push([data[1], data[2], true])
+            }
+            if (action == "over") {
                // For this, we create a new audio-element for each call and play the given soundclip. Notice that all files are called like the event.
                var tempaudio = document.createElement("audio");
-               tempaudio.src = 'clips/' + received_msg.slice(6) + '.wav';
+               tempaudio.src = 'clips/' + data[1] + '.wav';
                // Play the sound and remove it's audioelement after 2 seconds (could be longer, doesn't really matter) to not fill up the ram.
                tempaudio.play();
                setTimeout(function () {
                   tempaudio.remove();
                }, 2000);
             }
-            if (received_msg.slice(0, 7) == "rainbow") {
-               var color = received_msg.slice(7);
-               var tempcolor;
-               if(received_msg.slice(14) in rainbowdict){
-                  tempcolor = rainbowdict[received_msg.slice(14)];
+            if (action == "rainbow") {
+               var color = data[1];
+               var blockElement;
+               if (data[2] in rainbowdict) {
+                  blockElement = rainbowdict[data[2]];
                } else {
-                  tempcolor = document.createElement("div");
-                  tempcolor.style = "animation: mymove 2s forwards;animation-timing-function: cubic-bezier(0,1.66,.99,.63);"
-                  tempcolor.classList.add("nullchild");
-                  footer.appendChild(tempcolor);
-                  rainbowdict[received_msg.slice(14)] = tempcolor;
+                  blockElement = document.createElement("div");
+                  blockElement.style = "animation: mymove 2s forwards;animation-timing-function: cubic-bezier(0,1.66,.99,.63);"
+                  blockElement.classList.add("nullchild");
+                  footer.appendChild(blockElement);
+                  rainbowdict[data[2]] = blockElement;
                }
-               tempcolor.style.backgroundColor = received_msg.slice(7,14);
+               blockElement.style.backgroundColor = color;
             }
-            if(received_msg.slice(0,6) == "wiggle"){
-               if(received_msg.slice(6) in rainbowdict){
-                  rainbowdict[received_msg.slice(6)].style.animation = "";
-               setTimeout(function () {
-                  rainbowdict[received_msg.slice(6)].style.animation = "jump 2s forwards"
-                  rainbowdict[received_msg.slice(6)].style.animationTimingFunction  = "cubic-bezier(0,1.19,1,.92)"
-               }, 0);
+            if (action == "wiggle") {
+               if (data[1] in rainbowdict) {
+                  rainbowdict[data[1]].style.animation = "";
+                  setTimeout(function () {
+                     rainbowdict[data[1]].style.animation = "jump 2s forwards"
+                     rainbowdict[data[1]].style.animationTimingFunction = "cubic-bezier(0,1.19,1,.92)"
+                  }, 0);
                }
             }
 
             if (!isFiringClip) {
-               HandleClips()
+               handleClips()
             }
          };
          ws.onclose = function () {
             // websocket is closed.
             alert("Connection is closed!");
          };
-      } else {
-         // The browser doesn't support WebSocket
-         alert("WebSocket NOT supported by your Browser!");
       }
 
 

@@ -81,7 +81,7 @@ const COMMANDMAP = {
       function ShowClip(raidername, clips) {
         if (clips["data"].length <= 0) return;
         var clip = clips["data"][Math.floor(Math.random() * clips["data"].length)];
-        WEBCONNECTIONS.forEach(key => key.send(`so ${raidername} ${clip["id"]} ${(clip["duration"] + 3) * 1000.0}`))
+        WEBCONNECTIONS.forEach(key => key.send(`so;${raidername};${clip["id"]};${(clip["duration"] + 3) * 1000.0}`))
       }
     },
   "!alerts":
@@ -213,7 +213,7 @@ function onMessageHandler(target, context, msg, self) {
   }
   function wiggleSubBlock() {
     if (RAINBOWUSERSDONE.indexOf(context['display-name'].toLowerCase()) != -1) {
-      WEBCONNECTIONS.forEach(key => key.send('wiggle' + context['display-name'].toLowerCase()));
+      WEBCONNECTIONS.forEach(key => key.send('wiggle;' + context['display-name'].toLowerCase()));
     }
   }
   function answerRandomly() {
@@ -412,11 +412,11 @@ if (APIENABLED) {
           // Give a shoutout to whoever raided the channel.
           client.say(OPTS.channels[0], `${notification.event['from_broadcaster_user_name']} hat unsere Vorlesung gestört. Was für eine Ehre. Schaut doch auch mal die letzten Publikationen von ${notification.event['from_broadcaster_user_name']} an! https://www.twitch.tv/${notification.event['from_broadcaster_user_name']}`);
           // Also send a notification with all important information to all connected websockets
-          WEBCONNECTIONS.forEach(key => key.send('raid' + notification.event['from_broadcaster_user_name'] + ':' + notification.event['viewers']));
+          WEBCONNECTIONS.forEach(key => key.send('raid' + ";" + notification.event['from_broadcaster_user_name'] + ';' + notification.event['viewers']));
         }
 
         if (notification.subscription.type == "channel.follow") {
-          if (ALERTS) WEBCONNECTIONS.forEach(key => key.send('follow' + notification.event['user_name']));
+          if (ALERTS) WEBCONNECTIONS.forEach(key => key.send('follow' + ";" + notification.event['user_name']));
         }
         // This event is triggered whenever a viewer redeems a custom reward. 
         if (notification.subscription.type == "channel.channel_points_custom_reward_redemption.add") {
@@ -431,7 +431,7 @@ if (APIENABLED) {
             getAudioDurationInSeconds(folderroot + 'clips/' + filename + '.wav').then((duration) => {
               duration = Math.ceil(duration);
               durationstring = duration < 10 ? "0" + duration.toString() : duration.toString();
-              WEBCONNECTIONS.forEach(key => key.send('anim' + durationstring + filename));
+              WEBCONNECTIONS.forEach(key => key.send('anim' + ";"+ durationstring +";"+ filename));
             })
             let headers = {
               "Authorization": AUTHS.Authorization,
@@ -459,14 +459,14 @@ if (APIENABLED) {
             getAudioDurationInSeconds(folderroot + 'clips/' + filename + '.wav').then((duration) => {
               duration = Math.ceil(duration);
               durationstring = duration < 10 ? "0" + duration.toString() : duration.toString();
-              WEBCONNECTIONS.forEach(key => key.send(rewardtitle + durationstring + filename));
+              WEBCONNECTIONS.forEach(key => key.send(rewardtitle + ";"+ durationstring + ";"+ filename));
             })
           }
           if (notification.event['reward']['title'].slice(0, 9) == "Animation") {
             getAudioDurationInSeconds(folderroot + 'clips/' + notification.event['reward']['title'].slice(11) + '.wav').then((duration) => {
               duration = Math.ceil(duration);
               durationstring = duration < 10 ? "0" + duration.toString() : duration.toString();
-              WEBCONNECTIONS.forEach(key => key.send('anim' + durationstring + notification.event['reward']['title'].slice(11)));
+              WEBCONNECTIONS.forEach(key => key.send('anim' +";" +durationstring +";"+ notification.event['reward']['title'].slice(11)));
             })
           }
         }
@@ -507,7 +507,7 @@ if (APIENABLED) {
     data["data"].forEach(element => {
       if (element['user_name'] == username) {
         if (username.toLowerCase() in COLORS) {
-          WEBCONNECTIONS.forEach(key => key.send('rainbow' + COLORS[username.toLowerCase()] + username.toLowerCase()));
+          WEBCONNECTIONS.forEach(key => key.send('rainbow'+";" + COLORS[username.toLowerCase()] +";"+ username.toLowerCase()));
           RAINBOWUSERSDONE.push(username.toLowerCase());
         }
       }
