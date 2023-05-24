@@ -304,7 +304,8 @@ if (APIENABLED) {
   // secret into the variable above.
   try {
     // read contents of the file
-    secret = fs.readFileSync('api-secret.txt', 'UTF-8');
+    const data = fs.readFileSync('api-secret.txt', 'UTF-8');
+    secret = data.trim();
   } catch (err) {
     console.error(err);
   }
