@@ -199,11 +199,12 @@
             if (action == "wiggle") {
                var username = data[1];
                if (username in rainbowdict) {
-                  rainbowdict[username].style.animation = "";
+                  rainbowdict[username].style.animation = "jump 2s forwards"
+                  rainbowdict[username].style.animationTimingFunction = "cubic-bezier(0,1.19,1,.92)"
+                  
                   setTimeout(function () {
-                     rainbowdict[username].style.animation = "jump 2s forwards"
-                     rainbowdict[username].style.animationTimingFunction = "cubic-bezier(0,1.19,1,.92)"
-                  }, 0);
+                     rainbowdict[username].style.animation = "";
+                  }, 2000);
                }
             }
 
