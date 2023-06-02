@@ -82,7 +82,7 @@
          isFiringAlert = false
       }
       function triggerAlert(type, username, raidername, viewercount) {
-         textelem.innerText = type == "raid" ? `${raidername} stürmt den Hörsaal mit ${viewercount} wilden Studierenden!` : `${username} ist nun immatrikuliert!`;
+         textelem.innerText = type == "Raid" ? `${raidername} stürmt den Hörsaal mit ${viewercount} wilden Studierenden!` : `${username} ist nun immatrikuliert!`;
          imageelem.src = `images/${type}.gif`;
          audioelem.src = `clips/${type}.wav`;
          audioelem.play();
