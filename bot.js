@@ -23,7 +23,7 @@ let mods = ['WTFDarky', 'Toobi', 'pladdemusicjam', 'Herbstliches', 'teirii', 'pi
 let colors = {};
 let rainbowusersdone = [];
 // Path for statics.json, which should hold all your commands. Use './statics.json' if you want to use the given example-file.
-let staticsPath = '/sftp_uploads/user1/darkyrobotnikexchange/statics.json'
+let staticsPath = '/var/sftp/Files/darkyrobotnikexchange/statics.json'
 let alerts = true;
 
 //////////////////////////////////////////////////////// Code //////////////////////////////////////////////////
@@ -394,7 +394,7 @@ if (apienabled) {
   })
 
   // Rootfolder for all downloadable content, such as images or clips
-  let folderroot = '/sftp_uploads/user1/'
+  let folderroot = '/var/sftp/Files/'
 
   // Download images or clips using the folderroot and given folders. This is used for browser-alerts and such.
   app.get('/:folder/:filename', (req, res) => {
